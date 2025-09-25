@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cyberpunk Prompt Generator</title>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue:wght@400&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -84,10 +86,11 @@
 
         .header h1 {
             font-size: 3.5rem;
-            font-weight: 800;
+            font-weight: 400;
+            font-family: 'Bebas Neue', sans-serif;
             color: #ffffff;
             margin-bottom: 16px;
-            letter-spacing: -0.02em;
+            letter-spacing: 0.05em;
             line-height: 1.1;
             text-shadow: 0 0 40px rgba(168, 85, 247, 0.3);
         }
@@ -143,81 +146,173 @@
             color: white;
         }
 
-        .inspire-section {
-            margin-bottom: 60px;
+        .controls {
             display: flex;
+            gap: 24px;
             justify-content: center;
+            margin-bottom: 50px;
+            flex-wrap: wrap;
         }
 
-        .inspire-container {
-            display: flex;
-            align-items: center;
-            gap: 0;
-            max-width: 800px;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 12px;
-            overflow: hidden;
-            backdrop-filter: blur(10px);
-        }
-
-        .inspire-btn {
-            background: linear-gradient(135deg, #a855f7, #ec4899);
-            border: none;
-            color: white;
-            padding: 16px 24px;
+        .btn {
+            padding: 14px 28px;
+            border: 1px solid;
+            border-radius: 8px;
             font-weight: 400;
             font-family: 'Bebas Neue', sans-serif;
             font-size: 1.1rem;
             letter-spacing: 0.05em;
             cursor: pointer;
             transition: all 0.3s ease;
-            white-space: nowrap;
-            border-radius: 0;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(10px);
         }
 
-        .inspire-btn:hover {
-            background: linear-gradient(135deg, #9333ea, #db2777);
-            transform: scale(1.02);
+        .btn-primary {
+            background: linear-gradient(135deg, #a855f7, #ec4899);
+            border-color: transparent;
+            color: white;
+            box-shadow: 0 4px 20px rgba(168, 85, 247, 0.3);
         }
 
-        .inspiration-output {
-            flex: 1;
-            padding: 24px;
-            font-size: 1.1rem;
-            line-height: 1.6;
-            color: #f3f4f6;
-            min-height: 120px;
-            font-family: 'Bebas Neue', monospace;
-            background: transparent;
-            border: none;
-            outline: none;
-            resize: none;
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(168, 85, 247, 0.4);
         }
 
-        .image-gallery {
-            margin-bottom: 60px;
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.2);
+            color: #e5e7eb;
         }
 
-        .gallery-grid {
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .categories-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
             gap: 24px;
-            margin-top: 40px;
+            margin-bottom: 40px;
         }
 
-        .image-card {
+        .category-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 24px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(168, 85, 247, 0.3), transparent);
+        }
+
+        .category-card:hover {
+            border-color: rgba(168, 85, 247, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .category-title {
+            font-size: 1.25rem;
+            font-weight: 400;
+            font-family: 'Bebas Neue', sans-serif;
+            color: #ffffff;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            letter-spacing: 0.05em;
+        }
+
+        .category-title::before {
+            content: '';
+            width: 4px;
+            height: 20px;
+            background: linear-gradient(135deg, #a855f7, #ec4899);
+            border-radius: 2px;
+        }
+
+        .options-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .option-tag {
+            padding: 6px 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            font-size: 0.875rem;
+            color: #d1d5db;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .option-tag:hover {
+            background: rgba(168, 85, 247, 0.08);
+            border-color: rgba(168, 85, 247, 0.2);
+            color: #ffffff;
+        }
+
+        .option-tag.selected {
+            background: rgba(168, 85, 247, 0.15);
+            border-color: rgba(168, 85, 247, 0.4);
+            color: white;
+        }
+
+        .show-more-btn {
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            color: #a855f7;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 400;
+            font-family: 'Bebas Neue', sans-serif;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 12px;
+        }
+
+        .show-more-btn:hover {
+            background: rgba(168, 85, 247, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .output-section {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 16px;
-            overflow: hidden;
+            padding: 32px;
+            margin-bottom: 40px;
             backdrop-filter: blur(20px);
-            transition: all 0.3s ease;
             position: relative;
+            overflow: hidden;
         }
 
-        .image-card::before {
+        .output-section::before {
             content: '';
             position: absolute;
             top: 0;
@@ -227,38 +322,116 @@
             background: linear-gradient(90deg, transparent, rgba(168, 85, 247, 0.5), transparent);
         }
 
-        .image-card:hover {
-            border-color: rgba(168, 85, 247, 0.3);
-            transform: translateY(-4px);
-            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.3);
-        }
-
-        .card-content {
-            padding: 20px;
-        }
-
-        .card-title {
-            font-size: 1.25rem;
-            font-weight: 700;
+        .output-title {
+            font-size: 1.5rem;
+            font-weight: 400;
+            font-family: 'Bebas Neue', sans-serif;
             color: #ffffff;
-            margin-bottom: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            letter-spacing: 0.05em;
+        }
+
+        .output-title::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: linear-gradient(135deg, #a855f7, #ec4899);
+            border-radius: 2px;
+        }
+
+        .prompt-output {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 24px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #f3f4f6;
+            margin-bottom: 20px;
+            min-height: 120px;
+            font-family: 'Bebas Neue', monospace;
+            position: relative;
+        }
+
+        .copy-btn {
+            background: linear-gradient(135deg, #a855f7, #ec4899);
+            border: none;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
-        .card-title::before {
+        .copy-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(168, 85, 247, 0.4);
+        }
+
+        .copy-btn.copied {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+
+        .history-section {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 32px;
+            backdrop-filter: blur(20px);
+        }
+
+        .history-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .history-title::before {
             content: '';
             width: 4px;
-            height: 16px;
+            height: 24px;
             background: linear-gradient(135deg, #a855f7, #ec4899);
             border-radius: 2px;
         }
 
-        .card-description {
-            font-size: 0.875rem;
-            color: rgba(229, 231, 235, 0.8);
-            line-height: 1.5;
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .history-item {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 16px;
+            font-size: 0.9rem;
+            color: #d1d5db;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .history-item:hover {
+            border-color: rgba(168, 85, 247, 0.3);
+            background: rgba(168, 85, 247, 0.05);
+        }
+
+        .history-empty {
+            text-align: center;
+            color: rgba(229, 231, 235, 0.6);
+            font-style: italic;
+            padding: 40px 20px;
         }
 
         @media (max-width: 768px) {
@@ -270,28 +443,19 @@
                 font-size: 2.5rem;
             }
 
-            .gallery-grid {
-                grid-template-columns: repeat(2, 1fr);
+            .categories-grid {
+                grid-template-columns: 1fr;
                 gap: 16px;
+            }
+
+            .controls {
+                flex-direction: column;
+                align-items: center;
             }
 
             .nav-buttons {
                 flex-direction: column;
                 align-items: center;
-            }
-
-            .inspire-container {
-                flex-direction: column;
-                gap: 0;
-            }
-
-            .inspire-btn {
-                border-radius: 12px 12px 0 0;
-                width: 100%;
-            }
-
-            .inspiration-output {
-                border-radius: 0 0 12px 12px;
             }
         }
 
@@ -300,12 +464,13 @@
                 font-size: 2rem;
             }
 
-            .gallery-grid {
-                grid-template-columns: 1fr;
+            .category-card {
+                padding: 16px;
             }
 
-            .card-content {
-                padding: 16px;
+            .output-section,
+            .history-section {
+                padding: 20px;
             }
         }
     </style>
@@ -313,65 +478,123 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>Let's Start Building <span class="highlight">Prompts</span> People Remember</h1>
-            <p>Perfect for creators, designers, and marketers who need high-converting AI prompts that stand out from the crowd.</p>
+            <h1>Cyberpunk <span class="highlight">Prompt Generator</span></h1>
+            <p>Generate infinite variations of cyberpunk and futuristic AI image prompts with our advanced modular system.</p>
         </div>
 
         <div class="nav-buttons">
-            <a href="index.html" class="nav-btn active">Home</a>
-            <a href="generator.html" class="nav-btn">Generator</a>
+            <a href="index.html" class="nav-btn">Home</a>
+            <a href="generator.html" class="nav-btn active">Generator</a>
         </div>
 
-        <div class="inspire-section">
-            <div class="inspire-container">
-                <button class="inspire-btn" onclick="generateInspiration()">Inspire me</button>
-                <div class="inspiration-output" id="inspirationOutput">
-                    Click "Inspire me" to get a random cyberpunk prompt idea...
+        <div class="controls">
+            <button class="btn btn-primary" onclick="generateRandomPrompt()">Generate Random</button>
+            <button class="btn btn-secondary" onclick="generateFromSelected()">Use Selected</button>
+            <button class="btn btn-secondary" onclick="clearHistory()">Clear History</button>
+        </div>
+
+        <div class="categories-grid">
+            <div class="category-card">
+                <div class="category-title">Subject Type</div>
+                <div class="options-container" id="subject-type">
+                    <!-- Options will be populated by JavaScript -->
                 </div>
+                <button class="show-more-btn" onclick="toggleCategory('subject-type')">Show More</button>
+            </div>
+
+            <div class="category-card">
+                <div class="category-title">Wardrobe</div>
+                <div class="options-container" id="wardrobe">
+                    <!-- Options will be populated by JavaScript -->
+                </div>
+                <button class="show-more-btn" onclick="toggleCategory('wardrobe')">Show More</button>
+            </div>
+
+            <div class="category-card">
+                <div class="category-title">Body Modifications</div>
+                <div class="options-container" id="body-modifications">
+                    <!-- Options will be populated by JavaScript -->
+                </div>
+                <button class="show-more-btn" onclick="toggleCategory('body-modifications')">Show More</button>
+            </div>
+
+            <div class="category-card">
+                <div class="category-title">Mood/Expression</div>
+                <div class="options-container" id="mood-expression">
+                    <!-- Options will be populated by JavaScript -->
+                </div>
+                <button class="show-more-btn" onclick="toggleCategory('mood-expression')">Show More</button>
+            </div>
+
+            <div class="category-card">
+                <div class="category-title">Environment</div>
+                <div class="options-container" id="environment">
+                    <!-- Options will be populated by JavaScript -->
+                </div>
+                <button class="show-more-btn" onclick="toggleCategory('environment')">Show More</button>
+            </div>
+
+            <div class="category-card">
+                <div class="category-title">Surrounding Elements</div>
+                <div class="options-container" id="surrounding-elements">
+                    <!-- Options will be populated by JavaScript -->
+                </div>
+                <button class="show-more-btn" onclick="toggleCategory('surrounding-elements')">Show More</button>
+            </div>
+
+            <div class="category-card">
+                <div class="category-title">Lighting</div>
+                <div class="options-container" id="lighting">
+                    <!-- Options will be populated by JavaScript -->
+                </div>
+                <button class="show-more-btn" onclick="toggleCategory('lighting')">Show More</button>
+            </div>
+
+            <div class="category-card">
+                <div class="category-title">Camera Angle</div>
+                <div class="options-container" id="camera-angle">
+                    <!-- Options will be populated by JavaScript -->
+                </div>
+                <button class="show-more-btn" onclick="toggleCategory('camera-angle')">Show More</button>
+            </div>
+
+            <div class="category-card">
+                <div class="category-title">Art Style</div>
+                <div class="options-container" id="art-style">
+                    <!-- Options will be populated by JavaScript -->
+                </div>
+                <button class="show-more-btn" onclick="toggleCategory('art-style')">Show More</button>
+            </div>
+
+            <div class="category-card">
+                <div class="category-title">Composition</div>
+                <div class="options-container" id="composition">
+                    <!-- Options will be populated by JavaScript -->
+                </div>
+                <button class="show-more-btn" onclick="toggleCategory('composition')">Show More</button>
             </div>
         </div>
 
-        <div class="image-gallery">
-            <div class="gallery-grid">
-                <div class="image-card">
-                    <img src="1prompt.png" alt="Cyberpunk Portrait" style="width: 100%; height: auto; object-fit: cover; aspect-ratio: 9/16; border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
-                    <div class="card-content">
-                        <h3 class="card-title">Crystal Shaman</h3>
-                        <p class="card-description">A Crystal shaman wearing Translucent alien fabric, with Holographic bone replacements, expressing a Stoic and regal mood, standing in a Void-like dreamspace. Surrounded by Neon graffiti, lit by Celestial light shaft, captured with a CCTV surveillance angle. Inspired by Dark baroque surrealism. Looking into the light.</p>
-                    </div>
-                </div>
-                
-                <div class="image-card">
-                    <img src="2prompt.png" alt="Futuristic Landscape" style="width: 100%; height: auto; object-fit: cover; aspect-ratio: 9/16; border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
-                    <div class="card-content">
-                        <h3 class="card-title">Neural Vampire</h3>
-                        <p class="card-description">A Neural vampire wearing Retro-futurist jumpsuit, with Living armor attached to skin, expressing a Cyberpunk rebellion mood, standing in a Void dimension pocket. Surrounded by Quantum entanglement threads, lit by Glitch-reality lighting, captured with a Electric storm tracker. Inspired by Electric field impressionism. Glitch-reality fracture view.</p>
-                    </div>
-                </div>
-                
-                <div class="image-card">
-                    <img src="5prompt.png" alt="Ancient Tech Deity" style="width: 100%; height: auto; object-fit: cover; aspect-ratio: 9/16; border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
-                    <div class="card-content">
-                        <h3 class="card-title">Ancient Tech Deity</h3>
-                        <p class="card-description">An Ancient tech deity wearing Electric feather cape, with Golden cybernetic arms, expressing a Glitch-induced madness mood, standing in a Endless mirrored void. Surrounded by Holographic projection screens, lit by Holographic projection light, captured with a Telephoto through smoke. Inspired by Electric field impressionism. Dramatic overhead light.</p>
-                    </div>
-                </div>
-                
-                <div class="image-card">
-                    <img src="4prompt.png" alt="Digital Architecture" style="width: 100%; height: auto; object-fit: cover; aspect-ratio: 9/16; border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
-                    <div class="card-content">
-                        <h3 class="card-title">Quantum Priest</h3>
-                        <p class="card-description">A Quantum priest wearing High-tech tactical gear, with Neon organ displays, expressing a Ethereal and dreamlike mood, standing in a Neon-lit cyberpunk streets. Surrounded by Neon graffiti, lit by Overexposed whitewash, captured with a Electric field detector. Inspired by Brutalist fashion editorial. Neural pathway network shot.</p>
-                    </div>
-                </div>
-                
+        <div class="output-section">
+            <h2 class="output-title">Generated Prompt</h2>
+            <div class="prompt-output" id="promptOutput">
+                Click "Generate Random" or select options above to create your cyberpunk prompt...
             </div>
+            <button class="copy-btn" onclick="copyPrompt()">
+                <span id="copyText">Copy Prompt</span>
+            </button>
         </div>
 
+        <div class="history-section">
+            <h2 class="history-title">Prompt History</h2>
+            <div class="history-list" id="historyList">
+                <div class="history-empty">No prompts generated yet. Create your first prompt above!</div>
+            </div>
+        </div>
     </div>
 
     <script>
-        // Prompt categories with expanded options (same as generator page)
+        // Prompt categories with expanded options
         const promptCategories = {
             'subject-type': [
                 'Cyberpunk warrior', 'Neural hacker', 'Quantum thief', 'Digital shaman', 'Neon samurai',
@@ -493,7 +716,79 @@
             ]
         };
 
-        function generateInspiration() {
+        let selectedOptions = {};
+        let promptHistory = [];
+
+        function init() {
+            populateCategories();
+            loadHistory();
+        }
+
+        function populateCategories() {
+            Object.keys(promptCategories).forEach(categoryId => {
+                const container = document.getElementById(categoryId);
+                const options = promptCategories[categoryId];
+                
+                // Show first 8 options initially
+                const visibleOptions = options.slice(0, 8);
+                const hiddenOptions = options.slice(8);
+                
+                visibleOptions.forEach(option => {
+                    const tag = createOptionTag(option, categoryId);
+                    container.appendChild(tag);
+                });
+                
+                // Store hidden options for later
+                container.hiddenOptions = hiddenOptions;
+                container.showingAll = false;
+            });
+        }
+
+        function createOptionTag(option, categoryId) {
+            const tag = document.createElement('div');
+            tag.className = 'option-tag';
+            tag.textContent = option;
+            tag.onclick = () => selectOption(option, categoryId, tag);
+            return tag;
+        }
+
+        function selectOption(option, categoryId, element) {
+            // Remove previous selection in this category
+            const container = document.getElementById(categoryId);
+            container.querySelectorAll('.option-tag').forEach(tag => {
+                tag.classList.remove('selected');
+            });
+            
+            // Add selection to new option
+            element.classList.add('selected');
+            selectedOptions[categoryId] = option;
+        }
+
+        function toggleCategory(categoryId) {
+            const container = document.getElementById(categoryId);
+            const categoryCard = container.parentElement;
+            const button = categoryCard.querySelector('.show-more-btn');
+            const hiddenOptions = container.hiddenOptions;
+            
+            if (!container.showingAll) {
+                // Show all options
+                hiddenOptions.forEach(option => {
+                    const tag = createOptionTag(option, categoryId);
+                    container.appendChild(tag);
+                });
+                button.textContent = 'Show Less';
+                container.showingAll = true;
+            } else {
+                // Hide extra options
+                hiddenOptions.forEach(() => {
+                    container.removeChild(container.lastElementChild);
+                });
+                button.textContent = 'Show More';
+                container.showingAll = false;
+            }
+        }
+
+        function generateRandomPrompt() {
             const template = "A {subject-type} wearing {wardrobe}, with {body-modifications}, expressing a {mood-expression} mood, standing in a {environment}. Surrounded by {surrounding-elements}, lit by {lighting}, captured with a {camera-angle}. Inspired by {art-style}. {composition}.";
             
             let prompt = template;
@@ -503,8 +798,103 @@
                 prompt = prompt.replace(`{${category}}`, randomOption);
             });
             
-            document.getElementById('inspirationOutput').textContent = prompt;
+            displayPrompt(prompt);
+            addToHistory(prompt);
         }
+
+        function generateFromSelected() {
+            const template = "A {subject-type} wearing {wardrobe}, with {body-modifications}, expressing a {mood-expression} mood, standing in a {environment}. Surrounded by {surrounding-elements}, lit by {lighting}, captured with a {camera-angle}. Inspired by {art-style}. {composition}.";
+            
+            let prompt = template;
+            let hasSelection = false;
+            
+            Object.keys(promptCategories).forEach(category => {
+                if (selectedOptions[category]) {
+                    prompt = prompt.replace(`{${category}}`, selectedOptions[category]);
+                    hasSelection = true;
+                } else {
+                    // Use random if no selection
+                    const options = promptCategories[category];
+                    const randomOption = options[Math.floor(Math.random() * options.length)];
+                    prompt = prompt.replace(`{${category}}`, randomOption);
+                }
+            });
+            
+            if (hasSelection) {
+                displayPrompt(prompt);
+                addToHistory(prompt);
+            } else {
+                alert('Please select at least one option from the categories above, or use "Generate Random" instead.');
+            }
+        }
+
+        function displayPrompt(prompt) {
+            document.getElementById('promptOutput').textContent = prompt;
+        }
+
+        function copyPrompt() {
+            const prompt = document.getElementById('promptOutput').textContent;
+            navigator.clipboard.writeText(prompt).then(() => {
+                const button = document.querySelector('.copy-btn');
+                const copyText = document.getElementById('copyText');
+                
+                button.classList.add('copied');
+                copyText.textContent = 'Copied!';
+                
+                setTimeout(() => {
+                    button.classList.remove('copied');
+                    copyText.textContent = 'Copy Prompt';
+                }, 2000);
+            });
+        }
+
+        function addToHistory(prompt) {
+            promptHistory.unshift(prompt);
+            if (promptHistory.length > 10) {
+                promptHistory.pop();
+            }
+            saveHistory();
+            updateHistoryDisplay();
+        }
+
+        function updateHistoryDisplay() {
+            const historyList = document.getElementById('historyList');
+            
+            if (promptHistory.length === 0) {
+                historyList.innerHTML = '<div class="history-empty">No prompts generated yet. Create your first prompt above!</div>';
+                return;
+            }
+            
+            historyList.innerHTML = promptHistory.map((prompt, index) => 
+                `<div class="history-item" onclick="useHistoryPrompt(${index})">${prompt}</div>`
+            ).join('');
+        }
+
+        function useHistoryPrompt(index) {
+            const prompt = promptHistory[index];
+            displayPrompt(prompt);
+        }
+
+        function clearHistory() {
+            promptHistory = [];
+            saveHistory();
+            updateHistoryDisplay();
+        }
+
+        function saveHistory() {
+            localStorage.setItem('cyberpunkPromptHistory', JSON.stringify(promptHistory));
+        }
+
+        function loadHistory() {
+            const saved = localStorage.getItem('cyberpunkPromptHistory');
+            if (saved) {
+                promptHistory = JSON.parse(saved);
+                updateHistoryDisplay();
+            }
+        }
+
+        // Initialize the app when page loads
+        window.onload = init;
     </script>
 </body>
 </html>

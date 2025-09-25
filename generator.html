@@ -58,10 +58,58 @@
             z-index: -1;
         }
 
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+            padding: 0;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 16px 20px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .nav-link {
+            color: #e5e7eb;
+            text-decoration: none;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 400;
+            letter-spacing: 0.05em;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background: rgba(168, 85, 247, 0.1);
+            color: #ffffff;
+        }
+
+        .nav-link.active {
+            background: rgba(168, 85, 247, 0.2);
+            color: #ffffff;
+        }
+
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 40px 20px;
+            padding: 120px 20px 40px 20px;
             position: relative;
             z-index: 1;
         }
@@ -86,11 +134,10 @@
 
         .header h1 {
             font-size: 3.5rem;
-            font-weight: 400;
-            font-family: 'Bebas Neue', sans-serif;
+            font-weight: 800;
             color: #ffffff;
             margin-bottom: 16px;
-            letter-spacing: 0.05em;
+            letter-spacing: -0.02em;
             line-height: 1.1;
             text-shadow: 0 0 40px rgba(168, 85, 247, 0.3);
         }
@@ -112,39 +159,6 @@
             font-weight: 800;
         }
 
-        .nav-buttons {
-            display: flex;
-            gap: 16px;
-            justify-content: center;
-            margin-bottom: 40px;
-        }
-
-        .nav-btn {
-            padding: 12px 24px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            color: #e5e7eb;
-            text-decoration: none;
-            font-weight: 400;
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.1rem;
-            letter-spacing: 0.05em;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-        }
-
-        .nav-btn:hover {
-            background: rgba(168, 85, 247, 0.1);
-            border-color: rgba(168, 85, 247, 0.3);
-            transform: translateY(-2px);
-        }
-
-        .nav-btn.active {
-            background: linear-gradient(135deg, #a855f7, #ec4899);
-            border-color: transparent;
-            color: white;
-        }
 
         .controls {
             display: flex;
@@ -356,83 +370,34 @@
             position: relative;
         }
 
-        .copy-btn {
-            background: linear-gradient(135deg, #a855f7, #ec4899);
-            border: none;
-            color: white;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-weight: 600;
+        .copy-icon-btn {
+            position: absolute;
+            bottom: 12px;
+            right: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #e5e7eb;
+            padding: 6px;
+            border-radius: 4px;
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
-            gap: 8px;
+            justify-content: center;
         }
 
-        .copy-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(168, 85, 247, 0.4);
-        }
-
-        .copy-btn.copied {
-            background: linear-gradient(135deg, #10b981, #059669);
-        }
-
-        .history-section {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px;
-            padding: 32px;
-            backdrop-filter: blur(20px);
-        }
-
-        .history-title {
-            font-size: 1.5rem;
-            font-weight: 700;
+        .copy-icon-btn:hover {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: rgba(168, 85, 247, 0.4);
             color: #ffffff;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
         }
 
-        .history-title::before {
-            content: '';
-            width: 4px;
-            height: 24px;
-            background: linear-gradient(135deg, #a855f7, #ec4899);
-            border-radius: 2px;
+        .copy-icon-btn.copied {
+            background: rgba(16, 185, 129, 0.2);
+            border-color: rgba(16, 185, 129, 0.4);
+            color: #10b981;
         }
 
-        .history-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .history-item {
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            padding: 16px;
-            font-size: 0.9rem;
-            color: #d1d5db;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .history-item:hover {
-            border-color: rgba(168, 85, 247, 0.3);
-            background: rgba(168, 85, 247, 0.05);
-        }
-
-        .history-empty {
-            text-align: center;
-            color: rgba(229, 231, 235, 0.6);
-            font-style: italic;
-            padding: 40px 20px;
-        }
 
         @media (max-width: 768px) {
             .container {
@@ -453,9 +418,16 @@
                 align-items: center;
             }
 
-            .nav-buttons {
-                flex-direction: column;
-                align-items: center;
+            .nav-container {
+                padding: 12px 20px;
+            }
+
+            .nav-links {
+                gap: 16px;
+            }
+
+            .container {
+                padding: 160px 20px 40px 20px;
             }
         }
 
@@ -476,21 +448,24 @@
     </style>
 </head>
 <body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="generator.html" class="nav-link active">Generator</a>
+            </div>
+        </div>
+    </nav>
+
     <div class="container">
         <div class="header">
-            <h1>Cyberpunk <span class="highlight">Prompt Generator</span></h1>
-            <p>Generate infinite variations of cyberpunk and futuristic AI image prompts with our advanced modular system.</p>
-        </div>
-
-        <div class="nav-buttons">
-            <a href="index.html" class="nav-btn">Home</a>
-            <a href="generator.html" class="nav-btn active">Generator</a>
+            <h1><span class="highlight">PROMPT</span> GENERATOR</h1>
+            <p>Generate millions of variations of prompts with our advanced modular system.</p>
         </div>
 
         <div class="controls">
             <button class="btn btn-primary" onclick="generateRandomPrompt()">Generate Random</button>
             <button class="btn btn-secondary" onclick="generateFromSelected()">Use Selected</button>
-            <button class="btn btn-secondary" onclick="clearHistory()">Clear History</button>
         </div>
 
         <div class="categories-grid">
@@ -579,18 +554,15 @@
             <h2 class="output-title">Generated Prompt</h2>
             <div class="prompt-output" id="promptOutput">
                 Click "Generate Random" or select options above to create your cyberpunk prompt...
+                <button class="copy-icon-btn" id="copyPromptBtn" onclick="copyPrompt()" style="display: none;" title="Copy prompt">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                </button>
             </div>
-            <button class="copy-btn" onclick="copyPrompt()">
-                <span id="copyText">Copy Prompt</span>
-            </button>
         </div>
 
-        <div class="history-section">
-            <h2 class="history-title">Prompt History</h2>
-            <div class="history-list" id="historyList">
-                <div class="history-empty">No prompts generated yet. Create your first prompt above!</div>
-            </div>
-        </div>
     </div>
 
     <script>
@@ -717,11 +689,9 @@
         };
 
         let selectedOptions = {};
-        let promptHistory = [];
 
         function init() {
             populateCategories();
-            loadHistory();
         }
 
         function populateCategories() {
@@ -799,7 +769,6 @@
             });
             
             displayPrompt(prompt);
-            addToHistory(prompt);
         }
 
         function generateFromSelected() {
@@ -822,76 +791,36 @@
             
             if (hasSelection) {
                 displayPrompt(prompt);
-                addToHistory(prompt);
             } else {
                 alert('Please select at least one option from the categories above, or use "Generate Random" instead.');
             }
         }
 
         function displayPrompt(prompt) {
-            document.getElementById('promptOutput').textContent = prompt;
+            const outputDiv = document.getElementById('promptOutput');
+            const copyBtn = document.getElementById('copyPromptBtn');
+            
+            // Clear existing content but preserve the copy button
+            outputDiv.innerHTML = '';
+            outputDiv.appendChild(document.createTextNode(prompt));
+            outputDiv.appendChild(copyBtn);
+            
+            copyBtn.style.display = 'block';
         }
 
         function copyPrompt() {
             const prompt = document.getElementById('promptOutput').textContent;
             navigator.clipboard.writeText(prompt).then(() => {
-                const button = document.querySelector('.copy-btn');
-                const copyText = document.getElementById('copyText');
+                const button = document.getElementById('copyPromptBtn');
                 
                 button.classList.add('copied');
-                copyText.textContent = 'Copied!';
                 
                 setTimeout(() => {
                     button.classList.remove('copied');
-                    copyText.textContent = 'Copy Prompt';
                 }, 2000);
             });
         }
 
-        function addToHistory(prompt) {
-            promptHistory.unshift(prompt);
-            if (promptHistory.length > 10) {
-                promptHistory.pop();
-            }
-            saveHistory();
-            updateHistoryDisplay();
-        }
-
-        function updateHistoryDisplay() {
-            const historyList = document.getElementById('historyList');
-            
-            if (promptHistory.length === 0) {
-                historyList.innerHTML = '<div class="history-empty">No prompts generated yet. Create your first prompt above!</div>';
-                return;
-            }
-            
-            historyList.innerHTML = promptHistory.map((prompt, index) => 
-                `<div class="history-item" onclick="useHistoryPrompt(${index})">${prompt}</div>`
-            ).join('');
-        }
-
-        function useHistoryPrompt(index) {
-            const prompt = promptHistory[index];
-            displayPrompt(prompt);
-        }
-
-        function clearHistory() {
-            promptHistory = [];
-            saveHistory();
-            updateHistoryDisplay();
-        }
-
-        function saveHistory() {
-            localStorage.setItem('cyberpunkPromptHistory', JSON.stringify(promptHistory));
-        }
-
-        function loadHistory() {
-            const saved = localStorage.getItem('cyberpunkPromptHistory');
-            if (saved) {
-                promptHistory = JSON.parse(saved);
-                updateHistoryDisplay();
-            }
-        }
 
         // Initialize the app when page loads
         window.onload = init;

@@ -56,10 +56,59 @@
             z-index: -1;
         }
 
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+            padding: 0;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 16px 20px;
+        }
+
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .nav-link {
+            color: #e5e7eb;
+            text-decoration: none;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 400;
+            letter-spacing: 0.05em;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background: rgba(168, 85, 247, 0.1);
+            color: #ffffff;
+        }
+
+        .nav-link.active {
+            background: rgba(168, 85, 247, 0.2);
+            color: #ffffff;
+        }
+
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 40px 20px;
+            padding: 120px 20px 40px 20px;
             position: relative;
             z-index: 1;
         }
@@ -109,39 +158,6 @@
             font-weight: 800;
         }
 
-        .nav-buttons {
-            display: flex;
-            gap: 16px;
-            justify-content: center;
-            margin-bottom: 40px;
-        }
-
-        .nav-btn {
-            padding: 12px 24px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            color: #e5e7eb;
-            text-decoration: none;
-            font-weight: 400;
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.1rem;
-            letter-spacing: 0.05em;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-        }
-
-        .nav-btn:hover {
-            background: rgba(168, 85, 247, 0.1);
-            border-color: rgba(168, 85, 247, 0.3);
-            transform: translateY(-2px);
-        }
-
-        .nav-btn.active {
-            background: linear-gradient(135deg, #a855f7, #ec4899);
-            border-color: transparent;
-            color: white;
-        }
 
         .inspire-section {
             margin-bottom: 60px;
@@ -194,6 +210,35 @@
             border: none;
             outline: none;
             resize: none;
+            position: relative;
+        }
+
+        .copy-icon-btn {
+            position: absolute;
+            bottom: 12px;
+            right: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #e5e7eb;
+            padding: 6px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .copy-icon-btn:hover {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: rgba(168, 85, 247, 0.4);
+            color: #ffffff;
+        }
+
+        .copy-icon-btn.copied {
+            background: rgba(16, 185, 129, 0.2);
+            border-color: rgba(16, 185, 129, 0.4);
+            color: #10b981;
         }
 
         .image-gallery {
@@ -239,19 +284,21 @@
 
         .card-title {
             font-size: 1.25rem;
-            font-weight: 700;
+            font-weight: 400;
+            font-family: 'Bebas Neue', sans-serif;
             color: #ffffff;
             margin-bottom: 12px;
             display: flex;
             align-items: center;
             gap: 8px;
+            letter-spacing: 0.05em;
         }
 
         .card-title::before {
             content: '';
             width: 4px;
             height: 16px;
-            background: linear-gradient(135deg, #a855f7, #ec4899);
+            background: #a855f7;
             border-radius: 2px;
         }
 
@@ -275,9 +322,16 @@
                 gap: 16px;
             }
 
-            .nav-buttons {
-                flex-direction: column;
-                align-items: center;
+            .nav-container {
+                padding: 12px 20px;
+            }
+
+            .nav-links {
+                gap: 16px;
+            }
+
+            .container {
+                padding: 160px 20px 40px 20px;
             }
 
             .inspire-container {
@@ -311,22 +365,32 @@
     </style>
 </head>
 <body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <div class="nav-links">
+                <a href="index.html" class="nav-link active">Home</a>
+                <a href="generator.html" class="nav-link">Generator</a>
+            </div>
+        </div>
+    </nav>
+
     <div class="container">
         <div class="header">
             <h1>Let's Start Building <span class="highlight">Prompts</span> People Remember</h1>
             <p>Perfect for creators, designers, and marketers who need high-converting AI prompts that stand out from the crowd.</p>
         </div>
 
-        <div class="nav-buttons">
-            <a href="index.html" class="nav-btn active">Home</a>
-            <a href="generator.html" class="nav-btn">Generator</a>
-        </div>
-
         <div class="inspire-section">
             <div class="inspire-container">
                 <button class="inspire-btn" onclick="generateInspiration()">Inspire me</button>
                 <div class="inspiration-output" id="inspirationOutput">
-                    Click "Inspire me" to get a random cyberpunk prompt idea...
+                    Click "Inspire me" to get a random prompt idea...
+                    <button class="copy-icon-btn" id="copyInspireBtn" onclick="copyInspiration()" style="display: none;" title="Copy prompt">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                    </button>
                 </div>
             </div>
         </div>
@@ -503,7 +567,28 @@
                 prompt = prompt.replace(`{${category}}`, randomOption);
             });
             
-            document.getElementById('inspirationOutput').textContent = prompt;
+            const outputDiv = document.getElementById('inspirationOutput');
+            const copyBtn = document.getElementById('copyInspireBtn');
+            
+            // Clear existing content but preserve the copy button
+            outputDiv.innerHTML = '';
+            outputDiv.appendChild(document.createTextNode(prompt));
+            outputDiv.appendChild(copyBtn);
+            
+            copyBtn.style.display = 'block';
+        }
+
+        function copyInspiration() {
+            const prompt = document.getElementById('inspirationOutput').textContent;
+            navigator.clipboard.writeText(prompt).then(() => {
+                const button = document.getElementById('copyInspireBtn');
+                
+                button.classList.add('copied');
+                
+                setTimeout(() => {
+                    button.classList.remove('copied');
+                }, 2000);
+            });
         }
     </script>
 </body>

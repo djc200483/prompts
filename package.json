@@ -1,0 +1,26 @@
+{
+  "name": "cyberpunk-prompt-generator",
+  "version": "1.0.0",
+  "description": "A beautiful web app for generating infinite variations of cyberpunk and futuristic AI image prompts",
+  "main": "index.html",
+  "scripts": {
+    "dev": "vercel dev",
+    "start": "vercel dev",
+    "build": "echo 'No build step needed - static site'",
+    "serve": "npx http-server . -p 8000 -o"
+  },
+  "keywords": [
+    "cyberpunk",
+    "prompt-generator",
+    "ai",
+    "midjourney",
+    "image-generation",
+    "futuristic"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "devDependencies": {
+    "vercel": "^32.0.0",
+    "http-server": "^14.1.1"
+  }
+}

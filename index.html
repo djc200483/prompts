@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyberpunk Prompt Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            color: #e0e6ed;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 3s ease-in-out infinite;
+            margin-bottom: 10px;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: #a0aec0;
+        }
+
+        .controls {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(245, 87, 108, 0.4);
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(245, 87, 108, 0.6);
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .category-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .category-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #4ecdc4;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            padding-right: 20px;
+        }
+
+        .category-title:hover {
+            color: #ff6b6b;
+            transform: translateX(5px);
+        }
+
+        .category-title::after {
+            content: '▼';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            transition: transform 0.3s ease;
+            font-size: 0.8rem;
+        }
+
+        .category-title.expanded::after {
+            transform: translateY(-50%) rotate(180deg);
+        }
+
+        .show-more-btn {
+            background: rgba(255, 107, 107, 0.2);
+            border: 1px solid rgba(255, 107, 107, 0.3);
+            border-radius: 20px;
+            padding: 6px 16px;
+            font-size: 0.85rem;
+            color: #ff6b6b;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 8px;
+        }
+
+        .show-more-btn:hover {
+            background: rgba(255, 107, 107, 0.3);
+            transform: scale(1.05);
+        }
+
+        .category-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .option-tag {
+            background: rgba(78, 205, 196, 0.2);
+            border: 1px solid rgba(78, 205, 196, 0.3);
+            border-radius: 20px;
+            padding: 4px 12px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option-tag:hover {
+            background: rgba(78, 205, 196, 0.3);
+            transform: scale(1.05);
+        }
+
+        .option-tag.selected {
+            background: rgba(78, 205, 196, 0.6);
+            border-color: #4ecdc4;
+            box-shadow: 0 0 10px rgba(78, 205, 196, 0.5);
+        }
+
+        .output-section {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            margin-bottom: 20px;
+        }
+
+        .output-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #ff6b6b;
+        }
+
+        .prompt-output {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+            line-height: 1.6;
+            min-height: 120px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .copy-btn {
+            margin-top: 15px;
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            color: #e0e6ed;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .history-section {
+            margin-top: 30px;
+        }
+
+        .history-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .history-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .categories-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Cyberpunk Prompt Generator</h1>
+            <p>Generate infinite variations of futuristic, cyberpunk-inspired prompts</p>
+        </div>
+
+        <div class="controls">
+            <button class="btn btn-primary" onclick="generateRandomPrompt()">🎲 Generate Random</button>
+            <button class="btn btn-secondary" onclick="generateFromSelected()">✨ Use Selected</button>
+            <button class="btn btn-secondary" onclick="clearHistory()">🗑️ Clear History</button>
+        </div>
+
+        <div class="categories-grid" id="categoriesGrid">
+            <!-- Categories will be populated by JavaScript -->
+        </div>
+
+        <div class="output-section">
+            <div class="output-title">Generated Prompt</div>
+            <div class="prompt-output" id="promptOutput">Click "Generate Random" to create your first prompt!</div>
+            <button class="copy-btn" onclick="copyPrompt()">📋 Copy Prompt</button>
+        </div>
+
+        <div class="history-section" id="historySection" style="display: none;">
+            <div class="output-title">Generation History</div>
+            <div id="historyList"></div>
+        </div>
+    </div>
+
+    <script>
+        // Prompt data structure with all the expanded categories
+        const promptData = {
+            subjectType: [
+                "Alien priestess", "Cyberpunk witch", "Biomechanical warrior", "Post-human oracle",
+                "Tattooed model", "Futuristic empress", "Digital avatar", "Mech-shaman",
+                "Astral traveler", "Holographic singer", "Neon samurai", "Desert exile",
+                "Quantum thief", "Cyber assassin", "Alien ambassador", "Robotic monk",
+                "Lost time traveler", "AI-controlled puppet", "Ancient tech deity", "Cosmic wanderer",
+                "Synthetic prophet", "Void dancer", "Tech necromancer", "Neural ghost",
+                "Crystal shaman", "Plasma mage", "Binary oracle", "Ethereal cyborg",
+                "Quantum priest", "Holographic wraith", "Data sorcerer", "Cyber demon",
+                "Electric angel", "Digital phoenix", "Neural vampire", "Void saint",
+                "Tech archangel", "Plasma revenant", "Crystal specter", "Binary wraith"
+            ],
+            wardrobe: [
+                "Flowing metallic robes", "High-tech tactical gear", "Neon-accented techwear",
+                "Cybernetic lace bodysuit", "Sacred silk wraps", "Holographic armor plating",
+                "Minimalist chrome suit", "Ancient priest garments", "Asymmetrical mech-streetwear",
+                "Translucent alien fabric", "Bio-synthetic bone armor", "Draped netting with LEDs",
+                "Dust-covered survival wraps", "Futurist cult robes", "Leather and carbon weave",
+                "Tattooed skin with no clothing", "Plated bodysuit with glowing seams",
+                "Crystal-threaded gown", "Retro-futurist jumpsuit", "Layered dystopian fashion",
+                "Quantum-weave cloak", "Neural mesh bodysuit", "Void-touched vestments",
+                "Electric feather cape", "Plasma-woven shroud", "Binary silk kimono",
+                "Crystal chainmail", "Holographic battle dress", "Data-stream robes",
+                "Neon leather harness", "Cyberpunk trench coat", "Ethereal wire mesh",
+                "Glitch-pattern suit", "Quantum fiber weave", "Neural lace corset",
+                "Plasma-dyed tunic", "Void-silk sarong", "Electric chainmail",
+                "Binary fiber cloak", "Crystal mesh armor", "Holographic battle suit"
+            ],
+            bodyMod: [
+                "Glowing circuit tattoos", "Transparent skin showing stardust", "Biomech implants",
+                "Alien runes etched into flesh", "Holographic tattoos", "Golden cybernetic arms",
+                "Neon biomechanical spine", "Mechanical wings", "Data ports along collarbone",
+                "Visibly exposed microchips", "Organic-metal hybrid veins", "Crystalline horns",
+                "Chrome skullplate", "Augmented reality eye lenses", "Living armor attached to skin",
+                "Levitating metal rings", "Cybernetic spinal armor", "Mechanical jaw",
+                "Symbiotic shoulder armor", "Tattooed with star maps", "Quantum crystal implants",
+                "Neural interface ports", "Plasma-flowing veins", "Void-touched skin patches",
+                "Electric feather implants", "Binary code scars", "Crystal spine extensions",
+                "Holographic bone replacements", "Data-stream tattoos", "Neon organ displays",
+                "Cyberpunk prosthetic limbs", "Ethereal wire networks", "Glitch-pattern skin",
+                "Quantum fiber muscles", "Neural lace overlays", "Plasma-dyed hair",
+                "Void-silk skin grafts", "Electric muscle fibers", "Binary neural pathways",
+                "Crystal joint replacements", "Holographic organ systems"
+            ],
+            emotionalTone: [
+                "Mysterious and calm", "Dark and seductive", "Stoic and regal",
+                "Transcendent and glowing", "Menacing and cold", "Soft but powerful",
+                "Emotionless alien grace", "Introspective and quiet", "Ethereal and dreamlike",
+                "Haunted and hollow", "Feral and primal", "Commanding presence",
+                "Ritualistic trance", "Enlightened serenity", "Playful but enigmatic",
+                "Detached and calculating", "Sorrowful but divine", "Predatory elegance",
+                "Nostalgic futurism", "Obsessed with the void", "Electric and wild",
+                "Quantum uncertainty", "Plasma-charged fury", "Void-stricken melancholy",
+                "Crystal-clear focus", "Neural network calm", "Binary precision",
+                "Holographic detachment", "Data-stream consciousness", "Neon-bright energy",
+                "Cyberpunk rebellion", "Ethereal transcendence", "Glitch-induced madness",
+                "Quantum superposition", "Neural pathway serenity", "Plasma-flowing rage",
+                "Void-walker isolation", "Electric storm intensity", "Binary code logic",
+                "Crystal formation patience", "Holographic projection distance"
+            ],
+            environment: [
+                "Desert ruins on alien planet", "Dystopian neon alley", "Sacred alien spacecraft interior",
+                "Post-apocalyptic temple", "Futuristic Tokyo rooftop", "Cyber jungle",
+                "Void-like dreamspace", "Ancient underground reactor", "Mech-market bazaar",
+                "Abandoned starlight city", "Digital cathedral", "Rain-soaked urban slums",
+                "Moonlit shrine on Mars", "Bioluminescent swamp", "Mechanical bone forest",
+                "Crystalline cave", "Deep orbit docking station", "Endless mirrored void",
+                "Towering digital monoliths", "Afterlife cityscape", "Quantum flux chamber",
+                "Neural network realm", "Plasma storm battlefield", "Void dimension pocket",
+                "Crystal matrix laboratory", "Holographic simulation space", "Data stream corridor",
+                "Electric storm clouds", "Binary code landscape", "Neon-lit cyberpunk streets",
+                "Ethereal dimension rift", "Glitch-pattern reality", "Quantum foam bubbles",
+                "Neural pathway maze", "Plasma-washed shores", "Void-touched wasteland",
+                "Crystal formation caves", "Holographic projection room", "Data visualization space",
+                "Electric field distortion", "Binary garden maze", "Cyberpunk noir alleyways"
+            ],
+            symbolicElements: [
+                "Sacred geometry symbols", "Alien glyphs", "Floating holograms", "Digital feathers",
+                "Ancient sigils", "Glitch particles", "Quantum circuitry", "Drifting metallic petals",
+                "Ethereal fireflies", "Neon graffiti", "Mechanical runes", "Orbiting energy rings",
+                "Astrological constellations", "Fragments of floating stone tablets", "Glowing binary code rain",
+                "Breathing glass fragments", "Alien prayer scripts", "Time loop distortions",
+                "Ancient alien book pages", "Holographic snakes", "Quantum entanglement threads",
+                "Neural pathway lights", "Plasma energy orbs", "Void-touched crystals",
+                "Electric lightning bolts", "Binary code streams", "Crystal formation patterns",
+                "Holographic data clouds", "Neon circuit boards", "Cyberpunk interface elements",
+                "Ethereal dimension tears", "Glitch-reality fragments", "Quantum foam bubbles",
+                "Neural network nodes", "Plasma storm clouds", "Void dimension portals",
+                "Crystal matrix grids", "Holographic projection screens", "Data visualization charts",
+                "Electric field lines", "Binary decision trees", "Cyberpunk surveillance drones"
+            ],
+            lighting: [
+                "Backlit silhouette", "Golden hour haze", "Bioluminescent glow", "Neon red underglow",
+                "Moonlight + mist", "Sparkling ambient particles", "Volumetric spotlight",
+                "Dramatic chiaroscuro", "Overexposed whitewash", "Strobe-like flickering light",
+                "Faint candle glow", "Soft green biolight", "Hard blue rimlight",
+                "Pulsing LED strip light", "Shattered light through crystal", "Infrared heat haze",
+                "Soft morning mist", "UV radiation glow", "Glitching starlight reflections",
+                "Celestial light shaft", "Quantum field distortion", "Neural pathway illumination",
+                "Plasma storm lightning", "Void-touched shadows", "Crystal prism refraction",
+                "Holographic projection light", "Data stream luminescence", "Electric arc discharge",
+                "Binary code flickering", "Cyberpunk neon ambiance", "Ethereal dimension glow",
+                "Glitch-reality lighting", "Quantum foam sparkles", "Neural network pulses",
+                "Plasma-washed illumination", "Void-dimension radiance", "Crystal matrix beams",
+                "Holographic interface glow", "Data visualization lighting", "Electric storm flashes",
+                "Binary decision highlights", "Cyberpunk surveillance spotlights"
+            ],
+            cameraLens: [
+                "Leica 50mm, f/1.2, shallow depth of field", "Anamorphic lens, cinematic",
+                "Drone view, tilt angle", "DSLR 85mm, sharp focus on face", "Ultra wide lens, low angle",
+                "Top-down moody view", "Macro lens, extreme detail", "CCTV surveillance angle",
+                "Over-the-shoulder medium shot", "Zoom lens with haze", "Grainy analog camera",
+                "Infrared thermal lens", "Close-up low-focus DOF", "Telephoto through smoke",
+                "Point-of-view shot", "Fish-eye lens slight distortion", "Retro CRT video quality",
+                "Cinematic widescreen crop", "Mid-century film camera look", "Portrait studio lighting setup",
+                "Quantum field camera", "Neural interface view", "Plasma-wave lens",
+                "Void-dimension scanner", "Crystal matrix optics", "Holographic projection camera",
+                "Data stream visualization", "Electric field detector", "Binary code reader",
+                "Cyberpunk surveillance cam", "Ethereal dimension viewer", "Glitch-reality recorder",
+                "Quantum foam observer", "Neural pathway tracker", "Plasma storm monitor",
+                "Void-touched scanner", "Crystal formation recorder", "Holographic interface camera",
+                "Data visualization lens", "Electric storm tracker", "Binary decision camera",
+                "Cyberpunk noir detective cam", "Futuristic body cam"
+            ],
+            artisticStyle: [
+                "H.R. Giger", "Art Nouveau meets sci-fi", "Moebius x cyberpunk",
+                "Dark baroque surrealism", "Alexander McQueen couture", "80s anime cyber aesthetics",
+                "Surreal photo-realism", "Retro-futurist propaganda", "Mystical realism",
+                "Vaporwave noir", "Gothic cyber fantasy", "David LaChapelle futurism",
+                "Blade Runner x Dune", "Tribal-mech fusion", "Astral Impressionism",
+                "AI-generated art glitch", "Brutalist fashion editorial", "Spiritual symbolism abstraction",
+                "Tattoo realism meets robotics", "Neo-expressionist cyberpunk", "Quantum art movement",
+                "Neural network aesthetics", "Plasma-wave expressionism", "Void-touched surrealism",
+                "Crystal formation minimalism", "Holographic pop art", "Data stream cubism",
+                "Electric field impressionism", "Binary code pointillism", "Cyberpunk noir realism",
+                "Ethereal dimension abstraction", "Glitch-reality dadaism", "Quantum foam symbolism",
+                "Neural pathway constructivism", "Plasma-storm fauvism", "Void-dimension expressionism",
+                "Crystal matrix geometric art", "Holographic interface design", "Data visualization art",
+                "Electric storm action painting", "Binary decision conceptual art", "Cyberpunk surveillance realism"
+            ],
+            composition: [
+                "Center-framed portrait", "Wide angle full-body shot", "Dramatic overhead light",
+                "Soft bokeh background", "Tight close-up on facial tech", "Rule of thirds for subject",
+                "Foggy mid-ground characters", "Low-angle cinematic shot", "Portrait shot with symmetry",
+                "Off-center voyeuristic crop", "Overexposed backlight silhouette", "Profile-only character",
+                "From-behind with soft focus", "High contrast black and gold", "Abstract floating pose",
+                "Sitting with energy swirling", "Arms raised in ritual", "Looking into the light",
+                "Surrounded by void", "Fragmented glitch frame", "Quantum field distortion view",
+                "Neural pathway network shot", "Plasma storm center focus", "Void-dimension portal framing",
+                "Crystal matrix geometric composition", "Holographic projection angle", "Data stream flow capture",
+                "Electric field line following", "Binary code pattern framing", "Cyberpunk surveillance angle",
+                "Ethereal dimension perspective", "Glitch-reality fracture view", "Quantum foam bubble focus",
+                "Neural network node positioning", "Plasma-washed silhouette", "Void-touched negative space",
+                "Crystal formation growth pattern", "Holographic interface interaction", "Data visualization chart view",
+                "Electric storm center stage", "Binary decision tree layout", "Cyberpunk noir shadow play"
+            ]
+        };
+
+        // Category labels for display
+        const categoryLabels = {
+            subjectType: "Subject Type",
+            wardrobe: "Wardrobe / Fashion",
+            bodyMod: "Body Mod / Details",
+            emotionalTone: "Emotional Tone",
+            environment: "Environment / Setting",
+            symbolicElements: "Symbolic Elements",
+            lighting: "Lighting",
+            cameraLens: "Camera / Lens",
+            artisticStyle: "Artistic Style",
+            composition: "Composition Notes"
+        };
+
+        let selectedOptions = {};
+        let promptHistory = [];
+
+        // Initialize the app
+        function init() {
+            createCategoryCards();
+            generateRandomPrompt();
+        }
+
+        // Create category cards with options
+        function createCategoryCards() {
+            const grid = document.getElementById('categoriesGrid');
+            grid.innerHTML = '';
+
+            Object.keys(promptData).forEach(category => {
+                const card = document.createElement('div');
+                card.className = 'category-card';
+                
+                const title = document.createElement('div');
+                title.className = 'category-title';
+                title.textContent = categoryLabels[category];
+                title.onclick = () => toggleCategory(card);
+                
+                const options = document.createElement('div');
+                options.className = 'category-options';
+                options.style.display = 'none'; // Initially hidden
+                
+                // Show first 5 options
+                const visibleOptions = promptData[category].slice(0, 5);
+                const hiddenOptions = promptData[category].slice(5);
+                
+                visibleOptions.forEach(option => {
+                    const tag = document.createElement('span');
+                    tag.className = 'option-tag';
+                    tag.textContent = option;
+                    tag.onclick = () => toggleOption(category, option, tag);
+                    options.appendChild(tag);
+                });
+                
+                // Add "Show More" button if there are hidden options
+                if (hiddenOptions.length > 0) {
+                    const showMoreBtn = document.createElement('button');
+                    showMoreBtn.className = 'show-more-btn';
+                    showMoreBtn.textContent = `Show ${hiddenOptions.length} more...`;
+                    showMoreBtn.onclick = (e) => {
+                        e.stopPropagation();
+                        showAllOptions(category, options, hiddenOptions, showMoreBtn);
+                    };
+                    options.appendChild(showMoreBtn);
+                }
+                
+                card.appendChild(title);
+                card.appendChild(options);
+                grid.appendChild(card);
+            });
+        }
+
+        // Toggle category visibility
+        function toggleCategory(card) {
+            const options = card.querySelector('.category-options');
+            const title = card.querySelector('.category-title');
+            
+            if (options.style.display === 'none') {
+                options.style.display = 'flex';
+                title.classList.add('expanded');
+            } else {
+                options.style.display = 'none';
+                title.classList.remove('expanded');
+            }
+        }
+
+        // Show all options in a category
+        function showAllOptions(category, optionsContainer, hiddenOptions, showMoreBtn) {
+            hiddenOptions.forEach(option => {
+                const tag = document.createElement('span');
+                tag.className = 'option-tag';
+                tag.textContent = option;
+                tag.onclick = () => toggleOption(category, option, tag);
+                optionsContainer.insertBefore(tag, showMoreBtn);
+            });
+            
+            showMoreBtn.textContent = 'Show Less';
+            showMoreBtn.onclick = (e) => {
+                e.stopPropagation();
+                showFewerOptions(category, optionsContainer, hiddenOptions, showMoreBtn);
+            };
+        }
+
+        // Show fewer options in a category
+        function showFewerOptions(category, optionsContainer, hiddenOptions, showMoreBtn) {
+            // Remove all hidden option tags
+            hiddenOptions.forEach(() => {
+                const lastTag = optionsContainer.querySelector('.option-tag:last-of-type');
+                if (lastTag && !lastTag.textContent.includes('Show')) {
+                    lastTag.remove();
+                }
+            });
+            
+            showMoreBtn.textContent = `Show ${hiddenOptions.length} more...`;
+            showMoreBtn.onclick = (e) => {
+                e.stopPropagation();
+                showAllOptions(category, optionsContainer, hiddenOptions, showMoreBtn);
+            };
+        }
+
+        // Toggle option selection
+        function toggleOption(category, option, element) {
+            if (!selectedOptions[category]) {
+                selectedOptions[category] = new Set();
+            }
+            
+            if (selectedOptions[category].has(option)) {
+                selectedOptions[category].delete(option);
+                element.classList.remove('selected');
+            } else {
+                selectedOptions[category].add(option);
+                element.classList.add('selected');
+            }
+        }
+
+        // Generate random prompt
+        function generateRandomPrompt() {
+            const selections = {};
+            
+            Object.keys(promptData).forEach(category => {
+                const options = promptData[category];
+                const randomIndex = Math.floor(Math.random() * options.length);
+                selections[category] = options[randomIndex];
+            });
+            
+            displayPrompt(selections);
+        }
+
+        // Generate prompt from selected options
+        function generateFromSelected() {
+            const selections = {};
+            let hasSelection = false;
+            
+            Object.keys(promptData).forEach(category => {
+                if (selectedOptions[category] && selectedOptions[category].size > 0) {
+                    const options = Array.from(selectedOptions[category]);
+                    const randomIndex = Math.floor(Math.random() * options.length);
+                    selections[category] = options[randomIndex];
+                    hasSelection = true;
+                } else {
+                    const options = promptData[category];
+                    const randomIndex = Math.floor(Math.random() * options.length);
+                    selections[category] = options[randomIndex];
+                }
+            });
+            
+            displayPrompt(selections);
+        }
+
+        // Display the generated prompt
+        function displayPrompt(selections) {
+            const prompt = `A ${selections.subjectType} wearing ${selections.wardrobe}, with ${selections.bodyMod}, expressing a ${selections.emotionalTone} mood, standing in a ${selections.environment}. Surrounded by ${selections.symbolicElements}, lit by ${selections.lighting}, captured with a ${selections.cameraLens}. Inspired by ${selections.artisticStyle}. ${selections.composition}.`;
+            
+            document.getElementById('promptOutput').textContent = prompt;
+            
+            // Add to history
+            promptHistory.unshift({
+                prompt: prompt,
+                timestamp: new Date().toLocaleTimeString(),
+                selections: selections
+            });
+            
+            // Keep only last 10 prompts
+            if (promptHistory.length > 10) {
+                promptHistory = promptHistory.slice(0, 10);
+            }
+            
+            updateHistory();
+        }
+
+        // Update history display
+        function updateHistory() {
+            const historySection = document.getElementById('historySection');
+            const historyList = document.getElementById('historyList');
+            
+            if (promptHistory.length === 0) {
+                historySection.style.display = 'none';
+                return;
+            }
+            
+            historySection.style.display = 'block';
+            historyList.innerHTML = '';
+            
+            promptHistory.forEach((item, index) => {
+                const historyItem = document.createElement('div');
+                historyItem.className = 'history-item';
+                historyItem.innerHTML = `<strong>${item.timestamp}</strong><br>${item.prompt}`;
+                historyItem.onclick = () => {
+                    document.getElementById('promptOutput').textContent = item.prompt;
+                    document.getElementById('promptOutput').scrollIntoView({ behavior: 'smooth' });
+                };
+                historyList.appendChild(historyItem);
+            });
+        }
+
+        // Copy prompt to clipboard
+        function copyPrompt() {
+            const prompt = document.getElementById('promptOutput').textContent;
+            navigator.clipboard.writeText(prompt).then(() => {
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = '✅ Copied!';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                }, 2000);
+            });
+        }
+
+        // Clear history
+        function clearHistory() {
+            promptHistory = [];
+            updateHistory();
+        }
+
+        // Initialize the app when page loads
+        window.onload = init;
+    </script>
+</body>
+</html>

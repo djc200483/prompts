@@ -167,7 +167,8 @@
         .inspire-section {
             margin-bottom: 60px;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            align-items: center;
         }
 
         .inspire-container {
@@ -244,6 +245,87 @@
             background: rgba(16, 185, 129, 0.2);
             border-color: rgba(16, 185, 129, 0.4);
             color: #10b981;
+        }
+
+        .pack-selector {
+            margin-bottom: 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .pack-title {
+            font-size: 1.5rem;
+            font-weight: 400;
+            font-family: 'Bebas Neue', sans-serif;
+            color: #ffffff;
+            margin-bottom: 24px;
+            letter-spacing: 0.05em;
+            text-align: center;
+        }
+
+        .pack-options {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .pack-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            padding: 12px 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pack-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(168, 85, 247, 0.3), transparent);
+        }
+
+        .pack-btn:hover {
+            border-color: rgba(168, 85, 247, 0.2);
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .pack-btn.active {
+            border-color: rgba(168, 85, 247, 0.4);
+            background: rgba(168, 85, 247, 0.1);
+            box-shadow: 0 4px 20px rgba(168, 85, 247, 0.2);
+        }
+
+        .pack-name {
+            display: block;
+            font-size: 1rem;
+            font-weight: 400;
+            font-family: 'Bebas Neue', sans-serif;
+            color: #ffffff;
+            margin-bottom: 2px;
+            letter-spacing: 0.05em;
+            text-align: center;
+        }
+
+        .pack-desc {
+            display: block;
+            font-size: 0.8rem;
+            color: rgba(229, 231, 235, 0.7);
+            line-height: 1.2;
         }
 
         .image-gallery {
@@ -339,6 +421,12 @@
                 padding: 160px 20px 40px 20px;
             }
 
+            .pack-options {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+                max-width: 100%;
+            }
+
             .inspire-container {
                 flex-direction: column;
                 gap: 0;
@@ -383,6 +471,42 @@
         <div class="header">
             <h1>Let's Start Building <span class="highlight">Prompts</span> People Remember</h1>
             <p>Perfect for creators, designers, and AI Artists who want high-powered prompts that make your images stand out over the crowd.</p>
+        </div>
+
+        <div class="pack-selector">
+            <h3 class="pack-title">Choose Your Style Pack</h3>
+            <div class="pack-options">
+                <button class="pack-btn active" onclick="selectPack('cyber-mythos')" id="cyber-mythos-btn">
+                    <span class="pack-name">Cyber-Mythos</span>
+                </button>
+                <button class="pack-btn" onclick="selectPack('high-fantasy')" id="high-fantasy-btn">
+                    <span class="pack-name">High Fantasy</span>
+                </button>
+                <button class="pack-btn" onclick="selectPack('historical-realism')" id="historical-realism-btn">
+                    <span class="pack-name">Historical Realism</span>
+                </button>
+                <button class="pack-btn" onclick="selectPack('gothic-horror')" id="gothic-horror-btn">
+                    <span class="pack-name">Gothic Horror</span>
+                </button>
+                <button class="pack-btn" onclick="selectPack('myth-legend')" id="myth-legend-btn">
+                    <span class="pack-name">Myth & Legend</span>
+                </button>
+                <button class="pack-btn" onclick="selectPack('nature-spirit')" id="nature-spirit-btn">
+                    <span class="pack-name">Nature & Spirit</span>
+                </button>
+                <button class="pack-btn" onclick="selectPack('modern-surreal')" id="modern-surreal-btn">
+                    <span class="pack-name">Modern Surreal</span>
+                </button>
+                <button class="pack-btn" onclick="selectPack('pop-retro')" id="pop-retro-btn">
+                    <span class="pack-name">Pop/Retro</span>
+                </button>
+                <button class="pack-btn" onclick="selectPack('abstract-conceptual')" id="abstract-conceptual-btn">
+                    <span class="pack-name">Abstract/Conceptual</span>
+                </button>
+                <button class="pack-btn" onclick="selectPack('cosmic-scifi')" id="cosmic-scifi-btn">
+                    <span class="pack-name">Cosmic/Sci-Fi</span>
+                </button>
+            </div>
         </div>
 
         <div class="inspire-section">
@@ -472,8 +596,9 @@
     </div>
 
     <script>
-        // Prompt categories with expanded options (same as generator page)
+        // Prompt categories for different style packs
         const promptCategories = {
+            'cyber-mythos': {
             'subject-type': [
                 'Alien priestess', 'Cyberpunk witch', 'Biomechanical warrior', 'Post-human oracle', 'Tattooed model',
                 'Futuristic empress', 'Digital avatar', 'Mech-shaman', 'Astral traveler', 'Holographic singer',
@@ -576,14 +701,986 @@
                 'Neural mesh transformation', 'Plasma wave propagation', 'Holographic shadow division', 'Electric storm convergence', 'Crystal shard fragmentation',
                 'Void space compression', 'Quantum entanglement knot', 'Neural pathway junction', 'Plasma cloud accumulation', 'Holographic void expansion'
             ]
+            },
+            'high-fantasy': {
+            'subject-type': [
+                'Elven ranger', 'Dwarven king', 'Forest druid', 'Celestial paladin', 'Necromancer',
+                'Sorceress of the moon', 'Shadow assassin', 'Dragon knight', 'Fae trickster', 'Wandering bard',
+                'Mystic oracle', 'Goblin rogue', 'Dark elf warlock', 'Orc chieftain', 'Halfling adventurer',
+                'Gnome inventor', 'Priestess of light', 'Vampire count', 'Witch of the wilds', 'Griffon rider',
+                'Knight errant', 'Sacred monk', 'Undead lich', 'Werewolf shaman', 'Phoenix herald',
+                'Merfolk queen', 'Stormcaller mage', 'Runesmith blacksmith', 'Prophetic seer', 'Frost giant',
+                'Sunblade champion', 'Battle cleric', 'Sylvan archer', 'Demon-bound sorcerer', 'Palace scribe',
+                'Chivalric knight', 'Blood mage', 'Celestial angel', 'Fallen paladin', 'Rune-carved warrior'
+            ],
+            'wardrobe': [
+                'Enchanted silver armor', 'Flowing druidic robes', 'Dragonhide scale mail', 'Runed leather armor', 'Celestial silk gown',
+                'Tattered cloak of shadows', 'Royal gemstone crown', 'Starlight-woven cape', 'Blood-red ceremonial garb', 'Ancient chainmail tunic',
+                'Elven leaf-woven cloak', 'Dwarven forge apron', 'Moonlit velvet dress', 'Ritual bone headdress', 'Golden circlet with jewels',
+                'Shadow-dyed assassin garb', 'Glowing crystal staff harness', 'Plated battle surcoat', 'Forest-dyed ranger leathers', 'Ornate wizard hat and robes',
+                'Dark spiked armor', 'Phoenix-feather mantle', 'Scaled serpent cloak', 'Holy knight tabard', 'Silver tiara of starlight',
+                'Mystic embroidered shawl', 'Bone-stitched necromancer cloak', 'Fur-lined barbarian pelts', 'Sacrificial crimson robe', 'Ranger\'s weathered hood',
+                'Templar\'s cross-emblazoned surcoat', 'Fae-woven gossamer dress', 'Crown of thorns and roses', 'Storm-rune kilt', 'Obsidian breastplate',
+                'Feathered tribal cloak', 'Star-gemmed wizard mantle', 'Golden lion crest armor', 'Wolfshead pelt cloak', 'Twilight-dyed velvet cape'
+            ],
+            'body-modifications': [
+                'Runes glowing under skin', 'Dragonborn scales', 'Antler-like horns', 'Glowing elven tattoos', 'Eyes of flame',
+                'Crystal embedded in chest', 'Living vines entwined in skin', 'Silver halo of light', 'Wings of shadow', 'Wings of feathers',
+                'Spirit animal companion fused to body', 'Stone-like skin patches', 'Golden aura crown', 'Celestial starlight veins', 'Obsidian claws',
+                'Third glowing eye', 'Horned demon crown', 'Vampiric fangs', 'Gilded arm bracers fused into flesh', 'Halo of floating runes',
+                'Frostbitten skin cracks', 'Flame-scarred markings', 'Blood-red eyes', 'Shadow aura mist', 'Crown of living branches',
+                'Halo of fireflies', 'Sacred scarification', 'Metallic dwarven prosthetic', 'Tattooed battle marks', 'Phantom limb of smoke',
+                'Translucent ghostly skin', 'Ethereal flame hair', 'Bone protrusions from shoulders', 'Radiant gemstone eyes', 'Golden blood glow',
+                'Moss and bark skin growth', 'Spirit-bound arm chains', 'Fae wings of light', 'Storm-cracked veins', 'Halo of silver fire'
+            ],
+            'mood-expression': [
+                'Noble and wise', 'Corrupted by dark magic', 'Serene yet powerful', 'Trickster grin', 'Haunted with sorrow',
+                'Warrior\'s determination', 'Mystical serenity', 'Ferocious rage', 'Dreamlike wonder', 'Eerie silence',
+                'Proud and regal', 'Playful mischief', 'Melancholic longing', 'Divine compassion', 'Bloodthirsty hunger',
+                'Shadowed menace', 'Hopeful dreamer', 'Arcane focus', 'Wrathful fury', 'Stoic calm',
+                'Fanatical devotion', 'Cunning strategist', 'Desperate survivor', 'Joyful bardic charm', 'Ominous silence',
+                'Sacred transcendence', 'Wild ferality', 'Cold indifference', 'Childlike innocence', 'Ruthless ambition',
+                'Grim fatalism', 'Enlightened stillness', 'Obsessive curiosity', 'Reverent awe', 'Mocking arrogance',
+                'Conflicted duality', 'Predatory hunger', 'Unbreakable loyalty', 'Fated acceptance', 'Triumphant pride'
+            ],
+            'environment': [
+                'Enchanted forest clearing', 'Floating citadel', 'Crystal cavern of power', 'Sacred mountain peak', 'Foggy moorland',
+                'Ancient ruins with glowing runes', 'Moonlit glade', 'Volcanic battlefield', 'Mystical waterfall temple', 'Shadowed underworld cavern',
+                'Royal throne room', 'Fae circle in meadows', 'Frozen tundra battlefield', 'Sunlit temple of light', 'Haunted castle ruins',
+                'Hidden druid grove', 'Dragon\'s lair cavern', 'Celestial starry temple', 'War-torn medieval village', 'Orc encampment fires',
+                'Glittering dwarven hall', 'High elven cityscape', 'Sacrificial pyramid altar', 'Towering mage spire', 'Royal banquet chamber',
+                'Graveyard under blood moon', 'Sunken sea temple', 'Blazing desert fortress', 'Storm-lashed cliffside', 'Celestial observatory',
+                'Battlefield strewn with weapons', 'Dark fae swamp', 'Sacred oak grove', 'Golden plains at sunrise', 'Ancient labyrinth',
+                'Crumbling stone bridge', 'Goblin market tunnels', 'Twilight fae crossroads', 'Frozen crystal palace', 'Dragonbone throne hall'
+            ],
+            'surrounding-elements': [
+                'Floating runic symbols', 'Drifting fireflies', 'Falling leaves of light', 'Ancient magical glyphs', 'Flames spiraling upward',
+                'Phantom spirits', 'Twinkling constellations', 'Ethereal fog tendrils', 'Floating crystals', 'Arcane spell circles',
+                'Shattered weapons in the ground', 'Crows circling above', 'Glowing mushrooms', 'Bones scattered at feet', 'Runic stones hovering',
+                'Golden beams from heavens', 'Blood mist haze', 'Fae butterflies glowing', 'Shadowy tendrils creeping', 'Sacred banners waving',
+                'Raining flower petals', 'Crackling elemental sparks', 'Dust motes in moonlight', 'Drifting embers', 'Spectral chains floating',
+                'Choral ghostly voices', 'Swirling aurora ribbons', 'Sacred chalice glowing', 'Meteor streaks in sky', 'Crumbling ruins suspended',
+                'Torn banners in wind', 'Spirit wolves circling', 'Shards of stained glass', 'Magical tomes floating', 'Runic pillars rising',
+                'Ancient sigils glowing', 'Blood-soaked feathers falling', 'Vines wrapping weapons', 'Moonlight beams through clouds', 'Cursed relic fragments'
+            ],
+            'lighting': [
+                'Moonlight glow', 'Candlelit warmth', 'Holy radiant light', 'Flickering torchlight', 'Aurora shimmer',
+                'Dramatic firelight shadows', 'Soft golden glow', 'Lightning strike flash', 'Crystal light reflections', 'Magical aura luminescence',
+                'Blood-red eclipse light', 'Stars shining above', 'Misty dawn haze', 'Sunset fire glow', 'Stained-glass refractions',
+                'Volcanic red glow', 'Celestial comet light', 'Glowing spell circles', 'Runes casting light', 'Lantern glow',
+                'Sunbeam shafts through forest', 'Haunted blue glow', 'Torch sconce illumination', 'Golden dusk radiance', 'Frozen starlight glimmer',
+                'Rainbow prism shimmer', 'Battlefield smoke glow', 'Ghostly pale shine', 'Witchfire green light', 'Twilight horizon shine',
+                'Shadow-cast silhouettes', 'Morning light haze', 'Moonbeam spotlight', 'Arcane purple glow', 'Sword reflecting light',
+                'Bonfire illumination', 'Chandelier brilliance', 'Cavern crystal glow', 'Seraphic white brilliance', 'Infernal firestorm glow'
+            ],
+            'camera-angle': [
+                'Leica 50mm, f/1.2, shallow depth of field', 'Anamorphic lens, epic cinematic sweep', 'Drone view from dragon flight, tilt angle', 'DSLR 85mm, sharp focus on knight\'s face', 'Ultra wide lens, looming castle low angle',
+                'Top-down moody dungeon shot', 'Macro lens, extreme detail on runes', 'Scrying orb surveillance angle', 'Over-the-shoulder archer\'s aim', 'Zoom lens through misty forest haze',
+                'Grainy medieval tapestry camera look', 'Infrared magical vision lens', 'Close-up low-focus DOF on spellbook', 'Telephoto shot through battlefield smoke', 'First-person adventurer POV',
+                'Fish-eye lens distortion inside cavern', 'Retro illuminated manuscript frame style', 'Cinematic widescreen crop, epic scale', 'Mid-century fantasy illustration look', 'Portrait studio lighting with enchanted glow',
+                'Crystal ball tracker view', 'Scrying mirror monitor shot', 'Divination rune detector', 'Celestial star-map scanner', 'Alchemist\'s lens POV',
+                'Enchanted relic observer', 'Dragon-eye perspective lens', 'Arcane glyph projector', 'Magical flame shadow scope', 'Moonlight silver lens',
+                'Elven crystal shard scanner', 'Dwarven forge-view camera', 'Oracle\'s void mirror viewer', 'Dreamweaver\'s mist detector', 'Time-lapse sundial tracker',
+                'Tilt-shift "storybook miniature" effect', 'Illusionist\'s holographic lens', 'Divine halo monitor', 'Ethereal aura observer', 'Astral plane vision scope'
+            ],
+            'art-style': [
+                'High fantasy oil painting', 'Arthurian manuscript style', 'Dark gothic fantasy', 'Romanticism with magic', 'Watercolor fairytale',
+                'Frank Frazetta fantasy realism', 'Mythological tapestry', 'Celestial stained glass', 'Epic fantasy matte painting', 'Disneyesque fairytale illustration',
+                'Renaissance dramatic realism', 'Ink-drawn medieval marginalia', 'Heroic epic mural', 'Magic-imbued impressionism', 'Baroque fantasy opulence',
+                'Surreal dreamscape fantasy', 'Fantasy graphic novel inkwork', 'Mythic fresco style', 'Heroic propaganda poster', 'Etched woodcut style',
+                'Fantasy pulp magazine cover', 'Gothic illuminated script', 'Painterly folk tale style', 'Tolkien-inspired illustration', 'Symbolist myth painting',
+                'Stained parchment scroll style', 'Ethereal fantasy photography', 'Miniature war game illustration', 'Dreamlike fantasy surrealism', 'Epic battle panorama',
+                'Fantasy tarot card design', 'Golden Age illustration', 'RPG concept art sketch', 'Heroic bronze relief style', 'Carved stone frieze look',
+                'Medieval stained glass', 'Fantasy anime epic', 'Pre-Raphaelite magic realism', 'Mystical illuminated vellum', 'Fantasy surreal expressionism'
+            ],
+            'composition': [
+                'Hero framed by glowing runes', 'Standing before portal of light', 'Surrounded by summoned creatures', 'Cloaked in fog and fire', 'Sword raised under moonlight',
+                'Spell circle encircling subject', 'Sitting on throne of bones', 'Reaching toward the stars', 'Wings unfurled in radiant pose', 'Locked in duel with unseen foe',
+                'Kneeling in prayer before relic', 'Crowned with heavenly light', 'Leaning on broken sword', 'Emerging from forest shadows', 'Draped in flowing cape',
+                'Holding glowing staff aloft', 'Encircled by spectral spirits', 'Ascending staircase of light', 'Facing colossal dragon', 'Wading through battlefield smoke',
+                'Silhouette against burning horizon', 'Clutching ancient book', 'Hands glowing with power', 'Cloak swirling in storm winds', 'Standing atop ruined keep',
+                'Crowned amid golden aura', 'Shadow creeping from behind', 'Reflecting in mystic pool', 'Engulfed in swirling fog', 'Facing shattered portal',
+                'Back-to-back with ally', 'Emerging from enchanted mist', 'Surrounded by floating relics', 'Charging into combat', 'Arms raised to heavens',
+                'Resting with sword planted', 'Fallen in battle pose', 'Spell shockwave radiating', 'Glowing runes beneath feet', 'Silhouette on cliff at dawn'
+            ]
+            },
+            'historical-realism': {
+            'subject-type': [
+                'Roman centurion', 'Samurai warrior', 'Viking raider', 'Medieval knight', 'Renaissance noble',
+                'Victorian detective', 'WW2 soldier', 'Ancient Egyptian pharaoh', 'Greek philosopher', 'Napoleonic officer',
+                'Ming dynasty general', 'Native American warrior', 'Mongol horseman', 'Ottoman sultan', 'Persian scholar',
+                'Civil War soldier', 'Byzantine emperor', 'Spartan hoplite', 'Zulu warrior', 'Elizabethan playwright',
+                'French musketeer', 'Industrial revolution inventor', 'Victorian suffragette', 'Medieval monk', 'Pilgrim settler',
+                'Pirate captain', 'Buccaneer first mate', 'Cossack lancer', 'Sikh warrior', 'Incan priest',
+                'Mayan noble', 'Aztec jaguar warrior', 'Samurai shogun', 'Roman gladiator', 'Medieval archer',
+                'Colonial governor', 'Renaissance artist', 'WW1 trench soldier', 'British redcoat', 'French revolutionary fighter'
+            ],
+            'wardrobe': [
+                'Chainmail armor', 'Leather brigandine', 'Silk doublet', 'Wool tunic and cloak', 'Samurai kimono and armor',
+                'Roman lorica segmentata', 'Victorian frock coat', 'Top hat and waistcoat', 'Ming dynasty robes', 'Ottoman kaftan',
+                'Persian embroidered tunic', 'Greek himation', 'Egyptian linen shendyt', 'Zulu beadwork armor', 'Renaissance gown with corset',
+                'Pirate coat with tricorn hat', 'Cossack fur-lined coat', 'Spartan tunic and bronze greaves', 'WW2 field uniform', 'Civil War frock coat',
+                'Colonial militia jacket', 'Aztec jaguar pelt suit', 'Mayan ceremonial headdress', 'Elizabethan ruff and gown', 'Napoleonic military uniform',
+                'Medieval hooded surcoat', 'Victorian dress with bustle', 'Incan ceremonial attire', 'Byzantine ceremonial robes', 'Buccaneer leather jerkin',
+                'Industrial worker apron and cap', 'Greek chiton with sandals', 'Roman toga with sash', 'Samurai kabuto and mask', 'Pirate sash and belt',
+                'Renaissance painter\'s smock', 'WW1 trench coat', 'French revolutionary cockade', 'Colonial bonnet and apron'
+            ],
+            'body-modifications': [
+                'Battle scars', 'Tattooed tribal markings', 'Face paint for war', 'Crested helmet plume', 'Braided hair with beads',
+                'Medal or insignia on chest', 'Scar from dueling', 'Ash or soot on hands', 'Rings of power or rank', 'Henna decorations',
+                'Eye patch', 'Lost limb prosthetic', 'Worn gloves or gauntlets', 'Calloused hands', 'Facial hair (beard, mustache)',
+                'War paint streaks', 'Headband or circlet', 'Gold teeth', 'Scarlet war mark', 'Ceremonial scarification',
+                'Eye lenses (historical spyglass-inspired)', 'Fingerless gloves', 'Battle dirt smudges', 'Helmet burn marks', 'Tattooed script or symbols',
+                'Leather wristbands', 'Fur shoulder mantle', 'Amulet or talisman', 'Weapon holster markings', 'Finger rings of rank',
+                'Bloodied armor traces', 'Ancient inked symbols', 'Soot on face and arms', 'Scar from sword slash', 'Tattooed tribal line',
+                'Royal insignia', 'Battle tattoo', 'Ritual ash marks', 'Feathered hair adornments', 'Beaded necklaces'
+            ],
+            'mood-expression': [
+                'Stoic determination', 'Pensive reflection', 'Regal authority', 'Tense anticipation', 'Sorrowful loss',
+                'Fierce defiance', 'Noble pride', 'Fearful apprehension', 'Strategic calculation', 'Heroic courage',
+                'Melancholy introspection', 'Victorious triumph', 'Stoic endurance', 'Angry resolve', 'Quiet vigilance',
+                'Playful mischief', 'Focused attention', 'Wounded despair', 'Determined focus', 'Reverent awe',
+                'Proud command', 'Haunted by past', 'Scheming cunning', 'Calm leadership', 'Pensive scholar',
+                'Alert and wary', 'Triumphant joy', 'Stern discipline', 'Tired exhaustion', 'Strategic patience',
+                'Resolute stance', 'Humble devotion', 'Defiant stare', 'Nostalgic longing', 'Protective vigilance',
+                'Grim determination', 'Silent mourning', 'Celebratory pride', 'Shadowed contemplation'
+            ],
+            'environment': [
+                'Roman forum', 'Medieval castle courtyard', 'Viking longhouse hall', 'Renaissance palace chamber', 'WW2 battlefield trench',
+                'Colonial American village', 'Ancient Egyptian pyramid interior', 'Greek agora', 'Byzantine cathedral', 'Ming dynasty palace',
+                'Ottoman harem', 'Persian desert oasis', 'Zulu savannah village', 'Elizabethan theater stage', 'Napoleonic battlefield',
+                'Industrial revolution factory floor', 'Aztec temple plaza', 'Mayan ceremonial pyramid', 'Pirate ship deck', 'Cossack steppe encampment',
+                'Samurai dojo', 'Roman amphitheater', 'Medieval blacksmith forge', 'Colonial port dock', 'French revolutionary square',
+                'Incan stone terrace', 'WW1 battlefield no-man\'s land', 'Medieval market square', 'Renaissance art studio', 'Ancient library hall',
+                'Frozen tundra camp', 'Desert caravan trail', 'Riverbank dockside', 'Mountain fortress stronghold', 'Victorian street market',
+                'Royal throne room', 'Sunlit courtyard garden', 'Twilight battlefield', 'Medieval monastery cloister'
+            ],
+            'surrounding-elements': [
+                'Banners and flags', 'Torches and braziers', 'Weapons scattered on ground', 'Scrolls and parchments', 'Armor racks',
+                'Swords in stone', 'Candlelight glow', 'Historical artifacts', 'Wooden barrels and crates', 'Fur rugs and blankets',
+                'Stone pillars', 'Ancient books', 'Maps and charts', 'Feathers and quills', 'Beaded jewelry',
+                'Ceramic pots', 'Golden coins', 'Battle debris', 'Chained prisoners', 'Mounted banners',
+                'Shield walls', 'Archery targets', 'Quivers of arrows', 'Horse tack and saddles', 'Wooden carts',
+                'Siege equipment', 'Lanterns', 'Metal chains', 'Stone carvings', 'Tapestries',
+                'Scroll cases', 'Gongs and bells', 'Trade goods', 'Weapons racks', 'Herbal bundles',
+                'Firewood piles', 'Barrels of ale', 'Ink and inkwells', 'Armor fragments', 'Siege weapons parts',
+                'Stone statues', 'Ceremonial altars'
+            ],
+            'lighting': [
+                'Candlelit interior glow', 'Torchlight flicker', 'Sunlight through castle windows', 'Dawn over battlefield', 'Dusk shadows on village',
+                'Overcast medieval skies', 'Sun through palace arches', 'Lantern glow on cobblestone', 'Firelight from hearth', 'Moonlit courtyard',
+                'Volcanic red glow (historical battle)', 'Flickering street lanterns', 'Sunlight reflecting off armor', 'Dim tavern lighting', 'Golden hour sun on fields',
+                'Harsh midday sun', 'Stormy sky illumination', 'Moonbeam through tower slit', 'Faint foggy morning haze', 'Sun-dappled forest glade',
+                'Lantern-lit alleyway', 'Shadowed dungeon corridors', 'Bonfire camp glow', 'Twilight battlefield', 'Torchlight flickering on walls',
+                'Warm forge lighting', 'Snow-reflected sunlight', 'Harbor morning mist', 'Royal chamber chandelier light', 'Sunset battlefield haze',
+                'Fire-lit siege tower', 'Lantern-lit ship deck', 'Candlelight ritual hall', 'Morning sunlight on palace terrace', 'Faint overcast light',
+                'Evening street market glow', 'Battle flare illumination', 'Sun through stained glass', 'Overcast battlefield shadows', 'Shadowy monastery cloister',
+                'Winter twilight'
+            ],
+            'camera-angle': [
+                'Leica 50mm, f/1.2, shallow depth of field', 'Anamorphic lens, cinematic sweep', 'Drone view over battlefield, tilt angle', 'DSLR 85mm, sharp focus on soldier\'s face', 'Ultra wide lens, low angle on castle',
+                'Top-down market square view', 'Macro lens, extreme detail on scroll', 'CCTV-style surveillance of palace gate', 'Over-the-shoulder duel shot', 'Zoom lens with haze over battlefield',
+                'Grainy analog camera style', 'Infrared thermal lens for siege', 'Close-up low-focus DOF on artifact', 'Telephoto through smoke of battle', 'First-person POV of knight',
+                'Fish-eye lens in castle hall', 'Retro CRT video style', 'Cinematic widescreen crop', 'Mid-century documentary film look', 'Portrait studio lighting on historical figure',
+                'Torch tracker lens', 'Lantern-lit observer lens', 'Map-based top-down overview', 'Spyglass POV of enemy camp', 'Field sketching "artist lens" POV',
+                'Candle-lit study lens', 'War reporter vintage lens', 'Mounted cavalry perspective lens', 'High-angle castle tower shot', 'Low-angle ceremonial hall shot',
+                'Through archway framing lens', 'Horseback tracking lens', 'Side-profile duel lens', 'Overhead battlefield strategy lens', 'Scroll-focused extreme close-up lens',
+                'Market bustle observation lens', 'Ship deck telephoto lens', 'Temple interior volumetric light lens', 'Archival parchment lens effect', 'Twilight trench observer lens',
+                'Fog-draped courtyard lens'
+            ],
+            'art-style': [
+                'Oil painting realism', 'Renaissance portrait', 'Baroque dramatic realism', 'Romanticism landscape', 'Medieval manuscript illumination',
+                'Victorian illustration', 'Pencil sketch study', 'Watercolor historical scene', 'Etching / woodcut style', 'Historical fresco',
+                'Engraving style', 'Classic documentary photography look', 'Film noir-style historical photo', 'Impressionist historic scene', 'Neo-classical portrait',
+                'Tapestry-style composition', 'Miniature war game painting style', 'Charcoal figure study', 'Dutch golden age realism', 'Historical comic illustration',
+                'Photorealistic reenactment', 'Sepia-toned vintage photo', 'Ink and wash drawing', 'Pastel historical scene', 'Chiaroscuro dramatic lighting',
+                'Pre-Raphaelite inspired', 'Historic propaganda poster style', 'Stained glass illustration style', 'Etched map perspective illustration', 'Gothic architecture study',
+                'Realist battle painting', 'Victorian travel sketch', 'Museum diorama style', 'Illustrated historical atlas style', 'Lithograph print',
+                'Carved relief effect', 'Architectural study perspective', 'Museum portrait lighting style', 'Historical drama storyboard', 'Classic oil landscape',
+                'Ink crosshatching illustration'
+            ],
+            'composition': [
+                'Hero centered in battlefield', 'Duelers framed off-center', 'Council in royal chamber', 'Close-up on hands holding scroll', 'Marching soldiers in line',
+                'Archer taking aim in foreground', 'Knight atop hill overlooking valley', 'Candlelit study with scholar', 'Soldiers preparing for battle', 'Ruler at throne with attendants',
+                'Horseback patrol in low-angle', 'Ship deck, wide view', 'Village street market, mid-shot', 'Battle chaos with top-down view', 'Monk in cloister, symmetry framing',
+                'Noble portrait, centered', 'Sunlit columns framing subject', 'Spyglass view over enemy camp', 'Blacksmith at forge, close focus', 'Cannon firing scene, low-angle',
+                'Tavern interior, multiple figures', 'Messenger running, POV shot', 'Soldier kneeling by fallen comrade', 'Temple ritual, wide angle', 'Palace hallway, vanishing point',
+                'Colonial dock, birds-eye view', 'Shipboard duel mid-frame', 'Fencer in duel, extreme close-up', 'Re-enactment-style tableau', 'Scout peering from hilltop',
+                'Siege tower in frame, dramatic angle', 'Candle-lit scribe writing', 'Horse charging low-angle', 'Knight bowing to king', 'Mercenary encampment, high-angle',
+                'Crowd in market square', 'Soldier adjusting armor close-up', 'Royal procession, wide frame', 'Battlefield overview, panorama', 'Archer in shadowed forest'
+            ]
+            },
+            'gothic-horror': {
+            'subject-type': [
+                'Vampire lord', 'Cursed noblewoman', 'Mad scientist', 'Ghostly apparition', 'Werewolf hunter',
+                'Occultist', 'Demon summoner', 'Haunted child', 'Witch of the woods', 'Phantom knight',
+                'Coffin-bound corpse', 'Victorian detective', 'Revenant', 'Shadowy assassin', 'Corpse bride',
+                'Undead monk', 'Ghoul collector', 'Plague doctor', 'Cursed scholar', 'Spectral bridegroom',
+                'Wailing banshee', 'Fallen angel', 'Cursed mariner', 'Cemetery caretaker', 'Vengeful spirit',
+                'Blood mage', 'Cursed aristocrat', 'Raven familiar', 'Crypt keeper', 'Undying king',
+                'Alchemist of shadows', 'Lost soul', 'Twisted jester', 'Sinister governess', 'Mad cult leader',
+                'Haunted painter', 'Ghastly librarian', 'Nightmare creature', 'Death priest', 'Graveyard sentinel',
+                'Fogbound wanderer'
+            ],
+            'wardrobe': [
+                'Tattered Victorian gown', 'Cloak of shadows', 'Bloodstained suit', 'Raven-feathered mantle', 'Lace mourning dress',
+                'Leather plague outfit', 'High-collared frock coat', 'Corseted vampire attire', 'Hooded monk robe', 'Victorian nightdress',
+                'Chains and shackles', 'Dark aristocratic coat', 'Tattered carnival outfit', 'Hooded cult robes', 'Ritualistic bone armor',
+                'Creepy porcelain mask', 'Victorian corset with lace gloves', 'Gothic lace shirt', 'Velvet shadow cloak', 'Distressed tailcoat',
+                'Witch\'s pointed robe', 'Spectral shroud', 'Graveyard shroud', 'Skull-adorned mantle', 'Plague doctor mask and cloak',
+                'Blood-drenched ceremonial robe', 'Victorian bonnet with veil', 'Cryptic ritual vestments', 'Moonlit flowing dress', 'Torn military uniform',
+                'Haunted wedding dress', 'Leather-bound corset', 'Embroidered death motif gown', 'Fog-streaked travelling coat', 'Gothic armor plates',
+                'Ritualistic hooded cloak', 'Tattered knight\'s armor', 'Raven-winged mantle', 'Dark alchemist robes', 'Chain-linked ceremonial gown'
+            ],
+            'body-modifications': [
+                'Pale, almost translucent skin', 'Bloodshot eyes', 'Fangs or sharp teeth', 'Glowing occult tattoos', 'Scarred or stitched flesh',
+                'Veins glowing with dark magic', 'Burned or charred skin', 'Cracked lips', 'Rotting flesh', 'Piercing spectral gaze',
+                'Horned skull adornment', 'Ghastly facial markings', 'Creepy elongated fingers', 'Ghostly ethereal limbs', 'Veined with shadow',
+                'Mechanical prosthetic hand', 'Glowing red pupils', 'Vampiric bite marks', 'Tattooed spell circles', 'Decayed skeletal fingers',
+                'Shadow tendrils from body', 'Bone piercings', 'Clawed hands', 'Web-like scars', 'Hollow eyes',
+                'Veins pulsing with darkness', 'Skull-shaped implants', 'Demonic wings', 'Rotting jaw', 'Eerie scars across face',
+                'Tattooed death sigils', 'Flesh replaced with metal', 'Ghostly aura', 'Haunted scars', 'Shadow creeping along spine',
+                'Bloodstained hands', 'Flesh stitched with thread', 'Cursed crown embedded in skull', 'Spectral arm', 'Feral fangs',
+                'Creeping shadow veins'
+            ],
+            'mood-expression': [
+                'Haunted and sorrowful', 'Menacing and cold', 'Insane and unhinged', 'Brooding and mysterious', 'Sinister grin',
+                'Sorrowful despair', 'Predatory hunger', 'Tormented guilt', 'Mad obsession', 'Cunning calculation',
+                'Lurking menace', 'Quietly vengeful', 'Darkly playful', 'Feral aggression', 'Ethereal detachment',
+                'Grim determination', 'Malevolent plotting', 'Terrified and frantic', 'Haunted nostalgia', 'Obsession with death',
+                'Hypnotic stare', 'Ritualistic trance', 'Cold indifference', 'Bloodthirsty delight', 'Frightened innocence',
+                'Shadowed contemplation', 'Anguish-filled wail', 'Silent lurking', 'Ghostly serenity', 'Possessed rage',
+                'Eerie calm', 'Morbid fascination', 'Demonic smirk', 'Cursed lament', 'Horrified awe',
+                'Unholy ecstasy', 'Twisted joy', 'Frightened alertness', 'Malevolent triumph', 'Shadow-touched melancholy'
+            ],
+            'environment': [
+                'Foggy graveyard', 'Abandoned Victorian mansion', 'Candle-lit crypt', 'Haunted forest', 'Creepy carnival grounds',
+                'Storm-lashed castle', 'Plague-ridden village', 'Shadowed dungeon', 'Gothic cathedral interior', 'Fog-bound cobblestone street',
+                'Creepy lighthouse', 'Cemetery mausoleum', 'Blood-drenched battlefield', 'Twisted tree grove', 'Moonlit cliffside',
+                'Haunted opera house', 'Abandoned asylum', 'Rusting industrial ruin', 'Shadowed bridge over river', 'Underground catacombs',
+                'Crumbling tower', 'Cursed library', 'Foggy moorland', 'Desolate battlefield', 'Plague quarantine zone',
+                'Moonlit crypt', 'Undead burial mound', 'Creepy laboratory', 'Stormy battlefield', 'Ritual chamber',
+                'Sunken cathedral', 'Broken shrine', 'Abandoned theater', 'Castle dungeons', 'Desolate village street',
+                'Gnarled tree grove', 'Foggy swamp', 'Ruined monastery', 'Dark cavern', 'Shadowed hallway',
+                'Blood-stained altar'
+            ],
+            'surrounding-elements': [
+                'Candle flames', 'Mist curling around feet', 'Falling leaves in shadow', 'Ravens flying overhead', 'Hanging chains',
+                'Broken mirrors', 'Flickering lanterns', 'Shattered glass', 'Spider webs', 'Skulls and bones',
+                'Grave markers', 'Tattered banners', 'Glowing sigils', 'Floating candle clusters', 'Blood droplets',
+                'Dark smoke tendrils', 'Creeping vines', 'Occult symbols', 'Floating ghostly apparitions', 'Shattered relics',
+                'Burning incense', 'Falling feathers', 'Blood-stained scrolls', 'Shadowy figures in distance', 'Falling ash',
+                'Spider silk glimmer', 'Holographic ghost projections', 'Creaking wooden beams', 'Cobweb-draped furniture', 'Storm lightning through window',
+                'Creeping shadows on walls', 'Cracked floor tiles', 'Rotting books', 'Skull clusters', 'Fog rolling across floor',
+                'Candles reflected in mirrors', 'Chains dragging', 'Broken ritual instruments', 'Glowing potion bottles', 'Shadowed corners',
+                'Faint spectral orbs'
+            ],
+            'lighting': [
+                'Candlelit flicker', 'Moonlight through broken windows', 'Dim lantern glow', 'Flickering fireplace', 'Thunderstorm flashes',
+                'Blood-red glow', 'Green ghostly luminescence', 'Foggy twilight', 'Storm-lit shadows', 'Lantern-lit alley',
+                'Gothic stained glass reflections', 'Torches in crypts', 'Shadows cast by moon', 'Haunted blue glow', 'Flickering candle chandeliers',
+                'Storm lightning illumination', 'Soft sepulchral light', 'Ghostly pallor glow', 'Shadow-heavy corridors', 'Dim foggy sunrise',
+                'Torchlight flicker in dungeon', 'Red eclipse sky glow', 'Lantern beams through mist', 'Shafts of pale moonlight', 'Volcanic glow on battlefield',
+                'Candlelight reflection on water', 'Haunted mirror light', 'Faint magical aura glow', 'Storm-lit battlefield', 'Silver spectral light',
+                'Dim mausoleum shafts', 'Fire-lit laboratory glow', 'Ghostly greenish light', 'Twilight over cobblestones', 'Eerie purple fog',
+                'Chandelier flicker', 'Soft shadowed illumination', 'Moonbeam halo', 'Shadowed candlelight', 'Fog-drenched torchlight'
+            ],
+            'camera-angle': [
+                'Leica 50mm, f/1.2, shallow depth of field', 'Anamorphic lens, cinematic horror sweep', 'Drone view over cemetery, tilt angle', 'DSLR 85mm, sharp focus on haunted face', 'Ultra wide lens, low angle in mansion hallway',
+                'Top-down crypt view', 'Macro lens, extreme detail on relic', 'CCTV surveillance of asylum corridor', 'Over-the-shoulder cultist POV', 'Zoom lens through fog',
+                'Grainy vintage analog camera', 'Infrared "haunted vision" lens', 'Close-up low-focus DOF on cursed object', 'Telephoto through stormy graveyard', 'First-person POV through fog',
+                'Fish-eye lens in haunted attic', 'Retro CRT horror film look', 'Cinematic widescreen crop', 'Mid-century documentary horror style', 'Portrait studio lighting, pale skin',
+                'Crystal ball ghost tracker lens', 'Scrying mirror observer', 'Occult detector lens POV', 'Haunted artifact lens', 'Alchemist\'s eerie lens',
+                'Demon-eye perspective lens', 'Spell circle observer lens', 'Shadow projector camera', 'Moonlit window lens', 'Gothic cathedral tracker',
+                'Dungeon corridor volumetric lens', 'Low-angle crypt shot', 'High-angle mausoleum shot', 'Through shattered mirror lens', 'Candle-lit ritual close-up',
+                'Top-down haunted battlefield', 'Tavern interior shadow lens', 'Fogged street view', 'Graveyard low-angle lens', 'Stormy castle observation lens',
+                'Haunted staircase lens', 'Spectral orb lens'
+            ],
+            'art-style': [
+                'Gothic oil painting', 'Baroque horror realism', 'Romanticism dark landscape', 'Victorian illustration', 'H.R. Giger-esque macabre',
+                'Dark surrealism', 'Shadowed chiaroscuro', 'Expressionist horror', 'Grim etching / woodcut', 'Victorian photography reenactment',
+                'Dark fantasy matte painting', 'Symbolist nightmare', 'Illustrated gothic novel style', 'Macabre cartoon / illustration', 'Ethereal misty watercolor',
+                'Surreal nightmare illustration', 'Haunted manuscript illumination', 'Grim pulp magazine style', 'Photorealistic haunted portrait', 'Retro horror cinema style',
+                'Horror comic book inkwork', 'Gothic architectural study', 'Victorian theater poster style', 'Pre-Raphaelite dark twist', 'Monochrome shadow realism',
+                'Ink and wash horror sketches', 'Twilight landscape realism', 'Gothic tapestry style', 'Haunted miniature painting', 'Victorian horror lithograph',
+                'Gothic fresco', 'Shadowed cinema realism', 'Expressionist haunted figure', 'Fantasy-horror surrealism', 'Grim dark fantasy RPG art',
+                'Haunted illustration book style', 'Charcoal macabre study', 'Ethereal ghostly realism', 'Shadow-play photography style', 'Victorian gothic propaganda',
+                'Surreal dream-horror painting'
+            ],
+            'composition': [
+                'Haunted figure centered', 'Off-center lurking shadow', 'Candle-lit ritual circle', 'Character in foggy doorway', 'Silhouette in crypt archway',
+                'Ghost emerging from mist', 'Over-the-shoulder of lurking menace', 'Close-up on bloodied hand', 'Creepy hallway depth', 'Low-angle haunted tower',
+                'Figure framed in broken window', 'Top-down cemetery scene', 'Overhead cult gathering', 'Foreground skeletal remains', 'Character creeping along corridor',
+                'Silhouette against lightning', 'Character holding cursed object', 'Shadow creeping across floor', 'High-angle staircase descent', 'Half-hidden figure in doorway',
+                'Figure emerging from shadows', 'Cloaked figure in alleyway', 'Close-up on haunted eyes', 'Body sprawled in crypt', 'Figure reflected in broken mirror',
+                'Silhouette against full moon', 'Foreground spider webs framing subject', 'Mid-shot of ritual enactment', 'Creeping tendrils in foreground', 'Figure kneeling by tomb',
+                'High-contrast light and shadow framing', 'Ghostly figure floating', 'Over-the-shoulder witness POV', 'Figure walking down misty path', 'Extreme low-angle tomb shot',
+                'Wide shot of haunted battlefield', 'Twilight graveyard panorama', 'Creepy figure in corner', 'Silhouette on tower battlements', 'Hands reaching from shadows',
+                'Fog-filled alley with distant figure'
+            ]
+            },
+            'myth-legend': {
+            'subject-type': [
+                'Zeus, king of gods', 'Thor, god of thunder', 'Hercules, hero', 'Medusa, gorgon', 'Kitsune spirit',
+                'Phoenix', 'Fenrir, wolf of prophecy', 'Odin, allfather', 'Hades, god of the underworld', 'Minotaur',
+                'Mermaid queen', 'Siren', 'Kraken', 'Dragon king', 'Anansi, trickster spider',
+                'Icarus, doomed flyer', 'Achilles, warrior', 'Gilgamesh, epic king', 'Sun Wukong, monkey king', 'Loki, trickster god',
+                'Coyote, spirit guide', 'Banshee', 'Selkie', 'Garuda', 'Ra, sun god',
+                'Amaterasu, sun goddess', 'Valkyrie warrior', 'Chimera', 'Pegasus', 'Cerberus',
+                'Fafnir, cursed dragon', 'Tiamat, primordial serpent', 'King Arthur', 'Morgana le Fay', 'Robin Hood',
+                'Beowulf', 'Grendel', 'The Kraken', 'Nian, Chinese beast', 'Djinn, genie'
+            ],
+            'wardrobe': [
+                'Divine robes', 'Heroic armor', 'Animal hide tunic', 'Feathered ceremonial garb', 'Golden crown with jewels',
+                'Flowing silk gown', 'Leather warrior armor', 'Mystical enchanted cloak', 'Scale armor of dragon origin', 'Horned ceremonial headdress',
+                'Battle tabard with insignia', 'Celestial golden cape', 'Royal ceremonial armor', 'Mystic priest robes', 'Shamanic tribal attire',
+                'Sun goddess flowing dress', 'Moon priestess gown', 'Royal kingly mantle', 'Knight\'s plate armor', 'Sacred ceremonial vestments',
+                'Dragon-scale cape', 'Valkyrie winged armor', 'Wizard robes of power', 'Elemental battle armor', 'Mermaid\'s scaled fin dress',
+                'Forest spirit tunic', 'Sea god ceremonial garb', 'Winged messenger armor', 'Druidic robes with embroidery', 'Heroic leather tunic',
+                'Gilded gladiator armor', 'Giant\'s fur mantle', 'Spirit guardian robes', 'Cursed knight\'s armor', 'Robe of invisibility weave',
+                'Heroic cape with sigils', 'Sapphire-studded armor', 'Solar priestess cloak', 'Stormcaller armor', 'Fabled cloak of invisibility'
+            ],
+            'body-modifications': [
+                'Glowing divine aura', 'Animal features (horns, claws)', 'Scaled skin', 'Winged arms', 'Multiple eyes',
+                'Fiery hair', 'Fanged grin', 'Glowing tattoos of power', 'Elemental skin (fire, ice, lightning)', 'Mystical scars',
+                'Spirit-bound markings', 'Golden eyes', 'Third eye of wisdom', 'Glowing sigils', 'Tail of serpent',
+                'Crystalline skin', 'Living elemental veins', 'Horned skull', 'Magical prosthetic limb', 'Shadow tendrils',
+                'Celestial halo', 'Lightning coursing through veins', 'Mystic armor fused to skin', 'Ethereal transparency', 'Flaming hands',
+                'Feral claws', 'Bone spikes', 'Elemental fur', 'Dragon wings', 'Ghostly aura',
+                'Spirit chains', 'Mark of prophecy on forehead', 'Tattooed runes', 'Shimmering scales', 'Crystal horns',
+                'Living feathers', 'Venomous fangs', 'Stone-like skin', 'Spirit wings', 'Feral beast features'
+            ],
+            'mood-expression': [
+                'Majestic and commanding', 'Fierce and wrathful', 'Mischievous trickster', 'Wise and serene', 'Haunted by destiny',
+                'Fearsome and intimidating', 'Protective guardian', 'Enigmatic and mysterious', 'Joyful and triumphant', 'Somber and reflective',
+                'Vengeful', 'Playful mischief', 'Obsessed with power', 'Sorrowful lament', 'Divine inspiration',
+                'Predatory focus', 'Determined heroism', 'Defiant against fate', 'Ethereal calm', 'Ancient knowledge',
+                'Ritualistic trance', 'Thunderous rage', 'Calm strategist', 'Merciless fury', 'Pensive thought',
+                'Lurking menace', 'Blessed serenity', 'Dark temptation', 'Celestial pride', 'Shimmering awe',
+                'Epic focus', 'Transcendent glory', 'Cunning and sly', 'Heroic resolve', 'Fearsome roar',
+                'Stoic endurance', 'Bewildered awe', 'Divine wrath', 'Magical mischief', 'Epic melancholy'
+            ],
+            'environment': [
+                'Mount Olympus', 'Asgardian hall', 'Underworld river Styx', 'Atlantis ruins', 'Ancient forest glade',
+                'Volcanic dragon lair', 'Frozen mountain peak', 'Deserted temple', 'Stormy battlefield', 'Sunken ocean palace',
+                'Mystical floating islands', 'Celestial palace in clouds', 'Sacred mountain shrine', 'Enchanted cave', 'Haunted castle',
+                'Sacred river bend', 'Twilight glade', 'Dragon\'s peak', 'Giant\'s mountain hall', 'Fabled lost city',
+                'Cursed battlefield', 'Crystal lake', 'Sacred grove', 'Skyborne fortress', 'Labyrinth of legend',
+                'Celestial observatory', 'Mythical forest', 'Volcanic crater altar', 'Moonlit cliff', 'Raging ocean shore',
+                'Fog-bound swamp', 'Abandoned tower', 'Mystic desert ruins', 'Twilight village', 'Ghostly battlefield',
+                'Floating rock formations', 'Sacred altar atop mountain', 'Storm-wracked temple', 'Elemental realm', 'Giant\'s ruined fortress'
+            ],
+            'surrounding-elements': [
+                'Floating magical runes', 'Lightning strikes', 'Dragon bones', 'Floating crystals', 'Cursed relics',
+                'Mystic fire', 'Fog and mist', 'Sacred symbols', 'Falling leaves', 'Shimmering water',
+                'Spiraling winds', 'Spirit flames', 'Flying creatures', 'Floating islands fragments', 'Glowing sigils',
+                'Magic circle patterns', 'Falling stones', 'Crumbling ruins', 'Spectral lights', 'Celestial constellations',
+                'Elemental storms', 'Ancient totems', 'Mysterious portals', 'Floating scrolls', 'Sacred staffs',
+                'Glowing swords', 'Ancient manuscripts', 'Flying feathers', 'Storm clouds', 'Falling ash',
+                'Orbital celestial bodies', 'Cracked earth fissures', 'Phantom horses', 'Glowing chalices', 'Floating bones',
+                'Shattered armor', 'Ethereal energy streams', 'Mystic animal companions', 'Levitating crystals', 'Falling petals',
+                'Sacred fire pits'
+            ],
+            'lighting': [
+                'Golden sun rays', 'Storm-lit skies', 'Moonlit glow', 'Volcanic lava illumination', 'Candle-lit shrine',
+                'Lightning flash', 'Foggy morning haze', 'Mystical aura glow', 'Twilight shadows', 'Ethereal cloud light',
+                'Sunbeam piercing trees', 'Cursed red glow', 'Silver moonlight', 'Aurora shimmer', 'Divine radiant light',
+                'Soft glowing mist', 'Shadowed canyon light', 'Flickering torchlight', 'Magic circle illumination', 'Sunset over ocean',
+                'Moonbeam on mountaintop', 'Faint starlight', 'Ghostly pallor', 'Dawn glow', 'Crimson eclipse light',
+                'Reflected water shimmer', 'Fire-lit cave', 'Lantern-lit bridge', 'Celestial spotlight', 'Twilight forest',
+                'Glow from sacred altar', 'Temple light shafts', 'Candle reflection on water', 'Magic spark illumination', 'Fallen comet light',
+                'Storm glow over battlefield', 'Gleaming armor highlights', 'Mystical firelight', 'Shadow play', 'Sacred moonlight beams',
+                'Crystal reflection light'
+            ],
+            'camera-angle': [
+                'Leica 50mm, f/1.2, shallow depth of field', 'Anamorphic lens, cinematic sweep', 'Drone view of floating palace', 'DSLR 85mm, sharp focus on god\'s face', 'Ultra wide lens, low angle on temple',
+                'Top-down mythic battlefield', 'Macro lens, extreme detail on artifact', 'Over-the-shoulder hero POV', 'Zoom lens through magical haze', 'Grainy analog epic style',
+                'Infrared mystical lens', 'Close-up low-focus DOF on relic', 'Telephoto over dragon lair', 'First-person POV of hero', 'Fish-eye lens for forest spirits',
+                'Retro cinematic mythology look', 'Cinematic widescreen crop', 'Mid-century illustrated epic look', 'Portrait studio lighting, divine subject', 'Floating crystal tracker lens',
+                'Celestial orb observer', 'Mystic portal lens', 'Elemental energy detector', 'Hero\'s journey lens POV', 'Divine halo lens',
+                'Magic circle observer lens', 'Dragon-eye perspective lens', 'Temple volumetric lens', 'Spell effect scope', 'Moonlit mountain lens',
+                'Sacred artifact close-up', 'High-angle temple overview', 'Low-angle hero stance', 'Overhead battlefield magic lens', 'Foreground elemental framing',
+                'Spirit companion over shoulder', 'Extreme close-up on mystical markings', 'Top-down floating island panorama', 'Wide-angle epic forest', 'Shadowed cliff lens',
+                'Cinematic hero charge lens'
+            ],
+            'art-style': [
+                'Epic mythology painting', 'Renaissance heroic realism', 'Baroque dramatic fantasy', 'Romanticism legendary landscape', 'Surreal mythic realism',
+                'Illustrated ancient manuscript', 'Fantasy epic matte painting', 'Watercolor mythic scene', 'Engraving / etching legend', 'Photorealistic deity portrait',
+                'Symbolist myth depiction', 'Gothic epic style', 'Expressionist legendary scene', 'Epic comic illustration', 'Fantasy RPG concept art',
+                'Heroic propaganda poster', 'Miniature fantasy painting', 'Charcoal and ink legend study', 'Pre-Raphaelite epic fantasy', 'Classic tapestry style',
+                'Mythic fresco', 'Ethereal dreamlike illustration', 'Dark surreal legend', 'Painterly epic composition', 'Illustrated folklore',
+                'Epic adventure storyboard', 'Stained parchment illumination', 'Fantasy realism painting', 'Epic heroic relief sculpture', 'Fantasy tarot card design',
+                'Heroic bronze relief', 'Legendary epic mural', 'Ancient scroll style', 'Fantasy surreal expressionism', 'Epic battle panorama',
+                'Painterly fantasy realism', 'Illustrated epic saga', 'Legendary character portrait', 'Fantasy surrealist dream', 'Epic cinematic storyboard',
+                'Heroic epic oil painting', 'Mythological sculpture study'
+            ],
+            'composition': [
+                'Hero framed in divine light', 'God on throne above clouds', 'Dragon coiled around cliff', 'Figure standing on mountain peak', 'Celestial battle scene',
+                'Hero approaching portal', 'Figure in misty forest', 'Overhead battlefield', 'Silhouette against stormy sky', 'Epic duel mid-frame',
+                'Cloaked figure at cliff edge', 'Floating islands panorama', 'Character with wings spread', 'Hero holding magical weapon', 'Divine council scene',
+                'Creature emerging from cave', 'Ship approaching enchanted city', 'Character atop mountain', 'Temple interior symmetry', 'Figure walking into portal',
+                'Epic clash of gods', 'Foreground magical artifact', 'Mid-shot of hero in action', 'Spirit rising from ground', 'Low-angle dragon perspective',
+                'High-angle battlefield overview', 'Hero kneeling by sacred flame', 'Group assembled for ritual', 'Silhouette of hero against sun', 'Creature leaping toward camera',
+                'Figure reflected in magical lake', 'Epic wide shot of floating city', 'Action-focused duel composition', 'Character climbing cliff', 'Sacred altar centered',
+                'Top-down magical circle view', 'Hero surveying horizon', 'Epic chase through forest', 'Floating hero over clouds', 'Character framed by lightning',
+                'Celestial alignment framing'
+            ]
+            },
+            'nature-spirit': {
+            'subject-type': [
+                'Forest guardian', 'Spirit of the river', 'Mountain deity', 'Wind elemental', 'Fire nymph',
+                'Earth golem', 'Water sprite', 'Celestial tree spirit', 'Moon goddess', 'Sun deity',
+                'Shamanic healer', 'Sacred animal companion', 'Flower fairy', 'Cave spirit', 'Mist wraith',
+                'Crystal elemental', 'Totem animal', 'Aurora spirit', 'Spirit of the storm', 'Nature oracle',
+                'Celestial stag', 'Spirit fox', 'Sacred owl', 'Ancient tree guardian', 'Spirit of the waterfall',
+                'Wind dancer', 'Firefly queen', 'Lightning elemental', 'Shadowed forest spirit', 'Waterfall nymph',
+                'Earthbound elemental', 'Mountain hermit', 'River serpent', 'Sunflower spirit', 'Celestial crow',
+                'Aurora fox', 'Sacred deer', 'Flame warden', 'Moonlit panther', 'Spiritual guardian wolf',
+                'Spirit of the mist'
+            ],
+            'wardrobe': [
+                'Flowing leaf robes', 'Feathered ceremonial cloak', 'Vine-wrapped tunic', 'Petal-layered gown', 'Bark-textured armor',
+                'Moss-covered robes', 'Waterfall-draped dress', 'Celestial star cloak', 'Flowing elemental robe', 'Animal-hide tunic',
+                'Glowing ethereal wrap', 'Sunlight-threaded gown', 'Moonlight silk robes', 'Crystal-adorned robe', 'Wind-swept cloak',
+                'Fire-tinted tunic', 'Mist-woven shawl', 'Aurora-colored vestments', 'Sacred herb crown', 'Twilight silk dress',
+                'Stone-embedded armor', 'Water-reflective dress', 'Spirit-feathered cloak', 'Lightning-threaded robe', 'Sacred bark armor',
+                'Riverine flowing gown', 'Spirit-bound wraps', 'Glowvine embroidered dress', 'Wind-fur tunic', 'Flame-threaded cloak',
+                'Celestial robe with sigils', 'Moon-stitched gown', 'Forest shadow cloak', 'Aurora-threaded sash', 'Earth-textured tunic',
+                'Sacred shell jewelry', 'Firefly-lit robes', 'Crystalline armor plating', 'Petal-draped dress', 'Misty veil',
+                'Elemental-threaded robe', 'Leaf-adorned ceremonial gown'
+            ],
+            'body-modifications': [
+                'Glowing skin markings', 'Leaf-patterned tattoos', 'Branch-like antlers', 'Crystal-infused skin', 'Feathered hair',
+                'Glowing eyes', 'Elemental veins (fire, water, wind, earth)', 'Spirit aura', 'Animal companion growths', 'Glowing winged appendages',
+                'Petal-like scales', 'Flowing hair that moves like water', 'Mystical horns', 'Ethereal transparency', 'Light-reflecting skin',
+                'Celestial markings', 'Floating elemental particles', 'Stone-like skin patches', 'Flowering veins', 'Mist-emitting body',
+                'Water tendrils as hair', 'Fire trails from hands', 'Shadowed ethereal limbs', 'Wind-swirled robes fused to body', 'Glowvine patterns',
+                'Spirit-bound symbols', 'Sacred tattoos', 'Aurora streaks on skin', 'Crystal shards growing from limbs', 'Flowing flame hair',
+                'Leafy protrusions', 'Feathered arms', 'Living jewelry', 'Stone armor fused to skin', 'Magical energy pulses',
+                'Spirit wings', 'Animal markings fused with elements', 'Mist-enshrouded body', 'Light-draped skin', 'Ethereal elemental tattoos',
+                'Flowing elemental ribbons'
+            ],
+            'mood-expression': [
+                'Calm and serene', 'Playful and mischievous', 'Wise and ancient', 'Fierce protector', 'Gentle and nurturing',
+                'Ethereal dreamlike', 'Focused meditation', 'Joyful and radiant', 'Mystical and distant', 'Mournful reflection',
+                'Reverent devotion', 'Graceful and fluid', 'Stoic strength', 'Peaceful presence', 'Flowing energy',
+                'Otherworldly curiosity', 'Transcendent calm', 'Enlightened serenity', 'Observant guardian', 'Harmonious balance',
+                'Mystical contemplation', 'Gentle smile', 'Fiery determination', 'Feral wildness', 'Protective vigilance',
+                'Radiant joy', 'Elemental rage', 'Soft whispering', 'Floating in thought', 'Deep empathy',
+                'Curious exploration', 'Tranquil watchfulness', 'Elemental focus', 'Magical wonder', 'Reverent awe',
+                'Shadowed patience', 'Joyful dance', 'Subtle mischief', 'Sacred determination', 'Harmonious play',
+                'Flowing serenity'
+            ],
+            'environment': [
+                'Ancient forest glade', 'Waterfall cascade', 'Sacred mountain peak', 'Crystal cave', 'Aurora-lit tundra',
+                'Misty river bend', 'Flower meadow', 'Wind-swept cliffs', 'Sacred grove', 'Volcanic lava plain',
+                'Floating islands', 'Twilight marsh', 'Celestial garden', 'Fog-bound canyon', 'Moonlit beach',
+                'Desert oasis', 'Sacred stone circle', 'Coral reef undersea', 'Deep forest temple', 'Ice cave',
+                'Sacred waterfall altar', 'Sunlit canyon', 'Starry night plateau', 'Sacred ancient ruins', 'Foggy valley',
+                'Crystal lagoon', 'Volcanic crater', 'Floating lotus pond', 'Windy cliffside temple', 'Shadowed bamboo forest',
+                'Glow mushroom grove', 'Spirit-filled meadow', 'Ancient oak circle', 'Twilight cliffside', 'Ethereal misty lake',
+                'Mountain waterfall terrace', 'Golden autumn forest', 'Rainbow waterfall', 'Sacred desert plateau', 'Storm-lashed cliffs',
+                'Sacred pond with lily pads'
+            ],
+            'surrounding-elements': [
+                'Floating leaves', 'Mist and fog tendrils', 'Shimmering water droplets', 'Falling flower petals', 'Glowing fireflies',
+                'Floating spirit orbs', 'Aurora streaks', 'Falling autumn leaves', 'Sacred stones', 'Crystal shards',
+                'Flowing energy ribbons', 'Sparkling dew', 'Wind-blown feathers', 'Glowing mushrooms', 'Sacred sigils',
+                'Light beams through trees', 'Falling rain', 'Sparkling pollen', 'Animal companions', 'Twinkling stars',
+                'Floating lanterns', 'Magical flowers', 'Creeping vines', 'Mist around rocks', 'Floating elemental fragments',
+                'Water ripples', 'Fire sparks', 'Stone carvings', 'Sacred runes', 'Glowing aurora fragments',
+                'Shadow tendrils', 'Falling cherry blossoms', 'Floating sand particles', 'Spirit flames', 'Rainbow light rays',
+                'Sacred feathers', 'Ice crystals', 'Wind-blown petals', 'Glowing fungus', 'Light-dappled water',
+                'Spirit ribbons'
+            ],
+            'lighting': [
+                'Golden sunbeams', 'Moonlight glow', 'Aurora sky light', 'Twilight haze', 'Soft morning mist',
+                'Fire-lit glow', 'Faint foggy light', 'Crystal reflection shimmer', 'Sunlight through trees', 'Glowing mystical aura',
+                'Water reflection glow', 'Starlight shimmer', 'Soft candlelight', 'Glow from elemental energy', 'Lightning flashes in storm',
+                'Soft ethereal glow', 'Shadowed forest light', 'Sunset over mountains', 'Glow from fireflies', 'Twilight river reflection',
+                'Magical light streams', 'Sacred portal illumination', 'Soft dew reflections', 'Moonbeam filtering through fog', 'Sunlight on water',
+                'Mist-covered sunrise', 'Golden hour glow', 'Twilight forest light', 'Reflected crystal light', 'Magical sphere illumination',
+                'Shadow play in glade', 'Soft glowing lanterns', 'Aurora reflection on lake', 'Fire-lit cave', 'Glow from sacred stones',
+                'Sun-dappled canopy', 'Mystical fog shafts', 'Starry night illumination', 'Elemental energy glow', 'Ethereal morning light'
+            ],
+            'camera-angle': [
+                'Leica 50mm, f/1.2, shallow depth of field', 'Anamorphic lens, cinematic sweep', 'Drone view over forest canopy', 'DSLR 85mm, sharp focus on spirit figure', 'Ultra wide lens, low-angle waterfall shot',
+                'Top-down river bend view', 'Macro lens, extreme detail on flower', 'Over-the-shoulder shaman POV', 'Zoom lens through morning mist', 'Grainy vintage analog style',
+                'Infrared mystical lens', 'Close-up low-focus DOF on crystal', 'Telephoto through aurora', 'First-person POV of spirit journey', 'Fish-eye lens in forest glade',
+                'Retro cinematic nature look', 'Cinematic widescreen crop', 'Mid-century nature study look', 'Portrait studio lighting on elemental', 'Floating orb tracker lens',
+                'Spirit companion observer lens', 'Magical portal lens', 'Elemental energy POV lens', 'Tree canopy top-down', 'Waterfall close-up lens',
+                'Sunlit meadow lens', 'Foggy cliffside observer', 'Crystal cavern lens', 'Aurora panoramic lens', 'Low-angle spirit landing',
+                'High-angle cliff overview', 'Flower-focused macro shot', 'Soft mist lens POV', 'Stream reflection lens', 'Floating island top-down',
+                'Elemental motion tracking lens', 'Forest shadow framing', 'Sunbeam spotlight lens', 'Spirit flight POV', 'Ethereal trail lens',
+                'Crystal pool reflection lens'
+            ],
+            'art-style': [
+                'Mystical realism', 'Watercolor ethereal painting', 'Soft pastel illustration', 'Fantasy matte painting', 'Magical realism',
+                'Impressionist forest scene', 'Photorealistic nature spirit', 'Surreal elemental illustration', 'Japanese ink painting style', 'Digital fantasy painting',
+                'Gouache ethereal art', 'Illustrated storybook style', 'Fantasy concept art', 'Celestial landscape painting', 'Dreamlike watercolor scene',
+                'Soft oil painting', 'Fantasy RPG environment concept', 'Painterly nature study', 'Ethereal light-focused painting', 'Chiaroscuro forest scene',
+                'Symbolist mystical illustration', 'Magical wildlife painting', 'Fantasy environment matte painting', 'Whimsical storybook style', 'Glowing ethereal digital art',
+                'Romanticism-inspired landscape', 'Atmospheric nature painting', 'Fantasy environment illustration', 'Photographic realism', 'Soft cinematic digital painting',
+                'Mystical forest sketch', 'Ethereal character illustration', 'Fantasy tableau painting', 'Dreamlike landscape watercolor', 'Impressionist mystical scene',
+                'Magical creature study', 'Fantasy illustration art nouveau', 'Painterly light-focused forest', 'Concept art nature spirits', 'Soft dreamscape illustration',
+                'Celestial landscape digital painting'
+            ],
+            'composition': [
+                'Spirit centered in glade', 'Off-center guardian figure', 'Floating elemental mid-frame', 'Figure by waterfall', 'Low-angle cliff landing',
+                'Top-down forest canopy', 'Macro-focused flower detail', 'Over-the-shoulder river POV', 'Character framed by mist', 'Wide shot of aurora sky',
+                'Silhouette against moon', 'Foreground leaves framing figure', 'Spirit companion in flight', 'Mid-shot of elemental casting', 'High-angle waterfall overview',
+                'Figure kneeling in sacred circle', 'Cloaked figure in meadow', 'Floating over lake reflection', 'Tree arch framing subject', 'Soft bokeh background with spirit',
+                'Figure emerging from fog', 'Wide-angle forest path', 'Character by crystal pool', 'Low-angle tree guardian', 'High-angle river bend',
+                'Spirit dancing in petals', 'Floating island mid-frame', 'Hero in sunrise glow', 'Mid-shot elemental in motion', 'Top-down magical circle',
+                'Silhouette against aurora', 'Figure walking along cliff', 'Foreground mist, background spirit', 'Character framed by sunbeam', 'Spirit atop mountain peak',
+                'Wide meadow panorama', 'Floating flower petals framing', 'Low-angle waterfall cascade', 'Spirit interacting with animal companion', 'Figure reflected in crystal lake',
+                'Ethereal light shafts framing subject'
+            ]
+            },
+            'modern-surreal': {
+            'subject-type': [
+                'Urban dreamer', 'Floating mannequin', 'Digital doppelgänger', 'Street magician', 'Neon graffiti artist',
+                'Augmented reality figure', 'Fragmented human', 'Walking shadow', 'Glass-skinned model', 'Levitation performer',
+                'Surreal commuter', 'Holographic musician', 'Time-bending child', 'Mechanical dancer', 'City spirit',
+                'Abstract thinker', 'Hybrid animal-human', 'Futuristic architect', 'Virtual influencer', 'Mirrored twin',
+                'Fragmented consciousness', 'Neon street wanderer', 'Liquid humanoid', 'Cyborg artist', 'Floating librarian',
+                'Clockwork performer', 'Street illusionist', 'Glass-headed scholar', 'Digital ghost', 'Post-human wanderer',
+                'Neural network avatar', 'Pixelated figure', 'Mechanical pet companion', 'Urban shaman', 'Dream-absorbing child',
+                'Surrealist painter', 'Floating market vendor', 'Virtual reality runner', 'Morphing passerby', 'Cityscape wanderer',
+                'Street oracle'
+            ],
+            'wardrobe': [
+                'Neon-accented streetwear', 'Reflective metallic jacket', 'Oversized surreal hoodie', 'Patchwork digital robes', 'Transparent plastic trench coat',
+                'Floating fabric layers', 'Pixel-patterned jumpsuit', 'LED-lined sneakers', 'Futuristic tactical gear', 'Holographic cape',
+                'Abstract geometric tunic', 'Layered flowing scarf', 'Electric-colored bomber jacket', 'Flowing digital kimono', 'Fragmented cyberpunk armor',
+                'Asymmetrical fashion layers', 'Liquid metal dress', 'Circuit-patterned vest', 'Graffiti-inspired coat', 'Fragmented holographic suit',
+                'Layered neon jumpsuit', 'Oversized surreal coat', 'Mechanical limb accessorized outfit', 'Light-infused gown', 'Digital glitch sweater',
+                'Urban camouflage robe', 'Wireframe bodysuit', 'Pixelated scarf', 'Patchwork street dress', 'Floating translucent vestments',
+                'LED-traced pants', 'Modular street armor', 'Abstract sculptural tunic', 'Neural network hoodie', 'Surreal bomber vest',
+                'Morphing jacket', 'Chromed trench coat', 'Glitched streetwear', 'Holo-patterned skirt', 'Flowing layered urban robe'
+            ],
+            'body-modifications': [
+                'Pixelated limbs', 'Liquid metal skin', 'Floating hair strands', 'Glass skin', 'Fragmented eyes',
+                'Neural implants', 'Holographic tattoos', 'Mechanical hands', 'Time-distorted body', 'Digital glitch marks',
+                'Augmented reality lenses', 'Glowing veins', 'Morphing facial features', 'Light-reflecting skin', 'Circuitry patterns',
+                'Transparent skull', 'Neon cracks on skin', 'Digital smoke tendrils', 'Fragmented joints', 'Mechanical wings',
+                'Wireframe limbs', 'Reflective body surface', 'Levitation aura', 'Morphing appendages', 'Shadow extensions',
+                'Pixelated eyes', 'Fragmented torso', 'Liquid limbs', 'Glitched hair', 'Augmented face masks',
+                'Neural interface implants', 'Holographic projections from skin', 'Electric tendrils', 'Translucent body parts', 'Digital crystal growths',
+                'Mechanical spine', 'Floating fragments around body', 'Morphing hands', 'Glow tattoos', 'Cyborg facial implants',
+                'Fractured body planes'
+            ],
+            'mood-expression': [
+                'Pensive and abstract', 'Detached observation', 'Dreamlike wonder', 'Confused and fragmented', 'Ethereal calm',
+                'Playful absurdity', 'Detached surrealism', 'Hypnotic gaze', 'Melancholic contemplation', 'Joyful distortion',
+                'Subtle mischief', 'Detached introspection', 'Intense focus', 'Frenetic energy', 'Floating serenity',
+                'Creepy calm', 'Hyper-aware observation', 'Enigmatic smirk', 'Curious exploration', 'Feral abstraction',
+                'Detached amusement', 'Transcendent calm', 'Frightened surrealism', 'Oblivious wonder', 'Detached melancholy',
+                'Transcendent awe', 'Twisted joy', 'Electric curiosity', 'Haunted dreaminess', 'Focused intensity',
+                'Detached hypnotic stare', 'Playful enigma', 'Frenetic abstract joy', 'Calm floating awareness', 'Melancholy reflection',
+                'Detached observation', 'Mystical absorption', 'Surreal excitement', 'Absurd delight', 'Detached pondering'
+            ],
+            'environment': [
+                'Neon-lit street intersection', 'Floating cityscape', 'Abstract rooftop', 'Holographic market', 'Glitching alleyway',
+                'Fragmented subway station', 'Distorted skyscraper corridor', 'Surreal park', 'Mirrored plaza', 'Pixelated urban square',
+                'Liquid street reflections', 'Falling debris cityscape', 'Time-warped crosswalk', 'Floating pedestrian bridge', 'Graffiti-covered tunnel',
+                'Glitching traffic hub', 'Virtual reality lounge', 'Suspended train platform', 'Digital graffiti alley', 'Fragmented urban skyline',
+                'Floating café terrace', 'Distorted playground', 'Neon-lit bridge', 'Pixelated river walkway', 'Augmented street fair',
+                'Upside-down plaza', 'Surreal rooftop garden', 'Floating shopping mall', 'Glitched construction site', 'Mirrored alley reflections',
+                'Liquid urban canal', 'Twisted tower plaza', 'Neon-lit subway station', 'Distorted skyline', 'Floating bus stop',
+                'Pixelated street vendor', 'Mirrored city intersection', 'Glitching rooftop terrace', 'Fragmented tower alley', 'Abstract urban ruin'
+            ],
+            'surrounding-elements': [
+                'Floating neon signs', 'Glitch particles', 'Digital graffiti', 'Holographic advertisements', 'Falling circuit fragments',
+                'Pixelated pedestrians', 'Fragmented cars', 'Liquid puddles reflecting sky', 'Neon streetlight streaks', 'Floating wires',
+                'Virtual reality panels', 'Augmented holographic maps', 'Electric sparks', 'Digital billboards', 'Glitching shadows',
+                'Floating street furniture', 'Neon rain reflections', 'Pixel shards', 'Circuitry-infused objects', 'Fragmented street posters',
+                'Digital smoke', 'Falling data streams', 'Holographic screens', 'Virtual storefronts', 'Suspended signs',
+                'Shattered glass reflections', 'Pixelated pigeons', 'Glowing urban orbs', 'Mechanical drones', 'Twisted lamp posts',
+                'Reflective puddles', 'Floating geometric shapes', 'Augmented reality pets', 'Liquid reflections', 'Glitched vending machines',
+                'Neon cables', 'Holographic sculptures', 'Shimmering rain streaks', 'Floating balloons', 'Pixelated street debris'
+            ],
+            'lighting': [
+                'Neon glow', 'Reflected street lights', 'Holographic illumination', 'Digital rain reflections', 'Backlit silhouette',
+                'Glitch-inspired color streaks', 'LED strip lighting', 'Soft urban dusk', 'Overexposed city light', 'Soft neon haze',
+                'Projected holographic light', 'Streetlamp pools', 'Reflected puddle glow', 'Shadowed alley glow', 'Strobe flicker',
+                'Soft ambient reflection', 'Neon underglow', 'LED halo', 'Glowing screen reflections', 'Rain-soaked street shimmer',
+                'Artificial sunset', 'Pixelated flare', 'Chromatic aberration light', 'Soft holographic mist', 'Overhead neon shafts',
+                'Twilight street light', 'Flickering monitor glow', 'Reflected glass illumination', 'Shimmering puddles', 'Color-saturated city glow',
+                'Projected ads light', 'Digital aura glow', 'Soft reflective light', 'Glitch shadow illumination', 'Urban twilight shafts',
+                'Neon reflection on walls', 'Backlit holographic figure', 'Rain-drenched neon haze', 'Soft streetlamp glow', 'Augmented light projection',
+                'Floating light particles'
+            ],
+            'camera-angle': [
+                'Leica 50mm, f/1.2, shallow depth of field', 'Anamorphic lens, cinematic sweep', 'Drone view over cityscape', 'DSLR 85mm, sharp focus on figure', 'Ultra wide lens, low-angle street shot',
+                'Top-down urban grid', 'Macro lens, extreme detail on glitch', 'Over-the-shoulder urban POV', 'Zoom lens through neon haze', 'Grainy analog street style',
+                'Infrared thermal lens', 'Close-up low-focus DOF', 'Telephoto through rain-soaked streets', 'First-person POV through alley', 'Fish-eye lens in plaza',
+                'Retro cinematic city look', 'Cinematic widescreen crop', 'Mid-century urban documentary style', 'Portrait studio lighting, neon figure', 'Floating orb tracker lens',
+                'Holographic projection lens', 'Glitched street POV', 'Digital mirror lens', 'Neural network scanner lens', 'High-angle crosswalk overview',
+                'Low-angle rooftop shot', 'Overhead plaza capture', 'Foreground neon elements framing', 'Tilted alleyway perspective', 'Floating figure mid-frame',
+                'Perspective from puddle reflection', 'Tracking moving figure lens', 'Glitch fragment lens', 'Wide-angle subway station', 'Abstract floating rooftop POV',
+                'Shadowed alley lens', 'Backlit street silhouette', 'Neon reflection low-angle', 'Drone following figure POV', 'Tilted streetlight perspective',
+                'Macro neon sign lens'
+            ],
+            'art-style': [
+                'Salvador Dali surrealism', 'Rene Magritte-inspired urban', 'Vaporwave digital collage', 'Glitch art aesthetics', 'Cubist city abstraction',
+                'Futurist street realism', 'Neo-expressionist urban', 'Pop surrealism', 'David LaChapelle modern fantasy', 'H.R. Giger urban twist',
+                'Studio Ghibli x neon city', 'Jean Giraud Moebius futuristic', 'Psychedelic street painting', 'Postmodern digital collage', 'Deconstructivist cityscape',
+                'Surreal photography realism', 'AI-generated glitch art', 'Lowbrow surrealism', 'Pop art neon twist', 'Digital collage style',
+                'Fantasy cyber-realism', 'Retro-futurist urban', 'Abstract urban dreamscape', 'Cinematic noir surrealism', 'Tattoo realism urban style',
+                'Neo-noir cityscape', 'Cyberpunk surreal', 'Digital hyperrealism', 'Surrealist comic style', 'Contemporary illustration',
+                'Futuristic art deco', 'Dreamlike photorealism', 'Street surreal poster style', 'Fragmented urban abstraction', 'Magical realism',
+                'Digital painting hyperreal', 'Neon-infused expressionism', 'Fantasy urban illustration', 'Surrealist installation-inspired', 'Motion-blurred urban surrealism',
+                'Augmented reality aesthetic'
+            ],
+            'composition': [
+                'Centered figure in neon plaza', 'Off-center floating mannequin', 'Foreground glitch particles', 'Over-the-shoulder street POV', 'Low-angle building framing',
+                'High-angle city overview', 'Silhouette against neon signs', 'Character reflected in puddle', 'Mid-shot in alley haze', 'Foreground floating holograms',
+                'Wide-angle plaza', 'Close-up low-focus on hands', 'Figure framed by neon billboard', 'Tilted street composition', 'Drone perspective over traffic',
+                'Macro-focus on neon details', 'Foreground wires framing figure', 'Backlit street figure', 'Character walking toward camera', 'Wide-angle rooftop',
+                'Floating figure mid-frame', 'Perspective through window reflection', 'City street depth composition', 'Overhead crosswalk framing', 'Low-angle alley shadows',
+                'Foreground neon puddles', 'Silhouette against city skyline', 'Mid-frame drifting smoke', 'Character emerging from shadows', 'Wide-angle market scene',
+                'Floating elements framing figure', 'Tilted holographic signs', 'Backlit holographic figure', 'Top-down pedestrian street', 'Low-angle building reflection',
+                'Foreground glitch reflections', 'Wide shot of urban maze', 'Character framed by neon haze', 'Cinematic alley framing', 'High-angle plaza reflection'
+            ]
+            },
+            'pop-retro': {
+            'subject-type': [
+                '80s action hero', 'Retro-futuristic robot', 'Disco dancer', 'Comic book superhero', 'Arcade gamer',
+                'Synthwave musician', 'Classic movie star', 'Neon-lit street rebel', 'Vintage astronaut', 'Pin-up model',
+                'Skateboarder icon', 'Cyberpunk street performer', 'Retro TV celebrity', 'Pop art muse', 'Pixelated game character',
+                'Rock band lead singer', 'Retro villain', 'Vintage spy', 'Animated cartoon figure', 'Sci-fi sidekick',
+                'Retro car driver', 'Classic detective', 'Arcade champion', 'Famous cult movie character', 'Vintage cheerleader',
+                'Street fashion icon', 'Old-school boxer', 'Synthwave racer', 'Pop idol', 'Vintage pilot',
+                'Retro magician', 'Comic strip anti-hero', 'Cult cartoon mascot', 'Classic radio DJ', '80s rocker',
+                'Classic film director', 'Street graffiti artist', 'Retro skateboard gang', 'Pop culture mascot', 'Vintage circus performer',
+                'Cult TV alien'
+            ],
+            'wardrobe': [
+                'Leather jacket with patches', 'Denim overalls', 'Bright neon windbreaker', 'Bell-bottom trousers', 'Holographic party dress',
+                'Retro tracksuit', 'Disco ball-inspired outfit', 'Pixelated costume', 'Vintage suit and tie', 'High-waisted skirt',
+                'Futuristic visor and jumpsuit', 'Sequined stage costume', 'Retro leather biker outfit', 'Classic superhero suit', '80s punk rock ensemble',
+                'Skateboarding outfit', 'Neon-accented hoodie', 'Vintage prom dress', 'Retro flight suit', 'Color-blocked jacket',
+                'Synthwave glam outfit', 'Polka dot dress', 'Leather combat boots with neon socks', 'Retro roller-skating outfit', 'Classic detective trench coat',
+                'Retro cheerleader uniform', 'Futuristic cosplay armor', '80s aerobics leotard', 'Denim jacket with neon graffiti', 'Pixel-art inspired vest',
+                'Vintage glam rock costume', 'Neon raincoat', 'Retro disco suit', 'Classic magician outfit', 'Synth-pop performer costume',
+                'Pixelated cyber suit', 'Retro streetwear layers', 'Old-school boxing gear', 'Vintage circus costume', 'Pop idol stage outfit',
+                'Pixelated mask ensemble'
+            ],
+            'body-modifications': [
+                'Neon tattoos', 'Pixelated limbs', 'Glowing retro visor eyes', 'Cybernetic arm', 'Faux chrome hair',
+                'LED-lined hair streaks', 'Retro comic-style shading', 'Mechanical legs', 'Glitching face fragments', 'Floating neon earrings',
+                'Retro cybernetic mask', 'Animated cartoon eyes', 'Pixelated hands', 'Glow-in-the-dark hair', 'Holographic skin patterns',
+                'Vintage scar makeup', 'Neon wrist implants', 'Mechanical wings', 'Pixelated clothing integration', 'Retro robotic limbs',
+                'Glowing retro emblem on chest', 'LED gloves', 'Cartoonish exaggerated facial features', 'Holographic tattoos', 'Pixel dust trails',
+                'Retro robot chest plate', 'Neon arm bands', 'Glitched headband', 'Floating comic-style speech bubble', 'Augmented reality visor',
+                'Pixelated hair strands', 'Holographic gloves', 'Retro mechanical crown', 'Neon face paint', 'Animated winged shoulder pads',
+                'Faux metallic teeth', 'Pixelated aura', 'Cyberpunk belt gadgets', 'Holographic mask', 'Vintage glow bracelets'
+            ],
+            'mood-expression': [
+                'Cheerful and playful', 'Confident and bold', 'Retro-cool attitude', 'Energetic and dynamic', 'Quirky and fun',
+                'Determined heroism', 'Exaggerated surprise', 'Cool and detached', 'Playful mischief', 'Joyful excitement',
+                'Stoic retro hero', 'Melancholic nostalgia', 'Funky swagger', 'Heroic triumph', 'Cartoonish expression',
+                'Cheeky grin', 'Fearless defiance', 'Animated curiosity', 'Retro charm', 'Dynamic action focus',
+                'Confident smirk', 'Exuberant pose', 'Frenetic energy', 'Cinematic suspense', 'Silly antics',
+                'Retro pride', 'Determined adventure', 'Playful rebellion', 'Focused action', 'Vintage glamour',
+                'Cartoonish delight', 'Heroic stance', 'Retro villainous sneer', 'Mischievous plotting', 'Energetic dance',
+                'Joyful retro pose', 'Animated surprise', 'Cinematic retro awe', 'Exuberant joy', 'Nostalgic longing',
+                'Funky dance expression'
+            ],
+            'environment': [
+                'Neon-lit arcade', 'Retro diner', 'Disco dance floor', '80s city street', 'Classic movie set',
+                'Vintage music stage', 'Skate park', 'Pixelated video game level', 'Retro TV studio', 'Futuristic city alley',
+                'Synthwave rooftop', 'Old-school roller rink', 'Comic book panel city', 'Retro amusement park', 'Neon-lit highway',
+                'Vintage spaceship interior', 'Classic car street', 'Retro gaming room', 'Pop culture museum', '80s movie theater',
+                'Cult film set', 'Pixel-art cityscape', 'Retro suburban street', 'Disco ball-lit ballroom', 'Arcade championship arena',
+                'Street graffiti alley', 'Synthwave boulevard', 'Retro festival stage', 'Classic radio studio', 'Neon cyberpunk mall',
+                'Vintage hotel lobby', 'Comic convention hall', 'Retro skateboarding ramp', 'Pixelated street corner', '80s concert crowd',
+                'Futuristic arcade floor', 'Neon-lit alley maze', 'Vintage circus tent', 'Retro rooftop party', 'Cult TV set',
+                'Old-school arcade street'
+            ],
+            'surrounding-elements': [
+                'Neon signs', 'Arcade machines', 'Retro posters', 'Disco balls', 'Floating pixel elements',
+                'Glowing cassette tapes', 'Vintage vinyl records', 'Holographic projections', 'Pixelated graffiti', 'Floating comic panels',
+                'Retro billboards', 'Neon geometric shapes', 'Glitch particles', 'Animated confetti', 'Vintage cameras',
+                'Floating holographic screens', 'Arcade joysticks', 'Neon streaks', 'Retro TV monitors', 'Futuristic vending machines',
+                'Pixel dust trails', 'Floating neon cubes', 'Glowing arcade tokens', 'Retro microphones', 'Animated stars and sparkles',
+                'Holographic keyboards', 'Disco light beams', 'Retro skateboards', 'Floating soda cans', 'Pixelated retro animals',
+                'Neon street lamps', 'Glitching neon wires', 'Retro comic-style symbols', 'Vintage arcade prizes', 'Floating record albums',
+                'Neon rain reflections', 'Holographic speech bubbles', 'Pixelated neon trails', 'Retro glow sticks', 'Animated retro balloons'
+            ],
+            'lighting': [
+                'Neon glow', 'Spotlight stage lighting', 'Disco ball reflections', 'Soft retro ambient light', 'Fluorescent arcade lighting',
+                'Backlit silhouette', 'Holographic projection glow', 'Glitch-inspired neon streaks', 'Twilight city lights', 'Pixelated screen glow',
+                'Colorful stage lights', 'LED strip highlights', 'Streetlamp reflection', 'Flickering neon', 'Soft sunset glow',
+                'Retro studio lamps', 'Spotlight on retro hero', 'Glowing holographic panels', 'Reflected neon puddles', 'Rainbow disco haze',
+                'Soft ambient mall light', 'Backlit cinematic pose', 'Pixel dust illumination', 'Neon underglow', 'Fluorescent reflections',
+                'Animated comic light', 'Projected ads light', 'Shadowed alleyway glow', 'Soft glowing arcade screens', 'LED halo',
+                'Neon puddle reflection', 'Soft fluorescent reflection', 'Color-saturated glow', 'Projected hologram light', 'Cinematic retro lighting',
+                'Flickering sign illumination', 'Backlit stage figure', 'Soft neon haze', 'Glitch-inspired illumination', 'Animated sparkle light',
+                'Retro photographic glow'
+            ],
+            'camera-angle': [
+                'Leica 50mm, f/1.2, shallow depth of field', 'Anamorphic lens, cinematic', 'Drone view over arcade', 'DSLR 85mm, sharp focus on performer', 'Ultra wide lens, low-angle city street',
+                'Top-down dance floor', 'Macro lens, extreme detail on retro object', 'Over-the-shoulder stage POV', 'Zoom lens through neon haze', 'Grainy analog style',
+                'Infrared retro lens', 'Close-up low-focus DOF on cassette', 'Telephoto through disco lights', 'First-person POV through arcade', 'Fish-eye lens in retro plaza',
+                'Retro cinematic poster style', 'Cinematic widescreen crop', 'Mid-century film camera look', 'Portrait studio lighting on pop icon', 'Floating orb tracker lens',
+                'Holographic projection lens', 'High-angle rooftop view', 'Low-angle arcade scene', 'Overhead skatepark capture', 'Foreground neon elements framing',
+                'Tilted stage perspective', 'Tracking moving dancer lens', 'Wide-angle roller rink', 'Macro pixel detail', 'Drone following figure POV',
+                'Tilted alley perspective', 'Top-down arcade layout', 'Low-angle stage spotlight', 'Foreground confetti framing', 'Backlit silhouette shot',
+                'Wide shot of city street', 'Mid-frame character in neon glow', 'Floating pixel elements framing', 'Over-the-shoulder neon POV', 'Close-up on vinyl',
+                'Tilted rooftop party perspective'
+            ],
+            'art-style': [
+                'Pop art (Warhol-inspired)', '80s comic book style', 'Synthwave digital painting', 'Vaporwave collage', 'Retro-futurist illustration',
+                'Neon noir poster', 'Pixel art urban', 'Lowbrow surrealism', 'Digital illustration, pop culture', 'Futuristic retro photography',
+                'Graffiti street art', 'Anime-inspired retro style', 'Neon-glow concept art', 'Cinematic poster design', 'Retro cartoon cel shading',
+                '80s magazine illustration', 'Digital comic panel', 'Funk-inspired poster art', 'Synth-pop surrealism', 'Pop culture collage',
+                'Retro film poster aesthetic', 'Illustrated neon cityscape', 'Animated comic realism', 'Vaporwave photomanipulation', 'Futurist pop illustration',
+                'Cinematic neon digital painting', 'Pop-surreal digital collage', 'Retro RPG concept art', 'Pixelated comic style', 'Neon poster design',
+                'Animated retro fantasy', 'Synthwave environment illustration', 'Urban pop realism', 'Digital retro matte painting', 'Graffiti-inspired illustration',
+                'Comic book cover art', 'Pop icon portrait', 'Neon surreal photography', 'Retro sci-fi illustration', 'Funky digital collage',
+                'Cult film-inspired poster'
+            ],
+            'composition': [
+                'Centered performer on stage', 'Off-center arcade hero', 'Foreground neon signs framing', 'Over-the-shoulder viewer POV', 'Low-angle disco ball shot',
+                'High-angle arcade overview', 'Silhouette against neon city', 'Mid-frame dancer in motion', 'Foreground floating pixels', 'Wide-angle city street',
+                'Close-up on vinyl', 'Tilted retro poster composition', 'Figure framed by neon billboard', 'Drone perspective over roller rink', 'Macro focus on retro object',
+                'Foreground confetti framing', 'Backlit neon silhouette', 'Wide shot of arcade plaza', 'Character reflected in puddle', 'Tilted street perspective',
+                'High-angle city rooftop', 'Figure walking through alley', 'Low-angle neon reflection', 'Mid-shot on stage', 'Foreground LED strips',
+                'Top-down arcade floor', 'Floating balloons framing subject', 'Backlit performer silhouette', 'Wide shot of city crowd', 'Mid-frame skateboarding action',
+                'Over-the-shoulder neon alley', 'Foreground holographic particles', 'Character framed by streetlight', 'High-angle disco floor', 'Low-angle street performer',
+                'Floating neon shapes framing figure', 'Silhouette against billboard glow', 'Mid-shot performer in motion', 'Foreground glitch particles', 'Wide-angle rooftop party',
+                'Tilted stage framing'
+            ]
+            },
+            'abstract-conceptual': {
+            'subject-type': [
+                'Floating geometric forms', 'Fragmented human figure', 'Liquid humanoid', 'Shifting sculpture', 'Pixelated consciousness',
+                'Morphing organic shapes', 'Ethereal energy being', 'Levitation of abstract objects', 'Flowing ribbons of light', 'Glitched humanoid',
+                'Celestial form', 'Translucent crystal entity', 'Abstract thought representation', 'Color burst entity', 'Fractal creature',
+                'Time-warped figure', 'Shadowy silhouette', 'Neural network avatar', 'Liquid metal form', 'Morphing abstract animal',
+                'Floating consciousness sphere', 'Dimensional distortion', 'Energy vortex humanoid', 'Shattered reality figure', 'Illusionary figure',
+                'Floating wireframe object', 'Thought-form projection', 'Prismatic entity', 'Quantum energy form', 'Fragmented mask',
+                'Flowing data being', 'Surreal hybrid entity', 'Glass-like humanoid', 'Elemental abstraction', 'Pixel-cloud figure',
+                'Glowing essence orb', 'Conceptual human shape', 'Dreamscape wanderer', 'Morphing elemental form', 'Abstract avatar',
+                'Temporal echo entity', 'Suspended consciousness figure'
+            ],
+            'wardrobe': [
+                'Flowing energy robes', 'Translucent geometric tunic', 'Liquid metal draped fabric', 'Wireframe cape', 'Holographic projection outfit',
+                'Pixelated layered clothing', 'Fractal-patterned garment', 'Floating ribboned ensemble', 'Crystal-threaded robes', 'Neural interface vest',
+                'Quantum-fiber weave', 'Color-shifting bodysuit', 'Glitch-inspired wraps', 'Light-emitting robes', 'Abstract layered tunic',
+                'Morphing fabric suit', 'Ethereal mesh armor', 'Flowing surreal shawl', 'Transparent holographic gown', 'Energy-threaded coat',
+                'Suspended floating fabrics', 'Dimensional cloak', 'Pixel-threaded vestments', 'Liquid-reflective tunic', 'Shimmering aura layers',
+                'Morphing silhouette robe', 'Prismatic layered suit', 'Conceptual draped robe', 'Fractal-fabric dress', 'Glitch-patterned jumpsuit',
+                'Floating digital scarf', 'Translucent layered robes', 'Surreal fabric waves', 'Neon-threaded cape', 'Illusionary pattern bodysuit',
+                'Light-draped tunic', 'Suspended ribbon coat', 'Holographic mesh armor', 'Abstract flowing skirt', 'Quantum shimmer cloak'
+            ],
+            'body-modifications': [
+                'Glowing energy veins', 'Pixelated limbs', 'Fragmented face', 'Liquid metal appendages', 'Translucent skin',
+                'Holographic tattoos', 'Floating geometric ornaments', 'Morphing headpieces', 'Wireframe spine', 'Prismatic eyes',
+                'Fractal horns', 'Color-shifting hair', 'Abstract wing structures', 'Floating limb fragments', 'Neural implants',
+                'Suspended body fragments', 'Shimmering aura', 'Liquid crystal eyes', 'Morphing hands', 'Energy projections from skin',
+                'Glitching joints', 'Pixelated hair strands', 'Translucent skeleton', 'Flowing light ribbons from body', 'Floating mask fragments',
+                'Quantum implants', 'Shattered face fragments', 'Prismatic limbs', 'Glitch skin patterns', 'Wireframe muscle overlay',
+                'Suspended ornaments', 'Abstract crystal growths', 'Morphing torso', 'Liquid energy streams', 'Floating neon fragments',
+                'Holographic projection nodes', 'Pixel-drift aura', 'Neural network overlays', 'Fractal body markings', 'Morphing silhouette extensions'
+            ],
+            'mood-expression': [
+                'Detached contemplation', 'Surreal wonder', 'Abstract curiosity', 'Thoughtful introspection', 'Floating serenity',
+                'Fragmented focus', 'Dreamlike calm', 'Frenetic energy', 'Melancholic reflection', 'Transcendent awareness',
+                'Detached observation', 'Ethereal pondering', 'Hypnotic absorption', 'Fluid motion expression', 'Conceptual joy',
+                'Faintly confused', 'Otherworldly calm', 'Intense focus', 'Weightless thought', 'Whimsical abstraction',
+                'Floating awareness', 'Transcendent melancholy', 'Detached curiosity', 'Joyful abstraction', 'Frenetic creative energy',
+                'Silent reflection', 'Infinite wonder', 'Fluid contemplation', 'Abstract awe', 'Mysterious perception',
+                'Suspended focus', 'Dynamic mental flux', 'Dreamlike astonishment', 'Ethereal tranquility', 'Floating imagination',
+                'Hypnotic contemplation', 'Fragmented thought', 'Surreal amazement', 'Infinite observation', 'Detached fluidity',
+                'Conceptual reverie'
+            ],
+            'environment': [
+                'Endless mirrored void', 'Floating geometric landscape', 'Liquid-reflective plane', 'Prismatic cityscape', 'Abstract sky bridge',
+                'Shattered dimension', 'Floating islands of color', 'Morphing fractal terrain', 'Translucent crystal cavern', 'Digital abstraction space',
+                'Suspended light grid', 'Floating energy platforms', 'Glitched city fragments', 'Ethereal mist void', 'Pixelated floating structures',
+                'Liquid light river', 'Fractal tunnel maze', 'Floating holographic terrain', 'Quantum energy plane', 'Shimmering abstract canyon',
+                'Warped reflective surfaces', 'Glowing prism forest', 'Morphing urban abstraction', 'Suspended sphere landscape', 'Dimensional folds',
+                'Floating ribbon plains', 'Translucent energy valleys', 'Liquid metal cityscape', 'Fractal cloudscape', 'Suspended abstract mountains',
+                'Neon wireframe towers', 'Glitch horizon', 'Floating digital shards', 'Prismatic ocean waves', 'Abstract desert dunes',
+                'Suspended crystal forest', 'Morphing temporal ruins', 'Liquid light plains', 'Translucent fractal mountains', 'Warped reflective ocean',
+                'Floating surreal plateau'
+            ],
+            'surrounding-elements': [
+                'Floating geometric shards', 'Glitch particles', 'Energy ribbons', 'Pixel clouds', 'Suspended prism fragments',
+                'Fractal spirals', 'Neon wires', 'Liquid light trails', 'Floating abstract symbols', 'Glowing orbs',
+                'Shimmering planes', 'Floating holographic panels', 'Prismatic shards', 'Wireframe fragments', 'Digital dust',
+                'Suspended crystal fragments', 'Color-shifting spheres', 'Floating dimensional ribbons', 'Light beams', 'Fragmented cubes',
+                'Neural network nodes', 'Ethereal smoke tendrils', 'Morphing patterns', 'Pixelated debris', 'Quantum energy streams',
+                'Shimmering prisms', 'Floating abstract symbols', 'Glitch streaks', 'Suspended wireframe objects', 'Liquid metal droplets',
+                'Holographic cubes', 'Fractal particles', 'Floating luminous threads', 'Shattered mirrors', 'Suspended neon ribbons',
+                'Glowing abstract sigils', 'Colorful energy shards', 'Pixel drift fragments', 'Prismatic light fragments', 'Floating wireframe orbs',
+                'Ethereal motion trails'
+            ],
+            'lighting': [
+                'Prismatic light', 'Reflected neon shards', 'Backlit silhouette', 'Soft ethereal glow', 'Suspended ambient light',
+                'Glitch-inspired color streaks', 'Floating holographic illumination', 'Shimmering abstract reflection', 'Soft mist light', 'Floating energy glow',
+                'Overexposed reflective highlights', 'Soft pastel shafts', 'Floating prism illumination', 'Dynamic light streaks', 'Glowing aura effect',
+                'Color-shifting reflections', 'Backlit abstract forms', 'Flickering neon fragments', 'Soft ambient prism glow', 'Suspended light particles',
+                'High-contrast abstract lighting', 'Reflected digital glow', 'Projected holographic illumination', 'Liquid-reflected light', 'Fragmented shadow light',
+                'Suspended energy shafts', 'Prismatic flare', 'Glitch reflection illumination', 'Soft mirrored light', 'Floating luminous beams',
+                'Abstract spotlight shafts', 'Ethereal glow from fragments', 'Shimmering surface illumination', 'Suspended neon glow', 'Color-streaked reflection',
+                'Soft holographic rays', 'Fragmented illumination', 'Dynamic abstract light', 'Liquid prism shafts', 'Floating light diffusion'
+            ],
+            'camera-angle': [
+                'Leica 50mm, f/1.2, shallow depth of field', 'Anamorphic lens, cinematic', 'Drone view over abstract terrain', 'DSLR 85mm, sharp focus on fragment', 'Ultra wide lens, low-angle prism landscape',
+                'Top-down floating grid', 'Macro lens, extreme detail on abstract object', 'Over-the-shoulder conceptual POV', 'Zoom lens through mist', 'Grainy analog experimental style',
+                'Infrared abstract lens', 'Close-up low-focus DOF', 'Telephoto through prism reflection', 'First-person POV through floating shards', 'Fish-eye lens on energy swirl',
+                'Retro cinematic abstract look', 'Cinematic widescreen crop', 'Mid-century experimental camera', 'Portrait studio lighting on abstract form', 'Floating orb tracker lens',
+                'Holographic projection camera', 'High-angle floating landscape', 'Low-angle geometric object', 'Overhead fractal maze', 'Foreground prism shards framing',
+                'Tilted abstract perspective', 'Tracking morphing object lens', 'Wide-angle void landscape', 'Macro focus on suspended particle', 'Drone following energy streak',
+                'Tilted dimensional fold POV', 'Top-down floating pattern', 'Low-angle prism reflection', 'Foreground floating shards', 'Backlit silhouette shot',
+                'Wide shot of abstract plane', 'Mid-frame morphing form', 'Floating fragment framing lens', 'Over-the-shoulder prism POV', 'Close-up liquid fragment',
+                'Tilted floating plane perspective'
+            ],
+            'art-style': [
+                'Abstract expressionism', 'Surrealism (Dali-inspired)', 'Cubism', 'Futurist abstraction', 'Neo-expressionist digital',
+                'Minimalist abstract', 'Conceptual modernism', 'Glitch art', 'Digital collage abstraction', 'Fractal art',
+                'Prismatic painting', 'Experimental photography', 'Mixed media conceptual', 'Kinetic abstract painting', 'Op art',
+                'Dreamlike digital surrealism', 'Soft pastel abstraction', 'Geometric abstraction', 'Photorealistic surrealism', 'Ethereal light painting',
+                'Color field painting', 'Digital fractal rendering', 'Generative AI abstraction', 'Neo-noir surrealism', 'Expressionist abstract',
+                'Fluid motion painting', 'Surreal digital collage', 'Abstract minimalism', 'Soft cinematic abstraction', 'Glitch-inspired digital art',
+                'Cubist digital painting', 'Futurist landscape abstraction', 'Postmodern conceptual art', 'Liquid surrealism', 'Psychedelic abstraction',
+                'Translucent layer painting', 'Digital energy painting', 'Conceptual environmental art', 'Abstract light sculpture', 'Morphing shape digital art',
+                'Floating form illustration'
+            ],
+            'composition': [
+                'Centered abstract object', 'Off-center morphing form', 'Foreground floating shards', 'Over-the-shoulder energy POV', 'Low-angle prism shot',
+                'High-angle void overview', 'Silhouette against floating light', 'Mid-frame liquid object', 'Foreground floating fragments', 'Wide-angle abstract terrain',
+                'Close-up low-focus on crystal shard', 'Tilted fractal composition', 'Floating figure mid-frame', 'Drone perspective over morphing forms', 'Macro focus on prism detail',
+                'Foreground ribbons framing object', 'Backlit abstract silhouette', 'Wide shot of floating plane', 'Object reflected in mirrored surface', 'Tilted floating prism',
+                'High-angle fractal plane', 'Object walking through floating shards', 'Low-angle prism reflection', 'Mid-shot morphing form', 'Foreground floating light ribbons',
+                'Top-down floating fractal', 'Floating crystal mid-frame', 'Backlit prism silhouette', 'Wide shot of abstract void', 'Mid-frame liquid form',
+                'Over-the-shoulder prism POV', 'Foreground glowing particle framing', 'Character reflected in energy plane', 'High-angle floating structure', 'Low-angle prism shards',
+                'Floating shards framing object', 'Silhouette against prism glow', 'Mid-shot energy streaks', 'Foreground prism reflection', 'Wide-angle morphing landscape',
+                'Tilted abstract structure framing'
+            ]
+            },
+            'cosmic-scifi': {
+            'subject-type': [
+                'Starship captain', 'Interstellar explorer', 'Alien diplomat', 'Robotic navigator', 'Quantum consciousness entity',
+                'Void wanderer', 'Space marine', 'Holographic AI advisor', 'Astro-miner', 'Temporal scientist',
+                'Galactic ambassador', 'Neural network avatar', 'Plasma creature', 'Space rogue', 'Alien biologist',
+                'Cosmic sorcerer', 'Time-loop traveler', 'Asteroid scavenger', 'AI-controlled probe', 'Cybernetic pilot',
+                'Cryo-sleep passenger', 'Exoplanet colonist', 'Gravity-defying engineer', 'Orbital security officer', 'Luminous alien entity',
+                'Terraforming technician', 'Space anomaly observer', 'Nano-suit operative', 'Quantum thief', 'Neon nebula wanderer',
+                'Astro-archaeologist', 'Cosmic nomad', 'Black hole investigator', 'Solar flare shaman', 'Void emissary',
+                'Stellar cartographer', 'Interdimensional scout', 'Exoplanet researcher', 'Orbital drone swarm', 'Holographic diplomat',
+                'Plasma entity'
+            ],
+            'wardrobe': [
+                'Space-faring armor', 'Reflective astro-suit', 'Neural interface helmet', 'Quantum fiber jumpsuit', 'Holographic mission robes',
+                'Gravity-resistant coat', 'Bio-adaptive bodysuit', 'High-tech EVA suit', 'Plasma-insulated cape', 'Alien ceremonial garb',
+                'Layered cosmic robes', 'Mechanical exoskeleton', 'Transparent space cloak', 'Energy-threaded tunic', 'Futurist explorer armor',
+                'Suspended utility belt', 'Holo-tracking vest', 'Adaptive stealth suit', 'Reflective nebula cloak', 'Plasma-resistant tunic',
+                'Quantum field robe', 'Gravity-defying layers', 'Exosuit with floating panels', 'Star-forged armor plating', 'Celestial mesh suit',
+                'Void-shielded uniform', 'Temporal weave tunic', 'Crystal-lined space garb', 'Anti-radiation jumpsuit', 'Orbital hazard cloak',
+                'Energy-imbued ceremonial robes', 'Holo-layered jacket', 'Trans-dimensional explorer tunic', 'Plasma-lined boots', 'Futuristic ceremonial cloak',
+                'Astral armor with glowing seams', 'Alien hybrid robes', 'Suspended nebula cape', 'Holographic nebula dress', 'Quantum-shift armor',
+                'Starship navigator suit'
+            ],
+            'body-modifications': [
+                'Cybernetic limbs', 'Plasma veins', 'Holographic tattoos', 'Neural interface implants', 'Glowing alien eyes',
+                'Exoskeletal enhancements', 'Energy projection nodes', 'Mechanical wings', 'Augmented respiratory system', 'Crystal organ implants',
+                'Quantum circuitry under skin', 'Bio-luminescent tattoos', 'Time-distorted limbs', 'Magnetic bones', 'Floating nano-drones',
+                'Plasma blood vessels', 'Synaptic boosters', 'Energy-infused skullplate', 'Mechanical spinal augmentation', 'Holo-projection ports',
+                'Void-touched skin', 'Gravity-manipulating implants', 'Translucent skin revealing organs', 'Neon neural pathways', 'Adaptive ocular implants',
+                'Cryo-sleep enhancement implants', 'Symbiotic nanotech armor', 'Morphing limb augmentation', 'Stellar energy core implant', 'Orbital hazard implants',
+                'Quantum consciousness interface', 'Reflective chrome bones', 'Holographic wing projections', 'Time-loop tattoos', 'Alien rune etchings',
+                'Plasma aura generators', 'Neural mesh network overlay', 'Electric organ replacements', 'Anti-gravity implants', 'Suspended nano-energy nodes'
+            ],
+            'mood-expression': [
+                'Stoic and commanding', 'Curious and analytical', 'Detached observation', 'Frenetic determination', 'Transcendent calm',
+                'Frightened awe', 'Intense focus', 'Enigmatic confidence', 'Haunted by the void', 'Joyful discovery',
+                'Commanding presence', 'Electric fury', 'Ethereal serenity', 'Detached calculation', 'Obsessed with exploration',
+                'Galactic wonder', 'Sorrowful reflection', 'Predatory alertness', 'Quantum uncertainty', 'Neural network focus',
+                'Cosmic curiosity', 'Void-touched melancholy', 'Suspenseful alertness', 'Soft but powerful', 'Ritualistic trance',
+                'Playful interstellar wonder', 'Detached but aware', 'Haunted by anomalies', 'Focused precision', 'Transcendent euphoria',
+                'Frenetic experimenter', 'Stoic observer', 'Predatory exploration', 'Nostalgic futurism', 'Electric anticipation',
+                'Quantum entanglement awe', 'Holographic confidence', 'Plasma storm rage', 'Void convergence fascination', 'Celestial inspiration',
+                'Cosmic wonderment'
+            ],
+            'environment': [
+                'Orbiting space station', 'Alien planet surface', 'Gas giant cloudscape', 'Deep space nebula', 'Asteroid belt field',
+                'Exoplanet colony', 'Derelict starship', 'Terraforming facility', 'Cosmic anomaly', 'Black hole edge',
+                'Wormhole corridor', 'Futuristic space dock', 'Cryogenic chamber', 'Floating space debris field', 'Luminous nebula vista',
+                'Orbiting research platform', 'Planetary ring landscape', 'Quantum foam landscape', 'Deep orbit observatory', 'Stellar nursery',
+                'Artificial orbital habitat', 'Abandoned space station', 'Solar flare-exposed canyon', 'Alien spacecraft interior', 'Meteor shower vista',
+                'Crystal asteroid cavern', 'Plasma storm dimension', 'Magnetic pole research station', 'Holographic star map room', 'Void-touched surface',
+                'Suspended orbital bridge', 'Galactic cathedral interior', 'Exoplanet jungle', 'Deep space graveyard', 'Floating holographic city',
+                'Trans-dimensional corridor', 'Neural network space realm', 'Electromagnetic storm laboratory', 'Alien floating temple', 'Crystal comet surface'
+            ],
+            'surrounding-elements': [
+                'Floating satellite debris', 'Glowing plasma streams', 'Holographic star maps', 'Orbiting drones', 'Alien sigils',
+                'Quantum distortion ripples', 'Nebula gas clouds', 'Suspended asteroid shards', 'Crystal formations', 'Solar flare arcs',
+                'Energy rings', 'Gravitational lensing effects', 'Magnetic storm streaks', 'Particle trails', 'Glitching star fragments',
+                'Suspended cosmic dust', 'Holographic projections', 'Floating data panels', 'Plasma arcs', 'Orbiting energy cores',
+                'Temporal distortion waves', 'Void portals', 'Electric nebula veins', 'Suspended light ribbons', 'Alien glyphs',
+                'Laser grid fields', 'Quantum foam bubbles', 'Floating holographic interfaces', 'Prismatic energy shards', 'Suspended comet fragments',
+                'Neural network nodes', 'Time-loop anomalies', 'Celestial orbit trails', 'Electric field arcs', 'Plasma cloud formations',
+                'Crystal shard clusters', 'Void debris', 'Suspended nanotech particles', 'Holographic anomaly markers', 'Reflective light shards',
+                'Energy projection fields'
+            ],
+            'lighting': [
+                'Celestial light shafts', 'Neon nebula glow', 'Plasma storm illumination', 'Backlit silhouette', 'Starflare reflections',
+                'Soft cosmic haze', 'Holographic projection light', 'Volumetric starlight', 'Quantum energy emission', 'Flickering anomaly light',
+                'Soft ambient orbital glow', 'Reflected asteroid light', 'Infrared radiation glow', 'Aurora-like cosmic illumination', 'Overexposed solar reflection',
+                'Suspended nebula shafts', 'LED-like spacecraft panels', 'Electric plasma illumination', 'Glitching cosmic rays', 'Soft comet reflection',
+                'Chromatic lens flare', 'Projected holographic map light', 'Soft planetary halo', 'Void luminescence', 'Quantum flux light',
+                'Neon-lit spacecraft interiors', 'Dynamic solar reflections', 'Prismatic light dispersion', 'Reflected plasma bursts', 'Soft energy field glow',
+                'Suspended light ribbons', 'Backlit cosmic figure', 'Orbital shadowed lighting', 'Glowing star cluster reflections', 'Soft reflected nebula',
+                'Energy core illumination', 'Floating particle glow', 'Projected star map illumination', 'High-contrast celestial shafts', 'Aurora-streaked backlight'
+            ],
+            'camera-angle': [
+                'Leica 50mm, f/1.2, shallow depth of field', 'Anamorphic lens, cinematic', 'Drone view over space station', 'DSLR 85mm, sharp focus on subject', 'Ultra wide lens, low-angle planet surface',
+                'Top-down orbital view', 'Macro lens, extreme detail on tech', 'Over-the-shoulder EVA POV', 'Zoom lens through plasma haze', 'Grainy analog space documentary',
+                'Infrared thermal lens', 'Close-up low-focus DOF', 'Telephoto through solar glare', 'First-person astronaut POV', 'Fish-eye lens on cosmic anomaly',
+                'Retro sci-fi cinematography', 'Cinematic widescreen crop', 'Mid-century space exploration camera', 'Portrait studio lighting in spacecraft', 'Holographic projection lens',
+                'High-angle nebula shot', 'Low-angle starship perspective', 'Overhead asteroid field', 'Foreground cosmic debris', 'Tilted orbital platform POV',
+                'Tracking moving ship lens', 'Wide-angle nebula panorama', 'Macro focus on alien artifact', 'Drone following explorer POV', 'Tilted wormhole perspective',
+                'Top-down research station', 'Low-angle planetary crater', 'Foreground floating debris', 'Backlit silhouette shot', 'Wide shot of orbiting station',
+                'Mid-frame spacewalk', 'Floating holographic panels framing', 'Over-the-shoulder cosmic POV', 'Close-up alien implant', 'Tilted interstellar horizon'
+            ],
+            'art-style': [
+                'Space opera illustration', 'Futurist digital painting', 'Hard sci-fi realism', 'Celestial surrealism', 'Conceptual cosmic art',
+                'Neo-noir sci-fi', 'H.R. Giger-inspired technology', 'Fractal cosmic rendering', 'Astral impressionism', 'Digital matte painting',
+                'Vaporwave interstellar', 'Retro-futurist illustration', 'Cinematic space poster style', 'Psychedelic cosmic abstraction', 'Blade Runner-inspired space city',
+                'Futurist starship concept art', 'Sci-fi concept illustration', 'Prismatic digital painting', 'Astronomical realism', 'Cosmic surreal collage',
+                'Synthwave galaxy aesthetic', 'Neo-expressionist sci-fi', 'Photorealistic planetary landscapes', 'Digital cosmic sculpture', 'Futurist holographic illustration',
+                'Quantum-inspired digital art', 'Holographic energy painting', 'Cinematic space illustration', 'Conceptual interstellar surrealism', 'Hard sci-fi mech design',
+                'Alien architecture rendering', 'Celestial abstraction', 'Digital nebula painting', 'Surreal cosmic lighting', 'Fractal planetary art',
+                'Futurist orbital station design', 'Glitch-inspired cosmic imagery', 'Prismatic nebula concept art', 'Cybernetic space realism', 'Space-fantasy illustration',
+                'Interstellar poster art'
+            ],
+            'composition': [
+                'Centered starship', 'Off-center explorer', 'Foreground floating debris', 'Over-the-shoulder EVA POV', 'Low-angle planetary surface',
+                'High-angle orbital overview', 'Silhouette against nebula', 'Mid-frame plasma entity', 'Foreground holographic panels', 'Wide-angle starfield',
+                'Close-up low-focus on alien artifact', 'Tilted spaceship corridor', 'Floating energy core mid-frame', 'Drone perspective over asteroid field', 'Macro-focus on cosmic anomaly',
+                'Foreground comet shards framing', 'Backlit celestial silhouette', 'Wide shot of space station', 'Character reflected in space glass', 'Tilted orbital horizon',
+                'High-angle nebula cloudscape', 'Character navigating debris', 'Low-angle alien structure', 'Mid-shot scientist in lab', 'Foreground floating particles',
+                'Top-down star map view', 'Floating spaceship mid-frame', 'Backlit explorer silhouette', 'Wide shot of galaxy panorama', 'Mid-frame cosmic entity',
+                'Over-the-shoulder starship control', 'Foreground plasma arcs', 'High-angle interstellar battlefield', 'Low-angle nebula entity', 'Floating satellites framing subject',
+                'Silhouette against solar flare', 'Mid-shot EVA action', 'Foreground asteroid framing', 'Wide-angle wormhole', 'Tilted star system composition'
+            ]
+            }
         };
 
         function generateInspiration() {
             const template = "A {subject-type} wearing {wardrobe}, with {body-modifications}, expressing a {mood-expression} mood, standing in a {environment}. Surrounded by {surrounding-elements}, lit by {lighting}, captured with a {camera-angle}. Inspired by {art-style}. {composition}.";
             
             let prompt = template;
-            Object.keys(promptCategories).forEach(category => {
-                const options = promptCategories[category];
+            const currentPackData = promptCategories[currentPack];
+
+            // Replace placeholders with random selections from current pack
+            Object.keys(currentPackData).forEach(category => {
+                const options = currentPackData[category];
                 const randomOption = options[Math.floor(Math.random() * options.length)];
                 prompt = prompt.replace(`{${category}}`, randomOption);
             });
@@ -611,6 +1708,140 @@
                 }, 2000);
             });
         }
+
+        function selectPack(packType) {
+            // Remove active class from all pack buttons
+            document.querySelectorAll('.pack-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Add active class to selected pack button
+            document.getElementById(packType + '-btn').classList.add('active');
+            
+            // Store current pack selection
+            currentPack = packType;
+            
+            // Clear the prompt output box but preserve the copy button structure
+            const outputBox = document.getElementById('inspirationOutput');
+            const copyBtn = document.getElementById('copyInspireBtn');
+            
+            // Clear existing content but preserve the copy button
+            outputBox.innerHTML = '';
+            outputBox.appendChild(document.createTextNode('Click "Inspire me" to get a random prompt idea...'));
+            outputBox.appendChild(copyBtn);
+            
+            // Hide the copy button until a new prompt is generated
+            copyBtn.style.display = 'none';
+            
+            // Update image gallery based on selected pack
+            updateImageGallery(packType);
+        }
+
+        function updateImageGallery(packType) {
+            const imageCards = document.querySelectorAll('.image-card img');
+            const cardTitles = document.querySelectorAll('.card-title');
+            const cardDescriptions = document.querySelectorAll('.card-description');
+            
+            if (packType === 'cyber-mythos') {
+                // Cyber-Mythos images (current ones)
+                imageCards[0].src = '1prompt.png';
+                imageCards[1].src = '2prompt.png';
+                imageCards[2].src = '5prompt.png';
+                imageCards[3].src = '4prompt.png';
+                imageCards[4].src = '6prompt.png';
+                imageCards[5].src = '7prompt.png';
+                imageCards[6].src = '8prompt.png';
+                imageCards[7].src = '9prompt.png';
+                
+                // Reset to original Cyber-Mythos titles and descriptions
+                cardTitles[0].textContent = 'CRYSTAL SHAMAN';
+                cardTitles[1].textContent = 'NEURAL VAMPIRE';
+                cardTitles[2].textContent = 'ANCIENT TECH DEITY';
+                cardTitles[3].textContent = 'QUANTUM PRIEST';
+                cardTitles[4].textContent = 'DIGITAL GHOST';
+                cardTitles[5].textContent = 'DIGITAL AVATAR';
+                cardTitles[6].textContent = 'HOLOGRAPHIC DEMON';
+                cardTitles[7].textContent = 'ROBOTIC MONK';
+                
+                cardDescriptions[0].textContent = 'A Crystal shaman wearing Translucent alien fabric, with Holographic bone replacements, expressing a Stoic and regal mood, standing in a Void-like dreamspace. Surrounded by Neon graffiti, lit by Celestial light shaft, captured with a CCTV surveillance angle. Inspired by Dark baroque surrealism. Looking into the light.';
+                cardDescriptions[1].textContent = 'A Neural vampire wearing Retro-futurist jumpsuit, with Living armor attached to skin, expressing a Cyberpunk rebellion mood, standing in a Void dimension pocket. Surrounded by Quantum entanglement threads, lit by Glitch-reality lighting, captured with a Electric storm tracker. Inspired by Electric field impressionism. Glitch-reality fracture view.';
+                cardDescriptions[2].textContent = 'An Ancient tech deity wearing Electric feather cape, with Golden cybernetic arms, expressing a Glitch-induced madness mood, standing in a Endless mirrored void. Surrounded by Holographic projection screens, lit by Holographic projection light, captured with a Telephoto through smoke. Inspired by Electric field impressionism. Dramatic overhead light.';
+                cardDescriptions[3].textContent = 'A Quantum priest wearing High-tech tactical gear, with Neon organ displays, expressing a Ethereal and dreamlike mood, standing in a Neon-lit cyberpunk streets. Surrounded by Neon graffiti, lit by Overexposed whitewash, captured with a Electric field detector. Inspired by Brutalist fashion editorial. Neural pathway network shot.';
+                cardDescriptions[4].textContent = 'A Digital ghost wearing Ancient priest garments, with Plasma blood vessels, expressing a Commanding presence mood, standing in a Neural mesh garden. Surrounded by Floating holograms, lit by UV radiation glow, captured with a Plasma storm recorder. Inspired by Brutalist fashion editorial. Neural network explosion.';
+                cardDescriptions[5].textContent = 'A Digital avatar wearing Plasma wave pants, with Crystal eye replacements, expressing a Enlightened serenity mood, standing in a Moonlit shrine on Mars. Surrounded by Holographic data streams, lit by Faint candle glow, captured with a Drone view, tilt angle. Inspired by Tribal-mech fusion. Abstract floating pose.';
+                cardDescriptions[6].textContent = 'A Holographic demon wearing Plated bodysuit with glowing seams, with Chrome skullplate, expressing a Neural network calm mood, standing in a Quantum entanglement nexus. Surrounded by Plasma storm clouds, lit by Volumetric spotlight, captured with a Neural network scanner. Inspired by Biomechanical horror. Void pocket expansion.';
+                cardDescriptions[7].textContent = 'A Robotic monk wearing Holographic armor plating, with Neural mesh overlays, expressing a Quantum entanglement joy mood, standing in a Holographic shadow realm. Surrounded by Alien prayer scripts, lit by Quantum field emission, captured with a Ultra wide lens, low angle. Inspired by Vaporwave noir. Holographic void expansion.';
+                
+            } else if (packType === 'high-fantasy') {
+                // High Fantasy images (10prompt through 17prompt)
+                imageCards[0].src = '10prompt.png';
+                imageCards[1].src = '11prompt.png';
+                imageCards[2].src = '12prompt.png';
+                imageCards[3].src = '13prompt.png';
+                imageCards[4].src = '14prompt.png';
+                imageCards[5].src = '15prompt.png';
+                imageCards[6].src = '16prompt.png';
+                imageCards[7].src = '17prompt.png';
+                
+                // Update titles and descriptions for High Fantasy
+                cardTitles[0].textContent = 'DEMON-BOUND SORCERER';
+                cardTitles[1].textContent = 'PRIESTESS OF LIGHT';
+                cardTitles[2].textContent = 'KNIGHT ERRANT';
+                cardTitles[3].textContent = 'WITCH OF THE WILDS';
+                cardTitles[4].textContent = 'MYSTIC ORACLE';
+                cardTitles[5].textContent = 'SYLVAN ARCHER';
+                cardTitles[6].textContent = 'SUNBLADE CHAMPION';
+                cardTitles[7].textContent = 'VAMPIRE COUNT';
+                
+                cardDescriptions[0].textContent = 'A Demon-bound sorcerer wearing Ornate wizard hat and robes, with Golden blood glow, expressing a Cold indifference mood, standing in a Frozen crystal palace. Surrounded by Glowing mushrooms, lit by Crystal light reflections, captured with a Celestial star-map scanner. Inspired by Miniature war game illustration. Reflecting in mystic pool.';
+                cardDescriptions[1].textContent = 'A Priestess of light wearing Ranger\'s weathered hood, with Celestial starlight veins, expressing a Reverent awe mood, standing in a Haunted castle ruins. Surrounded by Falling leaves of light, lit by Volcanic red glow, captured with a Scrying mirror monitor shot. Inspired by Fantasy graphic novel inkwork. Cloak swirling in storm winds.';
+                cardDescriptions[2].textContent = 'A Knight errant wearing Fur-lined barbarian pelts, with Frostbitten skin cracks, expressing a Fated acceptance mood, standing in a Orc encampment fires. Surrounded by Shattered weapons in the ground, lit by Dramatic firelight shadows, captured with a Fish-eye lens distortion inside cavern. Inspired by Gothic illuminated script.';
+                cardDescriptions[3].textContent = 'A Witch of the wilds wearing Wolfshead pelt cloak, with Golden aura crown, expressing a Mystical serenity mood, standing in a Frozen crystal palace. Surrounded by Shattered weapons in the ground, lit by Seraphic white brilliance, captured with a Grainy medieval tapestry camera look. Inspired by Golden Age illustration. Resting with sword planted.';
+                cardDescriptions[4].textContent = 'A Mystic oracle wearing Dark spiked armor, with Fae wings of light, expressing a Stoic calm mood, standing in a High elven cityscape. Surrounded by Twinkling constellations, lit by Dramatic firelight shadows, captured with a Ethereal aura observer. Inspired by Epic battle panorama. Spell shockwave radiating.';
+                cardDescriptions[5].textContent = 'A Sylvan archer wearing Holy knight tabard, with Golden blood glow, expressing a Playful mischief mood, standing in a Royal banquet chamber. Surrounded by Swirling aurora ribbons, lit by Cavern crystal glow, captured with a Magical flame shadow scope. Inspired by Gothic illuminated script. Arms raised to heavens.';
+                cardDescriptions[6].textContent = 'A Sunblade champion wearing Plated battle surcoat, with Crown of living branches, expressing a Desperate survivor mood, standing in a Sacred mountain peak. Surrounded by Choral ghostly voices, lit by Frozen starlight glimmer, captured with a Scrying mirror monitor shot. Inspired by Carved stone frieze look. Locked in duel with unseen foe.';
+                cardDescriptions[7].textContent = 'A Vampire count wearing Golden lion crest armor, with Stone-like skin patches, expressing a Haunted with sorrow mood, standing in a Sacred oak grove. Surrounded by Blood-soaked feathers falling, lit by Twilight horizon shine, captured with a Dragon-eye perspective lens. Inspired by Renaissance dramatic realism. Kneeling in prayer before relic.';
+                
+            } else if (packType === 'historical-realism') {
+                // Historical Realism images (18prompt through 25prompt)
+                imageCards[0].src = '18prompt.png';
+                imageCards[1].src = '19prompt.png';
+                imageCards[2].src = '20prompt.png';
+                imageCards[3].src = '21prompt.png';
+                imageCards[4].src = '22prompt.png';
+                imageCards[5].src = '23prompt.png';
+                imageCards[6].src = '24prompt.png';
+                imageCards[7].src = '25prompt.png';
+                
+                // Update titles and descriptions for Historical Realism
+                cardTitles[0].textContent = 'HISTORICAL REALISM';
+                cardTitles[1].textContent = 'HISTORICAL REALISM';
+                cardTitles[2].textContent = 'HISTORICAL REALISM';
+                cardTitles[3].textContent = 'HISTORICAL REALISM';
+                cardTitles[4].textContent = 'HISTORICAL REALISM';
+                cardTitles[5].textContent = 'HISTORICAL REALISM';
+                cardTitles[6].textContent = 'HISTORICAL REALISM';
+                cardTitles[7].textContent = 'HISTORICAL REALISM';
+                
+                cardDescriptions[0].textContent = 'Historical realism prompt example 1';
+                cardDescriptions[1].textContent = 'Historical realism prompt example 2';
+                cardDescriptions[2].textContent = 'Historical realism prompt example 3';
+                cardDescriptions[3].textContent = 'Historical realism prompt example 4';
+                cardDescriptions[4].textContent = 'Historical realism prompt example 5';
+                cardDescriptions[5].textContent = 'Historical realism prompt example 6';
+                cardDescriptions[6].textContent = 'Historical realism prompt example 7';
+                cardDescriptions[7].textContent = 'Historical realism prompt example 8';
+                
+            } else {
+                // Default to placeholder for other packs (until images are added)
+                for (let i = 0; i < imageCards.length; i++) {
+                    imageCards[i].src = `${packType}-${i + 1}.png`;
+                }
+            }
+        }
+
+        // Initialize with Cyber-Mythos as default
+        let currentPack = 'cyber-mythos';
     </script>
 </body>
 </html>

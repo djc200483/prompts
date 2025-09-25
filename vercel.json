@@ -16,8 +16,13 @@
   ],
   "rewrites": [
     {
-      "source": "/((?!.*\\.png$).*)",
+      "source": "/generator",
+      "destination": "/generator.html"
+    },
+    {
+      "source": "/((?!.*\\.png$|^generator$).*)",
       "destination": "/index.html"
     }
-  ]
+  ],
+  "cleanUrls": true
 }

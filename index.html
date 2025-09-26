@@ -593,6 +593,7 @@
             </div>
         </div>
 
+
     </div>
 
     <script>
@@ -1888,6 +1889,36 @@
                 cardDescriptions[5].textContent = 'A Icarus, doomed flyer wearing Winged messenger armor, with Living feathers, expressing a Epic melancholy mood, standing in a Moonlit cliff. Surrounded by Sacred symbols, lit by Reflected water shimmer, captured with a Spirit companion over shoulder. Inspired by Epic heroic relief sculpture. From-behind framing.';
                 cardDescriptions[6].textContent = 'A Siren wearing Mystical enchanted cloak, with Stone-like skin, expressing a Obsessed with power mood, standing in a Skyborne fortress. Surrounded by Falling ash, lit by Ethereal cloud light, captured with a Spirit companion over shoulder. Inspired by Heroic propaganda poster. Mist-shrouded mid-ground.';
                 cardDescriptions[7].textContent = 'A Sun Wukong, monkey king wearing Elemental battle armor, with Celestial halo, expressing a Celestial pride mood, standing in a Sacred grove. Surrounded by Falling leaves, lit by Reflected water shimmer, captured with a Telephoto over dragon lair. Inspired by Romanticism legendary landscape. Wide-angle throne shot.';
+                
+            } else if (packType === 'nature-spirit') {
+                // Nature & Spirit images (42prompt through 49prompt)
+                imageCards[0].src = '42prompt.png';
+                imageCards[1].src = '43prompt.png';
+                imageCards[2].src = '44prompt.png';
+                imageCards[3].src = '45prompt.png';
+                imageCards[4].src = '46prompt.png';
+                imageCards[5].src = '47prompt.png';
+                imageCards[6].src = '48prompt.png';
+                imageCards[7].src = '49prompt.png';
+                
+                // Update titles and descriptions for Nature & Spirit
+                cardTitles[0].textContent = 'NATURE & SPIRIT';
+                cardTitles[1].textContent = 'NATURE & SPIRIT';
+                cardTitles[2].textContent = 'NATURE & SPIRIT';
+                cardTitles[3].textContent = 'NATURE & SPIRIT';
+                cardTitles[4].textContent = 'NATURE & SPIRIT';
+                cardTitles[5].textContent = 'NATURE & SPIRIT';
+                cardTitles[6].textContent = 'NATURE & SPIRIT';
+                cardTitles[7].textContent = 'NATURE & SPIRIT';
+                
+                cardDescriptions[0].textContent = 'Nature & spirit prompt example 1';
+                cardDescriptions[1].textContent = 'Nature & spirit prompt example 2';
+                cardDescriptions[2].textContent = 'Nature & spirit prompt example 3';
+                cardDescriptions[3].textContent = 'Nature & spirit prompt example 4';
+                cardDescriptions[4].textContent = 'Nature & spirit prompt example 5';
+                cardDescriptions[5].textContent = 'Nature & spirit prompt example 6';
+                cardDescriptions[6].textContent = 'Nature & spirit prompt example 7';
+                cardDescriptions[7].textContent = 'Nature & spirit prompt example 8';
                 
             } else {
                 // Default to placeholder for other packs (until images are added)

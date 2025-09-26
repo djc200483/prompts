@@ -1859,6 +1859,36 @@
                 cardDescriptions[6].textContent = 'A Occultist wearing Witch\'s pointed robe, with Shadow tendrils from body, expressing a Brooding and mysterious mood, standing in a Abandoned Victorian mansion. Surrounded by Creeping shadows on walls, lit by Fire-lit laboratory glow, captured with a Retro CRT horror film look. Inspired by Gothic fresco. Gothic shatter symmetry.';
                 cardDescriptions[7].textContent = 'A Corpse bride wearing Victorian nightdress, with Burned or charred skin, expressing a Feral aggression mood, standing in a Desolate village street. Surrounded by Cobweb-draped furniture, lit by Volcanic glow on battlefield, captured with a Portrait studio lighting, pale skin. Inspired by H.R. Giger-esque macabre. Looking into dim light.';
                 
+            } else if (packType === 'myth-legend') {
+                // Myth & Legend images (34prompt through 41prompt)
+                imageCards[0].src = '34prompt.png';
+                imageCards[1].src = '35prompt.png';
+                imageCards[2].src = '36prompt.png';
+                imageCards[3].src = '37prompt.png';
+                imageCards[4].src = '38prompt.png';
+                imageCards[5].src = '39prompt.png';
+                imageCards[6].src = '40prompt.png';
+                imageCards[7].src = '41prompt.png';
+                
+                // Update titles and descriptions for Myth & Legend
+                cardTitles[0].textContent = 'ODIN, ALLFATHER';
+                cardTitles[1].textContent = 'TIAMAT, PRIMORDIAL SERPENT';
+                cardTitles[2].textContent = 'AMATERASU, SUN GODDESS';
+                cardTitles[3].textContent = 'FAFNIR, CURSED DRAGON';
+                cardTitles[4].textContent = 'DJINN, GENIE';
+                cardTitles[5].textContent = 'ICARUS, DOOMED FLYER';
+                cardTitles[6].textContent = 'SIREN';
+                cardTitles[7].textContent = 'SUN WUKONG, MONKEY KING';
+                
+                cardDescriptions[0].textContent = 'A Odin, allfather wearing Celestial golden cape, with Crystal horns, expressing a Joyful and triumphant mood, standing in a Mount Olympus. Surrounded by Mysterious portals, lit by Ghostly pallor, captured with a Overhead battlefield magic lens. Inspired by Baroque dramatic fantasy. Backlit silhouette against sky.';
+                cardDescriptions[1].textContent = 'A Tiamat, primordial serpent wearing Wizard robes of power, with Dragon wings, expressing a Fearsome roar mood, standing in a Underworld river Styx. Surrounded by Sacred symbols, lit by Glow from sacred altar, captured with a Ultra wide lens, low angle on temple. Inspired by Dark surreal legend. Subject framed by ruins.';
+                cardDescriptions[2].textContent = 'A Amaterasu, sun goddess wearing Druidic robes with embroidery, with Venomous fangs, expressing a Shimmering awe mood, standing in a Moonlit cliff. Surrounded by Sacred fire pits, lit by Ethereal cloud light, captured with a Shadowed cliff lens. Inspired by Dark surreal legend. Low-angle epic framing.';
+                cardDescriptions[3].textContent = 'A Fafnir, cursed dragon wearing Heroic armor, with Crystalline skin, expressing a Defiant against fate mood, standing in a Volcanic crater altar. Surrounded by Storm clouds, lit by Mystical firelight, captured with a Dragon-eye perspective lens. Inspired by Romanticism legendary landscape. Center-framed portrait.';
+                cardDescriptions[4].textContent = 'A Djinn, genie wearing Forest spirit tunic, with Fiery hair, expressing a Joyful and triumphant mood, standing in a Atlantis ruins. Surrounded by Dragon bones, lit by Sunbeam piercing trees, captured with a Spirit companion over shoulder. Inspired by Fantasy surreal expressionism. Rule of thirds alignment.';
+                cardDescriptions[5].textContent = 'A Icarus, doomed flyer wearing Winged messenger armor, with Living feathers, expressing a Epic melancholy mood, standing in a Moonlit cliff. Surrounded by Sacred symbols, lit by Reflected water shimmer, captured with a Spirit companion over shoulder. Inspired by Epic heroic relief sculpture. From-behind framing.';
+                cardDescriptions[6].textContent = 'A Siren wearing Mystical enchanted cloak, with Stone-like skin, expressing a Obsessed with power mood, standing in a Skyborne fortress. Surrounded by Falling ash, lit by Ethereal cloud light, captured with a Spirit companion over shoulder. Inspired by Heroic propaganda poster. Mist-shrouded mid-ground.';
+                cardDescriptions[7].textContent = 'A Sun Wukong, monkey king wearing Elemental battle armor, with Celestial halo, expressing a Celestial pride mood, standing in a Sacred grove. Surrounded by Falling leaves, lit by Reflected water shimmer, captured with a Telephoto over dragon lair. Inspired by Romanticism legendary landscape. Wide-angle throne shot.';
+                
             } else {
                 // Default to placeholder for other packs (until images are added)
                 for (let i = 0; i < imageCards.length; i++) {

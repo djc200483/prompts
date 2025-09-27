@@ -259,7 +259,7 @@ router.get('/', (req, res) => {
                 document.addEventListener('click', function(e) {
                     if (e.target.classList.contains('edit-post-btn')) {
                         const postId = e.target.getAttribute('data-post-id');
-                        window.open(`/admin/edit/${postId}`, '_blank');
+                        window.open('/admin/edit/' + postId, '_blank');
                     }
                 });
             });

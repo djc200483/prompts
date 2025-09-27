@@ -479,10 +479,21 @@ router.get('/create', (req, res) => {
                 
                 <button type="submit" class="btn">🚀 Create Post</button>
                 <button type="button" class="btn btn-secondary" onclick="window.location.href='/admin'">Cancel</button>
+                <button type="button" class="btn" onclick="testForm()" style="background: #ff6600;">Test Form</button>
             </form>
         </div>
 
         <script>
+            // Test function
+            function testForm() {
+                console.log('Test button clicked!');
+                alert('Test button works! Check console for form data.');
+                
+                const title = document.getElementById('title').value;
+                const content = document.getElementById('content').innerHTML;
+                console.log('Current form data:', { title, content });
+            }
+            
             // Rich text editor functions
             function formatText(command, value = null) {
                 document.execCommand(command, false, value);
@@ -535,6 +546,7 @@ router.get('/create', (req, res) => {
             
             document.getElementById('post-form').addEventListener('submit', async (e) => {
                 e.preventDefault();
+                console.log('Form submitted!');
                 
                 const title = document.getElementById('title').value;
                 const excerpt = document.getElementById('excerpt').value;
@@ -543,6 +555,8 @@ router.get('/create', (req, res) => {
                 const featured_image_url = document.getElementById('featured_image_url').value;
                 const keywords = document.getElementById('keywords').value;
                 const published = document.getElementById('published').checked;
+                
+                console.log('Form data:', { title, excerpt, content, category, featured_image_url, keywords, published });
                 
                 const data = {
                     title: title,

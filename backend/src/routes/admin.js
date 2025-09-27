@@ -359,6 +359,45 @@ router.get('/create', (req, res) => {
                 text-align: center; 
                 padding: 20px;
             }
+            
+            .editor-toolbar {
+                display: flex;
+                gap: 5px;
+                margin-bottom: 10px;
+                flex-wrap: wrap;
+            }
+            
+            .editor-toolbar button {
+                padding: 8px 12px;
+                background: rgba(0, 255, 255, 0.1);
+                border: 1px solid #00ffff;
+                border-radius: 4px;
+                color: #00ffff;
+                cursor: pointer;
+                font-weight: bold;
+                transition: all 0.3s ease;
+            }
+            
+            .editor-toolbar button:hover {
+                background: rgba(0, 255, 255, 0.2);
+                transform: translateY(-1px);
+            }
+            
+            .rich-editor {
+                border: 1px solid rgba(255, 255, 255, 0.2) !important;
+                background: rgba(255, 255, 255, 0.05) !important;
+                color: #e5e7eb !important;
+                min-height: 200px;
+                padding: 15px;
+                border-radius: 5px;
+                line-height: 1.6;
+            }
+            
+            .rich-editor:focus {
+                outline: none;
+                border-color: #00ff00 !important;
+                box-shadow: 0 0 10px rgba(0, 255, 0, 0.3) !important;
+            }
             .back-link { 
                 display: inline-block; 
                 color: #00ffff; 
@@ -395,7 +434,18 @@ router.get('/create', (req, res) => {
                 
                 <div class="form-group">
                     <label for="content">Content *</label>
-                    <textarea id="content" name="content" rows="10" required placeholder="Write your blog post content here..."></textarea>
+                    <div class="editor-toolbar">
+                        <button type="button" onclick="formatText('bold')" title="Bold">B</button>
+                        <button type="button" onclick="formatText('italic')" title="Italic">I</button>
+                        <button type="button" onclick="formatText('underline')" title="Underline">U</button>
+                        <button type="button" onclick="formatText('insertUnorderedList')" title="Bullet List">•</button>
+                        <button type="button" onclick="formatText('insertOrderedList')" title="Numbered List">1.</button>
+                        <button type="button" onclick="formatText('formatBlock', 'h2')" title="Heading 2">H2</button>
+                        <button type="button" onclick="formatText('formatBlock', 'h3')" title="Heading 3">H3</button>
+                        <button type="button" onclick="formatText('formatBlock', 'blockquote')" title="Quote">"</button>
+                        <button type="button" onclick="formatText('formatBlock', 'pre')" title="Code Block">&lt;/&gt;</button>
+                    </div>
+                    <div id="content" class="rich-editor" contenteditable="true" style="min-height: 200px; border: 1px solid #ccc; padding: 10px; background: white; color: black;" placeholder="Write your blog post content here..."></div>
                 </div>
                 
                 <div class="form-group">
@@ -433,18 +483,75 @@ router.get('/create', (req, res) => {
         </div>
 
         <script>
+            // Rich text editor functions
+            function formatText(command, value = null) {
+                document.execCommand(command, false, value);
+                document.getElementById('content').focus();
+            }
+            
+            // Update toolbar button states
+            function updateToolbar() {
+                const buttons = document.querySelectorAll('.editor-toolbar button');
+                buttons.forEach(button => {
+                    const command = button.getAttribute('onclick').match(/formatText\('([^']+)'/)[1];
+                    if (document.queryCommandState(command)) {
+                        button.style.background = 'rgba(0, 255, 0, 0.3)';
+                        button.style.color = '#00ff00';
+                    } else {
+                        button.style.background = 'rgba(0, 255, 255, 0.1)';
+                        button.style.color = '#00ffff';
+                    }
+                });
+            }
+            
+            // Add event listeners for toolbar updates
+            document.addEventListener('DOMContentLoaded', function() {
+                const editor = document.getElementById('content');
+                if (editor) {
+                    editor.addEventListener('input', updateToolbar);
+                    editor.addEventListener('selectionchange', updateToolbar);
+                    
+                    // Keyboard shortcuts
+                    editor.addEventListener('keydown', function(e) {
+                        if (e.ctrlKey || e.metaKey) {
+                            switch(e.key) {
+                                case 'b':
+                                    e.preventDefault();
+                                    formatText('bold');
+                                    break;
+                                case 'i':
+                                    e.preventDefault();
+                                    formatText('italic');
+                                    break;
+                                case 'u':
+                                    e.preventDefault();
+                                    formatText('underline');
+                                    break;
+                            }
+                        }
+                    });
+                }
+            });
+            
             document.getElementById('post-form').addEventListener('submit', async (e) => {
                 e.preventDefault();
                 
-                const formData = new FormData(e.target);
+                const title = document.getElementById('title').value;
+                const excerpt = document.getElementById('excerpt').value;
+                const content = document.getElementById('content').innerHTML;
+                const category = document.getElementById('category').value;
+                const featured_image_url = document.getElementById('featured_image_url').value;
+                const keywords = document.getElementById('keywords').value;
+                const published = document.getElementById('published').checked;
+                
                 const data = {
-                    title: formData.get('title'),
-                    excerpt: formData.get('excerpt'),
-                    content: formData.get('content'),
-                    category: formData.get('category'),
-                    featured_image_url: formData.get('featured_image_url'),
-                    keywords: formData.get('keywords'),
-                    published: formData.get('published') === 'on'
+                    title: title,
+                    excerpt: excerpt,
+                    content: content,
+                    category: category,
+                    featured_image_url: featured_image_url,
+                    keywords: keywords,
+                    published: published
                 };
                 
                 const messageDiv = document.getElementById('message');

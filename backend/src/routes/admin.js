@@ -174,22 +174,22 @@ router.get('/', (req, res) => {
                 <div class="action-card">
                     <div class="action-title">📝 Create New Post</div>
                     <div class="action-description">Write and publish a new blog post</div>
-                    <button class="btn" onclick="window.open('/admin/create', '_blank')">Create Post</button>
+                    <button class="btn" id="create-post-btn">Create Post</button>
                 </div>
                 <div class="action-card">
                     <div class="action-title">📊 View Analytics</div>
                     <div class="action-description">Check blog performance and stats</div>
-                    <button class="btn" onclick="alert('Analytics coming soon!')">View Analytics</button>
+                    <button class="btn" id="analytics-btn">View Analytics</button>
                 </div>
                 <div class="action-card">
                     <div class="action-title">👥 Manage Subscribers</div>
                     <div class="action-description">View and manage email subscribers</div>
-                    <button class="btn" onclick="window.open('/admin/subscribers', '_blank')">Manage Subscribers</button>
+                    <button class="btn" id="subscribers-btn">Manage Subscribers</button>
                 </div>
                 <div class="action-card">
                     <div class="action-title">🔧 API Documentation</div>
                     <div class="action-description">View API endpoints and usage</div>
-                    <button class="btn" onclick="window.open('/api', '_blank')">API Docs</button>
+                    <button class="btn" id="api-docs-btn">API Docs</button>
                 </div>
             </div>
             
@@ -236,7 +236,7 @@ router.get('/', (req, res) => {
                                     <div class="post-date">\${new Date(post.created_at).toLocaleDateString()}</div>
                                 </div>
                                 <div>
-                                    <button class="btn" onclick="window.open('/admin/edit/\${post.id}', '_blank')">Edit</button>
+                                    <button class="btn edit-post-btn" data-post-id="\${post.id}">Edit</button>
                                 </div>
                             </div>
                         \`).join('');
@@ -247,6 +247,22 @@ router.get('/', (req, res) => {
                     document.getElementById('recent-posts-list').innerHTML = '<div class="error">Failed to load recent posts</div>';
                 }
             }
+            
+            // Add event listeners for dashboard buttons
+            document.addEventListener('DOMContentLoaded', function() {
+                document.getElementById('create-post-btn').addEventListener('click', () => window.open('/admin/create', '_blank'));
+                document.getElementById('analytics-btn').addEventListener('click', () => alert('Analytics coming soon!'));
+                document.getElementById('subscribers-btn').addEventListener('click', () => window.open('/admin/subscribers', '_blank'));
+                document.getElementById('api-docs-btn').addEventListener('click', () => window.open('/api', '_blank'));
+                
+                // Add event listeners for edit buttons (will be added dynamically)
+                document.addEventListener('click', function(e) {
+                    if (e.target.classList.contains('edit-post-btn')) {
+                        const postId = e.target.getAttribute('data-post-id');
+                        window.open(`/admin/edit/${postId}`, '_blank');
+                    }
+                });
+            });
             
             // Load stats on page load
             loadStats();

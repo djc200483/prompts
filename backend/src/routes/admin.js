@@ -435,15 +435,15 @@ router.get('/create', (req, res) => {
                 <div class="form-group">
                     <label for="content">Content *</label>
                     <div class="editor-toolbar">
-                        <button type="button" onclick="formatText('bold')" title="Bold">B</button>
-                        <button type="button" onclick="formatText('italic')" title="Italic">I</button>
-                        <button type="button" onclick="formatText('underline')" title="Underline">U</button>
-                        <button type="button" onclick="formatText('insertUnorderedList')" title="Bullet List">•</button>
-                        <button type="button" onclick="formatText('insertOrderedList')" title="Numbered List">1.</button>
-                        <button type="button" onclick="formatText('formatBlock', 'h2')" title="Heading 2">H2</button>
-                        <button type="button" onclick="formatText('formatBlock', 'h3')" title="Heading 3">H3</button>
-                        <button type="button" onclick="formatText('formatBlock', 'blockquote')" title="Quote">"</button>
-                        <button type="button" onclick="formatText('formatBlock', 'pre')" title="Code Block">&lt;/&gt;</button>
+                        <button type="button" id="bold-btn" title="Bold">B</button>
+                        <button type="button" id="italic-btn" title="Italic">I</button>
+                        <button type="button" id="underline-btn" title="Underline">U</button>
+                        <button type="button" id="bullet-btn" title="Bullet List">•</button>
+                        <button type="button" id="number-btn" title="Numbered List">1.</button>
+                        <button type="button" id="h2-btn" title="Heading 2">H2</button>
+                        <button type="button" id="h3-btn" title="Heading 3">H3</button>
+                        <button type="button" id="quote-btn" title="Quote">"</button>
+                        <button type="button" id="code-btn" title="Code Block">&lt;/&gt;</button>
                     </div>
                     <div id="content" class="rich-editor" contenteditable="true" style="min-height: 200px; border: 1px solid #ccc; padding: 10px; background: white; color: black;" placeholder="Write your blog post content here..."></div>
                 </div>
@@ -478,8 +478,8 @@ router.get('/create', (req, res) => {
                 </div>
                 
                 <button type="submit" class="btn">🚀 Create Post</button>
-                <button type="button" class="btn btn-secondary" onclick="window.location.href='/admin'">Cancel</button>
-                <button type="button" class="btn" onclick="testForm()" style="background: #ff6600;">Test Form</button>
+                <button type="button" class="btn btn-secondary" id="cancel-btn">Cancel</button>
+                <button type="button" class="btn" id="test-btn" style="background: #ff6600;">Test Form</button>
             </form>
         </div>
 
@@ -502,15 +502,22 @@ router.get('/create', (req, res) => {
             
             // Update toolbar button states
             function updateToolbar() {
-                const buttons = document.querySelectorAll('.editor-toolbar button');
-                buttons.forEach(button => {
-                    const command = button.getAttribute('onclick').match(/formatText\('([^']+)'/)[1];
-                    if (document.queryCommandState(command)) {
-                        button.style.background = 'rgba(0, 255, 0, 0.3)';
-                        button.style.color = '#00ff00';
-                    } else {
-                        button.style.background = 'rgba(0, 255, 255, 0.1)';
-                        button.style.color = '#00ffff';
+                const buttonCommands = {
+                    'bold-btn': 'bold',
+                    'italic-btn': 'italic',
+                    'underline-btn': 'underline'
+                };
+                
+                Object.entries(buttonCommands).forEach(([buttonId, command]) => {
+                    const button = document.getElementById(buttonId);
+                    if (button) {
+                        if (document.queryCommandState(command)) {
+                            button.style.background = 'rgba(0, 255, 0, 0.3)';
+                            button.style.color = '#00ff00';
+                        } else {
+                            button.style.background = 'rgba(0, 255, 255, 0.1)';
+                            button.style.color = '#00ffff';
+                        }
                     }
                 });
             }
@@ -542,6 +549,21 @@ router.get('/create', (req, res) => {
                         }
                     });
                 }
+                
+                // Add event listeners for toolbar buttons
+                document.getElementById('bold-btn').addEventListener('click', () => formatText('bold'));
+                document.getElementById('italic-btn').addEventListener('click', () => formatText('italic'));
+                document.getElementById('underline-btn').addEventListener('click', () => formatText('underline'));
+                document.getElementById('bullet-btn').addEventListener('click', () => formatText('insertUnorderedList'));
+                document.getElementById('number-btn').addEventListener('click', () => formatText('insertOrderedList'));
+                document.getElementById('h2-btn').addEventListener('click', () => formatText('formatBlock', 'h2'));
+                document.getElementById('h3-btn').addEventListener('click', () => formatText('formatBlock', 'h3'));
+                document.getElementById('quote-btn').addEventListener('click', () => formatText('formatBlock', 'blockquote'));
+                document.getElementById('code-btn').addEventListener('click', () => formatText('formatBlock', 'pre'));
+                
+                // Add event listeners for other buttons
+                document.getElementById('cancel-btn').addEventListener('click', () => window.location.href = '/admin');
+                document.getElementById('test-btn').addEventListener('click', testForm);
             });
             
             document.getElementById('post-form').addEventListener('submit', async (e) => {

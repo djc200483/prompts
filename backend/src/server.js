@@ -13,8 +13,19 @@ const { initializeDatabase } = require('./utils/database');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Security middleware
-app.use(helmet());
+// Security middleware with CSP configuration for admin panel
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+      fontSrc: ["'self'", "https://fonts.gstatic.com"],
+      imgSrc: ["'self'", "data:", "https:"],
+      connectSrc: ["'self'", "https://prompts-production-7afc.up.railway.app"]
+    }
+  }
+}));
 
 // Rate limiting
 const limiter = rateLimit({
@@ -28,11 +39,15 @@ app.use('/api/', limiter);
 const corsOptions = {
   origin: [
     'https://prompts.oddesthistory.com',
+    'https://prompts.oddesthistory.com/blog',
     'http://localhost:3000',
-    'http://127.0.0.1:3000'
+    'http://127.0.0.1:3000',
+    'http://localhost:8080'
   ],
   credentials: true,
-  optionsSuccessStatus: 200
+  optionsSuccessStatus: 200,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-API-Key']
 };
 app.use(cors(corsOptions));
 

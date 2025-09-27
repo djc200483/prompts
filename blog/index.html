@@ -464,14 +464,21 @@
         // Load blog posts from API
         let blogPosts = [];
         
-        // Try to load from localStorage (where the API stores posts)
-        function loadBlogPosts() {
+        // Load posts from backend API
+        async function loadBlogPosts() {
             try {
-                // Check if we have posts stored by the API
-                const storedPosts = localStorage.getItem('blog-posts');
-                if (storedPosts) {
-                    blogPosts = JSON.parse(storedPosts);
+                // Try to load from backend API first
+                const response = await fetch('https://prompts-production-7afc.up.railway.app/api/posts');
+                if (response.ok) {
+                    const data = await response.json();
+                    blogPosts = data.posts || [];
+                    console.log('✅ Loaded posts from backend API:', blogPosts.length);
                 } else {
+                    throw new Error('Backend API not available');
+                }
+            } catch (error) {
+                console.warn('⚠️ Backend API not available, using fallback posts:', error);
+                // Fallback to default posts
                     // Fallback to default posts
                     blogPosts = [
                         {
@@ -540,33 +547,59 @@
         // Render blog posts
         function renderBlogPosts() {
             const container = document.getElementById('blog-posts');
-            container.innerHTML = blogPosts.map(post => `
-                <article class="blog-post">
-                    <div class="post-image" style="background: ${post.image}">
-                        ${post.category}
+            
+            if (blogPosts.length === 0) {
+                container.innerHTML = `
+                    <div class="no-posts" style="text-align: center; padding: 60px 20px; color: #9ca3af;">
+                        <h2 style="color: #00ff88; margin-bottom: 20px;">No blog posts yet</h2>
+                        <p>Check back soon for new content!</p>
                     </div>
-                    <div class="post-content">
-                        <div class="post-meta">
-                            <span class="post-date">${new Date(post.date).toLocaleDateString('en-US', { 
-                                year: 'numeric', 
-                                month: 'long', 
-                                day: 'numeric' 
-                            })}</span>
-                            <span class="post-category">${post.category}</span>
+                `;
+                return;
+            }
+            
+            container.innerHTML = blogPosts.map(post => {
+                const featuredImage = post.featured_image_url ? 
+                    `<div class="post-image">
+                        <img src="${post.featured_image_url}" alt="${post.title}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px;">
+                    </div>` : 
+                    `<div class="post-image" style="background: linear-gradient(135deg, #667eea, #764ba2); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
+                        ${post.category || 'Blog Post'}
+                    </div>`;
+
+                const date = post.created_at || post.date;
+                const slug = post.slug || post.filename;
+
+                return `
+                    <article class="blog-post" onclick="window.location.href='./${slug}.html'">
+                        ${featuredImage}
+                        <div class="post-content">
+                            <div class="post-meta">
+                                <span class="post-date">${new Date(date).toLocaleDateString('en-US', { 
+                                    year: 'numeric', 
+                                    month: 'long', 
+                                    day: 'numeric' 
+                                })}</span>
+                                <span class="post-category">${post.category || 'Uncategorized'}</span>
+                            </div>
+                            <h3 class="post-title">${post.title}</h3>
+                            <p class="post-excerpt">${post.excerpt || 'No excerpt available'}</p>
+                            <button class="read-more">
+                                Read More →
+                            </button>
                         </div>
-                        <h3 class="post-title">${post.title}</h3>
-                        <p class="post-excerpt">${post.excerpt}</p>
-                        <a href="#" class="read-more">
-                            Read More →
-                        </a>
-                    </div>
-                </article>
-            `).join('');
+                    </article>
+                `;
+            }).join('');
         }
 
         // Initialize blog posts
-        loadBlogPosts();
-        renderBlogPosts();
+        async function initializeBlog() {
+            await loadBlogPosts();
+            renderBlogPosts();
+        }
+        
+        initializeBlog();
 
         // Add click handlers for blog posts
         document.querySelectorAll('.read-more').forEach((link, index) => {

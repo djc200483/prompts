@@ -1,11 +1,11 @@
 [phases.setup]
-nixPkgs = ["nodejs", "npm"]
+nixPkgs = ["nodejs_18", "npm"]
 
 [phases.install]
 cmds = ["npm ci --only=production"]
 
 [phases.build]
-cmds = ["npm run migrate"]
+cmds = ["npm run migrate || true"]
 
 [start]
 cmd = "npm start"

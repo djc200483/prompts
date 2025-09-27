@@ -92,18 +92,29 @@ app.use('*', (req, res) => {
 // Initialize database and start server
 async function startServer() {
   try {
-    await initializeDatabase();
-    console.log('✅ Database initialized successfully');
+    // Check if DATABASE_URL is available
+    if (process.env.DATABASE_URL) {
+      await initializeDatabase();
+      console.log('✅ Database initialized successfully');
+    } else {
+      console.warn('⚠️ DATABASE_URL not found, server starting without database');
+      console.log('ℹ️ Database will be initialized when DATABASE_URL is available');
+    }
     
     app.listen(PORT, () => {
       console.log(`🚀 Server running on port ${PORT}`);
       console.log(`📊 Health check: http://localhost:${PORT}/api/health`);
       console.log(`👤 Admin panel: http://localhost:${PORT}/admin`);
       console.log(`🌐 Environment: ${process.env.NODE_ENV || 'development'}`);
+      
+      if (!process.env.DATABASE_URL) {
+        console.log('🔧 To connect database, set DATABASE_URL environment variable');
+      }
     });
   } catch (error) {
     console.error('❌ Failed to start server:', error);
-    process.exit(1);
+    console.log('🔄 Retrying in 5 seconds...');
+    setTimeout(startServer, 5000);
   }
 }
 

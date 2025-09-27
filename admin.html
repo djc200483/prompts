@@ -934,48 +934,52 @@
             submitBtn.style.opacity = '0.7';
             
             try {
+                // Get API key from user
+                const apiKey = prompt('Enter your API Key:');
+                if (!apiKey) {
+                    alert('API Key is required to create posts');
+                    submitBtn.textContent = originalText;
+                    submitBtn.style.opacity = '1';
+                    return;
+                }
+                
+                // Set API key for the session
+                blogAPI.setApiKey(apiKey);
+                
                 const title = document.getElementById('post-title').value;
                 const excerpt = document.getElementById('post-excerpt').value;
                 const category = document.getElementById('post-category').value;
-                const date = document.getElementById('post-date').value;
                 const image = document.getElementById('post-image').value;
                 const content = document.getElementById('post-content').innerHTML;
                 const keywords = document.getElementById('post-keywords').value;
                 
-                // Create post data object
+                // Create post data object for backend API
                 const postData = {
                     title: title,
                     excerpt: excerpt,
-                    date: date,
                     category: category,
                     content: content,
+                    featured_image_url: image,
                     keywords: keywords,
-                    image: image
+                    published: true
                 };
                 
-                // Create the blog post automatically
+                // Create the blog post via backend API
                 const result = await blogAPI.createPost(postData);
                 
-                if (result.success) {
-                    // Get the generated HTML content
-                    const htmlContent = await blogAPI.createBlogPostFile(result.post);
-                    
-                    // Show success message with instructions
-                    document.getElementById('output-content').textContent = `🎉 SUCCESS! Blog post "${result.post.title}" has been generated!
+                // Show success message
+                document.getElementById('output-content').textContent = `🎉 SUCCESS! Blog post "${result.post.title}" has been created!
 
-📁 FILE DETAILS:
-Filename: ${result.post.filename}.html
-Location: blog/${result.post.filename}.html
+📁 POST DETAILS:
+Title: ${result.post.title}
+Slug: ${result.post.slug}
+ID: ${result.post.id}
+Created: ${new Date(result.post.created_at).toLocaleString()}
 
-📋 QUICK SETUP:
-1. Create a new file: blog/${result.post.filename}.html
-2. Copy the HTML below into the file
-3. Your blog post will be live!
+✅ Your blog post is now live on the backend!
+🔗 API URL: https://prompts-production-7afc.up.railway.app/api/posts/${result.post.slug}
 
-📝 GENERATED HTML:
-${htmlContent}
-
-✨ Your blog post is ready! Just create the file and paste the HTML.`;
+✨ Your blog post is automatically available through the API!`;
 
                     // Show the output section
                     document.getElementById('output-section').style.display = 'block';

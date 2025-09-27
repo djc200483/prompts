@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Admin - Add New Post | Cyberpunk Prompt Generator</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Bebas Neue', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #000000;
+            color: #e5e7eb;
+            line-height: 1.6;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 25% 25%, rgba(120, 119, 198, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(255, 119, 198, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(120, 219, 255, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(255, 255, 255, 0.02) 2px,
+                    rgba(255, 255, 255, 0.02) 4px
+                );
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+            padding: 0;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+        }
+
+        .logo {
+            color: #00ff88;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 400;
+            letter-spacing: 0.1em;
+            text-decoration: none;
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .nav-link {
+            color: #e5e7eb;
+            text-decoration: none;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 400;
+            letter-spacing: 0.05em;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #00ff88;
+            background: rgba(0, 255, 136, 0.1);
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 120px 20px 60px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3rem;
+            color: #00ff88;
+            text-shadow: 0 0 30px rgba(0, 255, 136, 0.5);
+            margin-bottom: 20px;
+            letter-spacing: 0.1em;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: #9ca3af;
+        }
+
+        .admin-panel {
+            background: rgba(10, 10, 15, 0.8);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 12px;
+            padding: 40px;
+            backdrop-filter: blur(10px);
+        }
+
+        .form-group {
+            margin-bottom: 30px;
+        }
+
+        .form-label {
+            display: block;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.2rem;
+            color: #00ff88;
+            margin-bottom: 10px;
+            letter-spacing: 0.05em;
+        }
+
+        .form-input, .form-textarea {
+            width: 100%;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: #e5e7eb;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .form-input:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #00ff88;
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .form-textarea {
+            min-height: 300px;
+            resize: vertical;
+        }
+
+        .editor-toolbar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-bottom: none;
+            border-radius: 8px 8px 0 0;
+            flex-wrap: wrap;
+        }
+
+        .toolbar-btn {
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            color: #e5e7eb;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .toolbar-btn:hover {
+            background: rgba(0, 255, 136, 0.2);
+            border-color: #00ff88;
+            color: #00ff88;
+        }
+
+        .toolbar-btn.active {
+            background: rgba(0, 255, 136, 0.3);
+            border-color: #00ff88;
+            color: #00ff88;
+        }
+
+        .toolbar-select {
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            color: #e5e7eb;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .toolbar-select:focus {
+            outline: none;
+            border-color: #00ff88;
+            background: rgba(0, 255, 136, 0.1);
+        }
+
+        .toolbar-separator {
+            width: 1px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            margin: 0 4px;
+        }
+
+        .rich-editor {
+            min-height: 300px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 0 0 8px 8px;
+            color: #e5e7eb;
+            font-size: 1rem;
+            line-height: 1.6;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .rich-editor:focus {
+            border-color: #00ff88;
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .rich-editor:empty:before {
+            content: attr(placeholder);
+            color: #6b7280;
+            font-style: italic;
+        }
+
+        .rich-editor h2 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.8rem;
+            color: #00ff88;
+            margin: 20px 0 15px 0;
+            letter-spacing: 0.05em;
+        }
+
+        .rich-editor h3 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.4rem;
+            color: #e5e7eb;
+            margin: 15px 0 10px 0;
+            letter-spacing: 0.03em;
+        }
+
+        .rich-editor p {
+            margin-bottom: 15px;
+        }
+
+        .rich-editor ul, .rich-editor ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+
+        .rich-editor li {
+            margin-bottom: 8px;
+        }
+
+        .rich-editor blockquote {
+            border-left: 4px solid #00ff88;
+            padding-left: 20px;
+            margin: 20px 0;
+            font-style: italic;
+            color: #9ca3af;
+        }
+
+        .rich-editor pre {
+            background: rgba(10, 10, 15, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            padding: 15px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+
+        .preview-section {
+            margin-top: 40px;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .preview-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.8rem;
+            color: #00ff88;
+            margin-bottom: 20px;
+            letter-spacing: 0.05em;
+        }
+
+        .preview-container {
+            background: rgba(10, 10, 15, 0.8);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .preview-nav {
+            background: rgba(10, 10, 15, 0.95);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .preview-logo {
+            color: #00ff88;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 400;
+            letter-spacing: 0.1em;
+            text-decoration: none;
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+        }
+
+        .preview-nav-links {
+            display: flex;
+            gap: 16px;
+        }
+
+        .preview-nav-link {
+            color: #9ca3af;
+            text-decoration: none;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 400;
+            letter-spacing: 0.05em;
+            padding: 6px 12px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .preview-nav-link:hover {
+            color: #00ff88;
+            background: rgba(0, 255, 136, 0.1);
+        }
+
+        .preview-nav-link.active {
+            color: #00ff88;
+            background: rgba(0, 255, 136, 0.15);
+        }
+
+        .preview-content {
+            padding: 30px;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .preview-back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #00ff88;
+            text-decoration: none;
+            margin-bottom: 20px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .preview-back-link:hover {
+            color: #00cc6a;
+        }
+
+        .preview-post-header {
+            margin-bottom: 30px;
+        }
+
+        .preview-post-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 0.8rem;
+            color: #9ca3af;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .preview-post-date {
+            color: #00ff88;
+        }
+
+        .preview-post-category {
+            background: rgba(0, 255, 136, 0.1);
+            color: #00ff88;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+        }
+
+        .preview-post-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem;
+            color: #e5e7eb;
+            margin-bottom: 15px;
+            letter-spacing: 0.02em;
+            line-height: 1.2;
+        }
+
+        .preview-post-excerpt {
+            font-size: 1.1rem;
+            color: #9ca3af;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .preview-post-content {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: #d1d5db;
+        }
+
+        .preview-post-content h2 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            color: #00ff88;
+            margin: 25px 0 15px 0;
+            letter-spacing: 0.05em;
+        }
+
+        .preview-post-content h3 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.2rem;
+            color: #e5e7eb;
+            margin: 20px 0 10px 0;
+            letter-spacing: 0.03em;
+        }
+
+        .preview-post-content p {
+            margin-bottom: 15px;
+        }
+
+        .preview-post-content ul, .preview-post-content ol {
+            margin: 15px 0;
+            padding-left: 25px;
+        }
+
+        .preview-post-content li {
+            margin-bottom: 8px;
+        }
+
+        .preview-post-content blockquote {
+            border-left: 3px solid #00ff88;
+            padding-left: 15px;
+            margin: 20px 0;
+            font-style: italic;
+            color: #9ca3af;
+        }
+
+        .preview-post-content pre {
+            background: rgba(10, 10, 15, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            padding: 12px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        .preview-newsletter-cta {
+            background: rgba(10, 10, 15, 0.8);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 8px;
+            padding: 25px;
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .preview-newsletter-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.4rem;
+            color: #00ff88;
+            margin-bottom: 10px;
+            letter-spacing: 0.05em;
+        }
+
+        .preview-newsletter-text {
+            color: #9ca3af;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+
+        .preview-email-form {
+            display: flex;
+            gap: 10px;
+            max-width: 300px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+        }
+
+        .preview-email-input {
+            flex: 1;
+            min-width: 180px;
+            padding: 10px 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            color: #e5e7eb;
+            font-size: 0.9rem;
+        }
+
+        .preview-subscribe-btn {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #00ff88, #00cc6a);
+            border: none;
+            border-radius: 6px;
+            color: #000;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 400;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+        }
+
+        .preview-featured-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin: 20px 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .preview-nav {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .preview-nav-links {
+                gap: 12px;
+            }
+
+            .preview-content {
+                padding: 20px;
+            }
+
+            .preview-post-title {
+                font-size: 1.6rem;
+            }
+
+            .preview-email-form {
+                flex-direction: column;
+            }
+
+            .preview-email-input {
+                min-width: auto;
+            }
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: #e5e7eb;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-select:focus {
+            outline: none;
+            border-color: #00ff88;
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+        }
+
+        .btn {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #00ff88, #00cc6a);
+            border: none;
+            border-radius: 8px;
+            color: #000;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 400;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 255, 136, 0.3);
+            margin-right: 15px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 255, 136, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #6b7280, #4b5563);
+            box-shadow: 0 4px 15px rgba(107, 114, 128, 0.3);
+        }
+
+        .btn-secondary:hover {
+            box-shadow: 0 6px 20px rgba(107, 114, 128, 0.4);
+        }
+
+        .output-section {
+            margin-top: 40px;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .output-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            color: #00ff88;
+            margin-bottom: 20px;
+            letter-spacing: 0.05em;
+        }
+
+        .output-content {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #d1d5db;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .copy-btn {
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid #00ff88;
+            border-radius: 6px;
+            color: #00ff88;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: rgba(0, 255, 136, 0.2);
+        }
+
+        .instructions {
+            background: rgba(120, 219, 255, 0.1);
+            border: 1px solid rgba(120, 219, 255, 0.3);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            color: #93c5fd;
+        }
+
+        .instructions h3 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.3rem;
+            color: #60a5fa;
+            margin-bottom: 15px;
+            letter-spacing: 0.05em;
+        }
+
+        .instructions ol {
+            margin-left: 20px;
+        }
+
+        .instructions li {
+            margin-bottom: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .nav-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .nav-links {
+                gap: 15px;
+            }
+
+            .admin-panel {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="logo">CYBERPROMPT</a>
+            <div class="nav-links">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/generator" class="nav-link">Generator</a>
+                <a href="/blog" class="nav-link">Blog</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h1>BLOG ADMIN</h1>
+            <p>Create and manage your cyberpunk blog posts</p>
+        </div>
+
+        <div class="instructions">
+            <h3>How to Add a New Blog Post:</h3>
+            <ol>
+                <li>Fill out the form below with your blog post details</li>
+                <li>Click "Generate Blog Post" to create the HTML file</li>
+                <li>Copy the generated HTML code</li>
+                <li>Create a new file in the <code>blog/</code> directory with a URL-friendly name (e.g., <code>my-new-post.html</code>)</li>
+                <li>Paste the HTML code into the new file</li>
+                <li>Update the blog index by adding your post to the <code>blogPosts</code> array in <code>blog/index.html</code></li>
+            </ol>
+        </div>
+
+        <div class="admin-panel">
+            <form id="blog-form">
+                <div class="form-group">
+                    <label class="form-label" for="post-title">Post Title</label>
+                    <input type="text" id="post-title" class="form-input" placeholder="Enter your blog post title" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="post-excerpt">Post Excerpt</label>
+                    <textarea id="post-excerpt" class="form-textarea" placeholder="Enter a brief description of your blog post" rows="3" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="post-category">Category</label>
+                    <select id="post-category" class="form-select" required>
+                        <option value="">Select a category</option>
+                        <option value="AI Art">AI Art</option>
+                        <option value="Design">Design</option>
+                        <option value="Tutorial">Tutorial</option>
+                        <option value="Psychology">Psychology</option>
+                        <option value="Career">Career</option>
+                        <option value="Ethics">Ethics</option>
+                        <option value="Technology">Technology</option>
+                        <option value="Culture">Culture</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="post-date">Post Date</label>
+                    <input type="date" id="post-date" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="post-image">Featured Image</label>
+                    <input type="url" id="post-image" class="form-input" placeholder="https://example.com/image.jpg">
+                    <small style="color: #9ca3af; font-size: 0.9rem; margin-top: 5px; display: block;">
+                        Optional: Add a URL to a featured image for your blog post. This will be displayed at the top of the post.
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="post-content">Post Content</label>
+                    <div class="editor-toolbar">
+                        <button type="button" class="toolbar-btn" onclick="formatText('bold')" title="Bold">
+                            <strong>B</strong>
+                        </button>
+                        <button type="button" class="toolbar-btn" onclick="formatText('italic')" title="Italic">
+                            <em>I</em>
+                        </button>
+                        <button type="button" class="toolbar-btn" onclick="formatText('underline')" title="Underline">
+                            <u>U</u>
+                        </button>
+                        <div class="toolbar-separator"></div>
+                        <select class="toolbar-select" onchange="formatText('fontSize', this.value)">
+                            <option value="">Font Size</option>
+                            <option value="12px">Small</option>
+                            <option value="16px">Normal</option>
+                            <option value="18px">Large</option>
+                            <option value="24px">Extra Large</option>
+                        </select>
+                        <div class="toolbar-separator"></div>
+                        <button type="button" class="toolbar-btn" onclick="formatText('insertOrderedList')" title="Numbered List">
+                            1.
+                        </button>
+                        <button type="button" class="toolbar-btn" onclick="formatText('insertUnorderedList')" title="Bullet List">
+                            •
+                        </button>
+                        <div class="toolbar-separator"></div>
+                        <button type="button" class="toolbar-btn" onclick="formatText('formatBlock', 'h2')" title="Heading 2">
+                            H2
+                        </button>
+                        <button type="button" class="toolbar-btn" onclick="formatText('formatBlock', 'h3')" title="Heading 3">
+                            H3
+                        </button>
+                        <div class="toolbar-separator"></div>
+                        <button type="button" class="toolbar-btn" onclick="formatText('formatBlock', 'blockquote')" title="Quote">
+                            "
+                        </button>
+                        <button type="button" class="toolbar-btn" onclick="formatText('formatBlock', 'pre')" title="Code Block">
+                            &lt;/&gt;
+                        </button>
+                        <div class="toolbar-separator"></div>
+                        <button type="button" class="toolbar-btn" onclick="formatText('justifyLeft')" title="Align Left">
+                            ⬅
+                        </button>
+                        <button type="button" class="toolbar-btn" onclick="formatText('justifyCenter')" title="Center">
+                            ↔
+                        </button>
+                        <button type="button" class="toolbar-btn" onclick="formatText('justifyRight')" title="Align Right">
+                            ➡
+                        </button>
+                    </div>
+                    <div id="post-content" class="rich-editor" contenteditable="true" placeholder="Write your blog post content here... You can use the toolbar above to format your text with bold, italic, headings, lists, and more!"></div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="post-keywords">Keywords (comma-separated)</label>
+                    <input type="text" id="post-keywords" class="form-input" placeholder="ai art, prompt engineering, cyberpunk" required>
+                </div>
+
+                <button type="button" class="btn" onclick="previewPost()">Preview Post</button>
+                <button type="submit" class="btn">Generate Blog Post</button>
+                <button type="button" class="btn btn-secondary" onclick="clearForm()">Clear Form</button>
+            </form>
+
+            <div class="preview-section" id="preview-section" style="display: none;">
+                <h3 class="preview-title">Blog Post Preview</h3>
+                <div class="preview-container">
+                    <div class="preview-nav">
+                        <a href="#" class="preview-logo">CYBERPROMPT</a>
+                        <div class="preview-nav-links">
+                            <a href="#" class="preview-nav-link">Home</a>
+                            <a href="#" class="preview-nav-link">Generator</a>
+                            <a href="#" class="preview-nav-link active">Blog</a>
+                        </div>
+                    </div>
+                    
+                    <div class="preview-content">
+                        <a href="#" class="preview-back-link">← Back to Blog</a>
+                        
+                        <header class="preview-post-header">
+                            <div class="preview-post-meta">
+                                <span class="preview-post-date" id="preview-date">Date</span>
+                                <span class="preview-post-category" id="preview-category">Category</span>
+                            </div>
+                            <h1 class="preview-post-title" id="preview-title">Post Title</h1>
+                            <p class="preview-post-excerpt" id="preview-excerpt">Post excerpt will appear here...</p>
+                        </header>
+
+                        <div id="preview-image-container"></div>
+
+                        <article class="preview-post-content" id="preview-content">
+                            <p>Your blog post content will appear here with all formatting applied...</p>
+                        </article>
+
+                        <div class="preview-newsletter-cta">
+                            <h2 class="preview-newsletter-title">Enjoyed This Post?</h2>
+                            <p class="preview-newsletter-text">
+                                Subscribe to get notified when we publish new insights on AI art and cyberpunk culture.
+                            </p>
+                            <form class="preview-email-form">
+                                <input type="email" class="preview-email-input" placeholder="Enter your email address">
+                                <button type="button" class="preview-subscribe-btn">Subscribe</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <button class="copy-btn" onclick="closePreview()">Close Preview</button>
+            </div>
+
+            <div class="output-section" id="output-section" style="display: none;">
+                <h3 class="output-title">Generated Blog Post HTML</h3>
+                <div class="output-content" id="output-content"></div>
+                <button class="copy-btn" onclick="copyToClipboard()">Copy All Info</button>
+                <button class="copy-btn copy-html-btn" onclick="copyHTMLOnly()">Copy HTML Only</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="blog-api.js"></script>
+    <script>
+        // Set today's date as default
+        document.getElementById('post-date').value = new Date().toISOString().split('T')[0];
+        
+        // Initialize blog API
+        const blogAPI = new BlogAPI();
+
+
+        document.getElementById('blog-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Show loading state
+            const submitBtn = document.querySelector('.btn');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Creating Blog Post...';
+            submitBtn.style.opacity = '0.7';
+            
+            try {
+                const title = document.getElementById('post-title').value;
+                const excerpt = document.getElementById('post-excerpt').value;
+                const category = document.getElementById('post-category').value;
+                const date = document.getElementById('post-date').value;
+                const image = document.getElementById('post-image').value;
+                const content = document.getElementById('post-content').innerHTML;
+                const keywords = document.getElementById('post-keywords').value;
+                
+                // Create post data object
+                const postData = {
+                    title: title,
+                    excerpt: excerpt,
+                    date: date,
+                    category: category,
+                    content: content,
+                    keywords: keywords,
+                    image: image
+                };
+                
+                // Create the blog post automatically
+                const result = await blogAPI.createPost(postData);
+                
+                if (result.success) {
+                    // Get the generated HTML content
+                    const htmlContent = await blogAPI.createBlogPostFile(result.post);
+                    
+                    // Show success message with instructions
+                    document.getElementById('output-content').textContent = `🎉 SUCCESS! Blog post "${result.post.title}" has been generated!
+
+📁 FILE DETAILS:
+Filename: ${result.post.filename}.html
+Location: blog/${result.post.filename}.html
+
+📋 QUICK SETUP:
+1. Create a new file: blog/${result.post.filename}.html
+2. Copy the HTML below into the file
+3. Your blog post will be live!
+
+📝 GENERATED HTML:
+${htmlContent}
+
+✨ Your blog post is ready! Just create the file and paste the HTML.`;
+
+                    // Show the output section
+                    document.getElementById('output-section').style.display = 'block';
+                    
+                    // Clear the form
+                    document.getElementById('blog-form').reset();
+                    document.getElementById('post-date').value = new Date().toISOString().split('T')[0];
+                    
+                } else {
+                    throw new Error(result.message);
+                }
+                
+            } catch (error) {
+                document.getElementById('output-content').textContent = `❌ Error creating blog post: ${error.message}`;
+            } finally {
+                // Reset button
+                submitBtn.textContent = originalText;
+                submitBtn.style.opacity = '1';
+                
+                // Show output
+                document.getElementById('output-section').style.display = 'block';
+                document.getElementById('output-section').scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+
+        function clearForm() {
+            document.getElementById('blog-form').reset();
+            document.getElementById('post-date').value = new Date().toISOString().split('T')[0];
+            document.getElementById('output-section').style.display = 'none';
+        }
+
+        function copyToClipboard() {
+            const content = document.getElementById('output-content').textContent;
+            navigator.clipboard.writeText(content).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                const originalText = btn.textContent;
+                btn.textContent = 'Copied!';
+                btn.style.background = 'rgba(0, 255, 136, 0.3)';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = 'rgba(0, 255, 136, 0.1)';
+                }, 2000);
+            });
+        }
+
+        function copyHTMLOnly() {
+            const content = document.getElementById('output-content').textContent;
+            const htmlMatch = content.match(/Generated HTML:\n(.*?)(?=\n\nBlog Index Entry|$)/s);
+            const htmlContent = htmlMatch ? htmlMatch[1] : content;
+            
+            navigator.clipboard.writeText(htmlContent).then(() => {
+                const btn = document.querySelector('.copy-html-btn');
+                const originalText = btn.textContent;
+                btn.textContent = 'HTML Copied!';
+                btn.style.background = 'rgba(0, 255, 136, 0.3)';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = 'rgba(0, 255, 136, 0.1)';
+                }, 2000);
+            });
+        }
+
+        // Rich Text Editor Functions
+        function formatText(command, value = null) {
+            document.execCommand(command, false, value);
+            document.getElementById('post-content').focus();
+        }
+
+        // Handle keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey || e.metaKey) {
+                const editor = document.getElementById('post-content');
+                if (document.activeElement === editor) {
+                    switch(e.key) {
+                        case 'b':
+                            e.preventDefault();
+                            formatText('bold');
+                            break;
+                        case 'i':
+                            e.preventDefault();
+                            formatText('italic');
+                            break;
+                        case 'u':
+                            e.preventDefault();
+                            formatText('underline');
+                            break;
+                    }
+                }
+            }
+        });
+
+        // Update toolbar button states
+        function updateToolbar() {
+            const editor = document.getElementById('post-content');
+            const buttons = document.querySelectorAll('.toolbar-btn');
+            
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Check bold
+            if (document.queryCommandState('bold')) {
+                document.querySelector('[onclick*="bold"]').classList.add('active');
+            }
+            
+            // Check italic
+            if (document.queryCommandState('italic')) {
+                document.querySelector('[onclick*="italic"]').classList.add('active');
+            }
+            
+            // Check underline
+            if (document.queryCommandState('underline')) {
+                document.querySelector('[onclick*="underline"]').classList.add('active');
+            }
+        }
+
+        // Add event listeners for toolbar updates
+        document.getElementById('post-content').addEventListener('input', updateToolbar);
+        document.getElementById('post-content').addEventListener('selectionchange', updateToolbar);
+
+        // Preview Functions
+        function previewPost() {
+            console.log('Preview button clicked!');
+            
+            try {
+                const title = document.getElementById('post-title').value || 'Your Post Title';
+                const excerpt = document.getElementById('post-excerpt').value || 'Your post excerpt will appear here...';
+                const category = document.getElementById('post-category').value || 'Category';
+                const date = document.getElementById('post-date').value;
+                const image = document.getElementById('post-image').value;
+                const content = document.getElementById('post-content').innerHTML || '<p>Your blog post content will appear here with all formatting applied...</p>';
+
+                console.log('Data collected:', { title, excerpt, category, date, image });
+
+                // Update preview elements
+                document.getElementById('preview-title').textContent = title;
+                document.getElementById('preview-excerpt').textContent = excerpt;
+                document.getElementById('preview-category').textContent = category;
+                
+                // Format date
+                const formattedDate = date ? new Date(date).toLocaleDateString('en-US', { 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                }) : 'Date';
+                document.getElementById('preview-date').textContent = formattedDate;
+
+                // Update content
+                document.getElementById('preview-content').innerHTML = content;
+
+                // Handle featured image
+                const imageContainer = document.getElementById('preview-image-container');
+                if (image && image.trim()) {
+                    imageContainer.innerHTML = `<img src="${image}" alt="${title}" class="preview-featured-image">`;
+                } else {
+                    imageContainer.innerHTML = '';
+                }
+
+                // Show preview
+                const previewSection = document.getElementById('preview-section');
+                const outputSection = document.getElementById('output-section');
+                
+                console.log('Preview section found:', previewSection);
+                console.log('Output section found:', outputSection);
+                
+                if (previewSection) {
+                    previewSection.style.display = 'block';
+                    console.log('Preview section shown');
+                }
+                
+                if (outputSection) {
+                    outputSection.style.display = 'none';
+                }
+                
+                // Scroll to preview
+                if (previewSection) {
+                    previewSection.scrollIntoView({ behavior: 'smooth' });
+                    console.log('Scrolled to preview');
+                }
+                
+            } catch (error) {
+                console.error('Error in preview function:', error);
+                alert('Error showing preview: ' + error.message);
+            }
+        }
+
+        function closePreview() {
+            document.getElementById('preview-section').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

@@ -478,68 +478,7 @@
                 }
             } catch (error) {
                 console.warn('⚠️ Backend API not available, using fallback posts:', error);
-                // Fallback to default posts
-                    // Fallback to default posts
-                    blogPosts = [
-                        {
-                            id: 1,
-                            title: "The Future of AI Art: Beyond Simple Prompts",
-                            excerpt: "Explore how advanced prompt engineering techniques are revolutionizing digital art creation and what this means for artists.",
-                            date: "2024-01-15",
-                            category: "AI Art",
-                            image: "linear-gradient(135deg, #667eea, #764ba2)",
-                            filename: "the-future-of-ai-art"
-                        },
-                        {
-                            id: 2,
-                            title: "Cyberpunk Aesthetics in Modern Design",
-                            excerpt: "How the cyberpunk movement influences contemporary design trends and what makes this aesthetic so compelling.",
-                            date: "2024-01-12",
-                            category: "Design",
-                            image: "linear-gradient(135deg, #f093fb, #f5576c)",
-                            filename: "cyberpunk-aesthetics-modern-design"
-                        },
-                        {
-                            id: 3,
-                            title: "Mastering Midjourney: Advanced Prompt Techniques",
-                            excerpt: "Deep dive into professional prompt crafting techniques that will elevate your AI-generated artwork to the next level.",
-                            date: "2024-01-10",
-                            category: "Tutorial",
-                            image: "linear-gradient(135deg, #4facfe, #00f2fe)",
-                            filename: "mastering-midjourney-advanced-prompt-techniques"
-                        },
-                        {
-                            id: 4,
-                            title: "The Psychology of Neon: Why Cyberpunk Resonates",
-                            excerpt: "Understanding the psychological impact of neon aesthetics and how it shapes our perception of the future.",
-                            date: "2024-01-08",
-                            category: "Psychology",
-                            image: "linear-gradient(135deg, #43e97b, #38f9d7)",
-                            filename: "psychology-neon-cyberpunk-resonates"
-                        },
-                        {
-                            id: 5,
-                            title: "Building Your AI Art Portfolio",
-                            excerpt: "Practical tips for creating a compelling portfolio that showcases your AI-generated artwork effectively.",
-                            date: "2024-01-05",
-                            category: "Career",
-                            image: "linear-gradient(135deg, #fa709a, #fee140)",
-                            filename: "building-ai-art-portfolio"
-                        },
-                        {
-                            id: 6,
-                            title: "The Ethics of AI-Generated Art",
-                            excerpt: "Exploring the complex ethical landscape surrounding AI art creation and its implications for the creative industry.",
-                            date: "2024-01-03",
-                            category: "Ethics",
-                            image: "linear-gradient(135deg, #a8edea, #fed6e3)",
-                            filename: "ethics-ai-generated-art"
-                        }
-                    ];
-                }
-            } catch (error) {
-                console.error('Error loading blog posts:', error);
-                // Use default posts if loading fails
+                // Fallback to default posts (only show if API is completely unavailable)
                 blogPosts = [];
             }
         }

@@ -18,6 +18,10 @@
       "use": "@vercel/static"
     },
     {
+      "src": "blog-post.html",
+      "use": "@vercel/static"
+    },
+    {
       "src": "*.png",
       "use": "@vercel/static"
     }
@@ -38,6 +42,10 @@
     {
       "source": "/blog/",
       "destination": "/blog.html"
+    },
+    {
+      "source": "/blog/(.*)",
+      "destination": "/blog-post.html"
     },
     {
       "source": "/((?!.*\\.png$|^generator$|^blog$).*)",

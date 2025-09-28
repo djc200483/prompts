@@ -9,7 +9,10 @@ const router = express.Router();
 // Validation rules
 const postValidation = [
   body('title').trim().isLength({ min: 1, max: 255 }).withMessage('Title must be 1-255 characters'),
-  body('content').trim().isLength({ min: 1 }).withMessage('Content is required'),
+  body('content').trim().isLength({ min: 1 }).withMessage('Content is required').customSanitizer(value => {
+    // Decode HTML entities
+    return value.replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+  }),
   body('excerpt').optional().trim().isLength({ max: 500 }).withMessage('Excerpt max 500 characters'),
   body('category').optional().trim().isLength({ max: 100 }).withMessage('Category max 100 characters'),
   body('featured_image_url').optional().isURL().withMessage('Featured image must be a valid URL'),
@@ -90,6 +93,15 @@ router.get('/:slug', async (req, res) => {
 // POST /api/posts - Create new post (requires API key)
 router.post('/', authenticateApiKey, postValidation, validateBlogPost, async (req, res) => {
   try {
+    console.log('Received blog post data:', {
+      title: req.body.title,
+      excerpt: req.body.excerpt,
+      content: req.body.content?.substring(0, 100) + '...',
+      category: req.body.category,
+      featured_image_url: req.body.featured_image_url,
+      keywords: req.body.keywords
+    });
+    
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       console.log('Validation errors:', errors.array());

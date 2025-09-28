@@ -10,6 +10,7 @@ const router = express.Router();
 const postValidation = [
   body('title').trim().isLength({ min: 1, max: 255 }).withMessage('Title must be 1-255 characters'),
   body('content').trim().isLength({ min: 1 }).withMessage('Content is required'),
+  body('excerpt').optional().trim().isLength({ max: 500 }).withMessage('Excerpt max 500 characters'),
   body('category').optional().trim().isLength({ max: 100 }).withMessage('Category max 100 characters'),
   body('featured_image_url').optional().isURL().withMessage('Featured image must be a valid URL'),
   body('keywords').optional().trim().isLength({ max: 500 }).withMessage('Keywords max 500 characters'),
@@ -91,7 +92,11 @@ router.post('/', authenticateApiKey, postValidation, validateBlogPost, async (re
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      console.log('Validation errors:', errors.array());
+      return res.status(400).json({ 
+        error: 'Validation failed',
+        errors: errors.array() 
+      });
     }
     
     const { title, excerpt, content, category, featured_image_url, keywords, published = true } = req.body;

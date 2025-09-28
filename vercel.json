@@ -30,15 +30,7 @@
     {
       "source": "/blog",
       "destination": "/blog.html"
-    },
-    {
-      "source": "/terms",
-      "destination": "/terms.html"
-    },
-    {
-      "source": "/((?!.*\\.png$|^generator$|^blog$|^terms$).*)",
-      "destination": "/index.html"
     }
   ],
-  "cleanUrls": true
+  "cleanUrls": false
 }

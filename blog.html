@@ -493,6 +493,15 @@
                     const data = await response.json();
                     blogPosts = data.posts || [];
                     console.log('✅ Loaded posts from Railway API:', blogPosts.length);
+                    
+                    // Debug: Log each post's image URL
+                    blogPosts.forEach((post, index) => {
+                        console.log(`Post ${index + 1}:`, {
+                            title: post.title,
+                            featured_image_url: post.featured_image_url,
+                            hasImage: !!post.featured_image_url
+                        });
+                    });
                 } else {
                     throw new Error('Railway API not available');
                 }
@@ -520,7 +529,12 @@
             container.innerHTML = blogPosts.map(post => {
                 const featuredImage = post.featured_image_url ? 
                     `<div class="post-image">
-                        <img src="${post.featured_image_url}" alt="${post.title}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px;">
+                        <img src="${post.featured_image_url}" 
+                             alt="${post.title}" 
+                             style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px;"
+                             onerror="this.parentElement.innerHTML='<div style=\\"background: linear-gradient(135deg, #667eea, #764ba2); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; height: 200px; border-radius: 8px;\\">Image Failed to Load</div>'"
+                             onload="console.log('Image loaded successfully:', '${post.featured_image_url}')"
+                             onerror="console.error('Image failed to load:', '${post.featured_image_url}')">
                     </div>` : 
                     `<div class="post-image" style="background: linear-gradient(135deg, #667eea, #764ba2); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
                         ${post.category || 'Blog Post'}

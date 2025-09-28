@@ -1030,6 +1030,7 @@
         <div class="posts-management">
             <h2>Manage Existing Posts</h2>
             <p>View, edit, and delete your blog posts</p>
+            <button class="btn" onclick="loadPosts()" style="margin-bottom: 20px;">Refresh Posts List</button>
             
             <div class="posts-list" id="posts-list">
                 <div class="loading-posts">
@@ -1140,18 +1141,30 @@ Created: ${new Date(result.post.created_at).toLocaleString()}
 
         // Load and display existing posts
         async function loadPosts() {
+            console.log('loadPosts() called');
             try {
                 const postsList = document.getElementById('posts-list');
+                console.log('Posts list element:', postsList);
+                
+                if (!postsList) {
+                    console.error('Posts list element not found!');
+                    return;
+                }
+                
                 postsList.innerHTML = '<div class="loading-posts"><p>Loading posts...</p></div>';
+                console.log('Fetching posts from API...');
                 
                 const response = await fetch('https://prompts-production-7afc.up.railway.app/api/posts');
+                console.log('API response:', response.status, response.statusText);
                 
                 if (!response.ok) {
-                    throw new Error('Failed to load posts');
+                    throw new Error(`Failed to load posts: ${response.status} ${response.statusText}`);
                 }
                 
                 const data = await response.json();
+                console.log('API data received:', data);
                 const posts = data.posts || [];
+                console.log('Posts array:', posts);
                 
                 if (posts.length === 0) {
                     postsList.innerHTML = '<div class="no-posts"><p>No blog posts found. Create your first post above!</p></div>';
@@ -1175,9 +1188,14 @@ Created: ${new Date(result.post.created_at).toLocaleString()}
                     </div>
                 `).join('');
                 
+                console.log('Posts rendered successfully');
+                
             } catch (error) {
                 console.error('Error loading posts:', error);
-                document.getElementById('posts-list').innerHTML = '<div class="no-posts"><p>Error loading posts. Please try again.</p></div>';
+                const postsList = document.getElementById('posts-list');
+                if (postsList) {
+                    postsList.innerHTML = '<div class="no-posts"><p>Error loading posts: ' + error.message + '</p></div>';
+                }
             }
         }
 
@@ -1222,6 +1240,9 @@ Created: ${new Date(result.post.created_at).toLocaleString()}
 
         // Load posts when the page loads
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOMContentLoaded event fired');
+            console.log('Posts management section exists:', document.querySelector('.posts-management') !== null);
+            console.log('Posts list element exists:', document.getElementById('posts-list') !== null);
             loadPosts();
         });
 

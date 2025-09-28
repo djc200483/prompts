@@ -48,11 +48,19 @@
       "destination": "/blog-post.html"
     },
     {
-      "source": "/((?!generator|blog|terms|index|blog-post).*)\\.html$",
+      "source": "/terms",
+      "destination": "/terms.html"
+    },
+    {
+      "source": "/terms/",
+      "destination": "/terms.html"
+    },
+    {
+      "source": "/test-blog-post.html",
       "destination": "/blog-post.html"
     },
     {
-      "source": "/((?!.*\\.png$|^generator$|^blog$).*)",
+      "source": "/((?!.*\\.png$|^generator$|^blog$|^terms$).*)",
       "destination": "/index.html"
     }
   ],

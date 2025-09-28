@@ -237,6 +237,7 @@ router.get('/', (req, res) => {
                                 </div>
                                 <div>
                                     <button class="btn edit-post-btn" data-post-id="\${post.id}">Edit</button>
+                                    <button class="btn delete-post-btn" data-post-id="\${post.id}" data-post-title="\${post.title}" style="background: linear-gradient(45deg, #ff4444, #cc0000); margin-left: 10px;">Delete</button>
                                 </div>
                             </div>
                         \`).join('');
@@ -248,6 +249,40 @@ router.get('/', (req, res) => {
                 }
             }
             
+            // Delete a blog post
+            async function deletePost(postId, postTitle) {
+                if (!confirm(\`Are you sure you want to delete "\${postTitle}"? This action cannot be undone.\`)) {
+                    return;
+                }
+                
+                try {
+                    const apiKey = prompt('Enter your API Key to delete this post:');
+                    if (!apiKey) {
+                        alert('API Key is required to delete posts');
+                        return;
+                    }
+                    
+                    const response = await fetch(\`/api/posts/\${postId}\`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'x-api-key': apiKey
+                        }
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(\`Failed to delete post: \${response.status} \${response.statusText}\`);
+                    }
+                    
+                    alert('Post deleted successfully!');
+                    loadStats(); // Reload the stats and posts list
+                    
+                } catch (error) {
+                    console.error('Error deleting post:', error);
+                    alert('Error deleting post: ' + error.message);
+                }
+            }
+            
             // Add event listeners for dashboard buttons
             document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('create-post-btn').addEventListener('click', () => window.open('/admin/create', '_blank'));
@@ -255,11 +290,17 @@ router.get('/', (req, res) => {
                 document.getElementById('subscribers-btn').addEventListener('click', () => window.open('/admin/subscribers', '_blank'));
                 document.getElementById('api-docs-btn').addEventListener('click', () => window.open('/api', '_blank'));
                 
-                // Add event listeners for edit buttons (will be added dynamically)
+                // Add event listeners for edit and delete buttons (will be added dynamically)
                 document.addEventListener('click', function(e) {
                     if (e.target.classList.contains('edit-post-btn')) {
                         const postId = e.target.getAttribute('data-post-id');
                         window.open('/admin/edit/' + postId, '_blank');
+                    }
+                    
+                    if (e.target.classList.contains('delete-post-btn')) {
+                        const postId = e.target.getAttribute('data-post-id');
+                        const postTitle = e.target.getAttribute('data-post-title');
+                        deletePost(postId, postTitle);
                     }
                 });
             });

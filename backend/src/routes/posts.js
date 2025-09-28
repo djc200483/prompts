@@ -15,7 +15,16 @@ const postValidation = [
   }),
   body('excerpt').optional().trim().isLength({ max: 500 }).withMessage('Excerpt max 500 characters'),
   body('category').optional().trim().isLength({ max: 100 }).withMessage('Category max 100 characters'),
-  body('featured_image_url').optional().isURL().withMessage('Featured image must be a valid URL'),
+  body('featured_image_url').optional().custom(value => {
+    if (value && value.trim() !== '') {
+      // Only validate URL if value is provided and not empty
+      const urlPattern = /^https?:\/\/.+/;
+      if (!urlPattern.test(value)) {
+        throw new Error('Featured image must be a valid URL');
+      }
+    }
+    return true;
+  }),
   body('keywords').optional().trim().isLength({ max: 500 }).withMessage('Keywords max 500 characters'),
   body('published').optional().isBoolean().withMessage('Published must be boolean')
 ];

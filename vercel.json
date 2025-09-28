@@ -14,10 +14,6 @@
       "use": "@vercel/static"
     },
     {
-      "src": "blog/**/*.html",
-      "use": "@vercel/static"
-    },
-    {
       "src": "*.png",
       "use": "@vercel/static"
     }
@@ -30,10 +26,6 @@
     {
       "source": "/blog",
       "destination": "/blog.html"
-    },
-    {
-      "source": "/blog/(.*)",
-      "destination": "/blog/$1"
     },
     {
       "source": "/((?!.*\\.png$|^generator$|^blog$).*)",

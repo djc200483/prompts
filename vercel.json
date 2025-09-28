@@ -48,7 +48,7 @@
       "destination": "/blog-post.html"
     },
     {
-      "source": "/((?!.*\\.png$|^generator$|^blog$|^terms$|^blog-post$).*)\\.html$",
+      "source": "/((?!generator|blog|terms|index|blog-post).*)\\.html$",
       "destination": "/blog-post.html"
     },
     {

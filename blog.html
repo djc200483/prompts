@@ -558,18 +558,7 @@
         
         initializeBlog();
 
-        // Add click handlers for blog posts
-        document.querySelectorAll('.read-more').forEach((link, index) => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                // For the first post, link to the actual blog post
-                if (index === 0) {
-                    window.location.href = '/blog/the-future-of-ai-art';
-                } else {
-                    alert(`This would open blog post: "${blogPosts[index].title}"\n\nMore blog posts coming soon!`);
-                }
-            });
-        });
+        // Blog post click handlers are handled by inline onclick in the template
     </script>
 </body>
 </html>

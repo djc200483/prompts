@@ -724,6 +724,118 @@
                 padding: 20px;
             }
         }
+
+        .posts-management {
+            margin-top: 60px;
+            padding: 40px;
+            background: rgba(10, 10, 15, 0.8);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+
+        .posts-management h2 {
+            color: #a855f7;
+            font-size: 2rem;
+            margin-bottom: 10px;
+            letter-spacing: 0.05em;
+        }
+
+        .posts-management p {
+            color: #9ca3af;
+            margin-bottom: 30px;
+        }
+
+        .posts-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .post-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .post-item:hover {
+            border-color: rgba(168, 85, 247, 0.3);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .post-info {
+            flex: 1;
+        }
+
+        .post-title {
+            color: #ffffff;
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .post-meta {
+            color: #9ca3af;
+            font-size: 0.9rem;
+            display: flex;
+            gap: 20px;
+        }
+
+        .post-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-delete {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-delete:hover {
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            transform: translateY(-1px);
+        }
+
+        .btn-edit {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-edit:hover {
+            background: linear-gradient(135deg, #d97706, #b45309);
+            transform: translateY(-1px);
+        }
+
+        .loading-posts {
+            text-align: center;
+            padding: 40px;
+            color: #9ca3af;
+        }
+
+        .no-posts {
+            text-align: center;
+            padding: 40px;
+            color: #9ca3af;
+        }
     </style>
 </head>
 <body>
@@ -913,6 +1025,18 @@
                 <button class="copy-btn copy-html-btn" onclick="copyHTMLOnly()">Copy HTML Only</button>
             </div>
         </div>
+
+        <!-- Posts Management Section -->
+        <div class="posts-management">
+            <h2>Manage Existing Posts</h2>
+            <p>View, edit, and delete your blog posts</p>
+            
+            <div class="posts-list" id="posts-list">
+                <div class="loading-posts">
+                    <p>Loading posts...</p>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="blog-api.js"></script>
@@ -988,6 +1112,9 @@ Created: ${new Date(result.post.created_at).toLocaleString()}
                     document.getElementById('blog-form').reset();
                     document.getElementById('post-date').value = new Date().toISOString().split('T')[0];
                     
+                    // Reload the posts list to show the new post
+                    loadPosts();
+                    
                 } else {
                     throw new Error(result.message);
                 }
@@ -1010,6 +1137,93 @@ Created: ${new Date(result.post.created_at).toLocaleString()}
             document.getElementById('post-date').value = new Date().toISOString().split('T')[0];
             document.getElementById('output-section').style.display = 'none';
         }
+
+        // Load and display existing posts
+        async function loadPosts() {
+            try {
+                const postsList = document.getElementById('posts-list');
+                postsList.innerHTML = '<div class="loading-posts"><p>Loading posts...</p></div>';
+                
+                const response = await fetch('https://prompts-production-7afc.up.railway.app/api/posts');
+                
+                if (!response.ok) {
+                    throw new Error('Failed to load posts');
+                }
+                
+                const data = await response.json();
+                const posts = data.posts || [];
+                
+                if (posts.length === 0) {
+                    postsList.innerHTML = '<div class="no-posts"><p>No blog posts found. Create your first post above!</p></div>';
+                    return;
+                }
+                
+                postsList.innerHTML = posts.map(post => `
+                    <div class="post-item">
+                        <div class="post-info">
+                            <div class="post-title">${post.title}</div>
+                            <div class="post-meta">
+                                <span>Category: ${post.category || 'Uncategorized'}</span>
+                                <span>Created: ${new Date(post.created_at).toLocaleDateString()}</span>
+                                <span>Slug: ${post.slug}</span>
+                            </div>
+                        </div>
+                        <div class="post-actions">
+                            <button class="btn-edit" onclick="editPost(${post.id})">Edit</button>
+                            <button class="btn-delete" onclick="deletePost(${post.id}, '${post.title}')">Delete</button>
+                        </div>
+                    </div>
+                `).join('');
+                
+            } catch (error) {
+                console.error('Error loading posts:', error);
+                document.getElementById('posts-list').innerHTML = '<div class="no-posts"><p>Error loading posts. Please try again.</p></div>';
+            }
+        }
+
+        // Delete a blog post
+        async function deletePost(postId, postTitle) {
+            if (!confirm(`Are you sure you want to delete "${postTitle}"? This action cannot be undone.`)) {
+                return;
+            }
+            
+            try {
+                const apiKey = prompt('Enter your API Key to delete this post:');
+                if (!apiKey) {
+                    alert('API Key is required to delete posts');
+                    return;
+                }
+                
+                const response = await fetch(`https://prompts-production-7afc.up.railway.app/api/posts/${postId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-api-key': apiKey
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`Failed to delete post: ${response.status} ${response.statusText}`);
+                }
+                
+                alert('Post deleted successfully!');
+                loadPosts(); // Reload the posts list
+                
+            } catch (error) {
+                console.error('Error deleting post:', error);
+                alert('Error deleting post: ' + error.message);
+            }
+        }
+
+        // Edit a blog post (placeholder for now)
+        function editPost(postId) {
+            alert('Edit functionality coming soon! For now, you can delete and recreate the post.');
+        }
+
+        // Load posts when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadPosts();
+        });
 
         function copyToClipboard() {
             const content = document.getElementById('output-content').textContent;

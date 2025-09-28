@@ -32,7 +32,11 @@
       "destination": "/blog.html"
     },
     {
-      "source": "/((?!.*\\.png$|^generator$|^blog$).*)",
+      "source": "/terms",
+      "destination": "/terms.html"
+    },
+    {
+      "source": "/((?!.*\\.png$|^generator$|^blog$|^terms$).*)",
       "destination": "/index.html"
     }
   ],

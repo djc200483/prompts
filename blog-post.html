@@ -332,13 +332,7 @@
                 const apiUrl = `https://prompts-production-7afc.up.railway.app/api/posts/${slug}?t=${Date.now()}`;
                 console.log('Fetching from API:', apiUrl);
                 
-                const response = await fetch(apiUrl, {
-                    method: 'GET',
-                    headers: {
-                        'Cache-Control': 'no-cache',
-                        'Pragma': 'no-cache'
-                    }
-                });
+                const response = await fetch(apiUrl);
                 
                 if (!response.ok) {
                     console.error('API response not ok:', response.status, response.statusText);

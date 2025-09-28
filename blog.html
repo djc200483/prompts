@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cyberpunk Blog - AI Art & Tech Insights | Prompt Generator</title>
+    <title>Cyber Blog - AI Art & Tech Insights | Prompt Generator</title>
     <meta name="description" content="Latest insights on AI art, cyberpunk culture, and prompt engineering. Stay updated with the future of digital creativity.">
     <meta name="keywords" content="AI art blog, cyberpunk culture, prompt engineering, AI creativity, digital art">
     <link rel="icon" type="image/png" href="favicon.png">
@@ -120,25 +120,46 @@
         .hero-section {
             text-align: center;
             margin-bottom: 80px;
+            position: relative;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #a855f7, transparent);
+            border-radius: 1px;
         }
 
         .hero-title {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 4rem;
-            font-weight: 400;
-            letter-spacing: 0.1em;
-            color: #00ff88;
-            text-shadow: 0 0 30px rgba(0, 255, 136, 0.5);
-            margin-bottom: 20px;
+            font-size: 4.2rem;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+            text-shadow: 0 0 40px rgba(168, 85, 247, 0.3);
         }
 
         .hero-subtitle {
-            font-size: 1.3rem;
-            color: #9ca3af;
-            margin-bottom: 40px;
+            font-size: 1.25rem;
+            color: rgba(229, 231, 235, 0.8);
+            font-weight: 400;
             max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, #a855f7, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 800;
         }
 
         .newsletter-signup {
@@ -342,7 +363,7 @@
 
         @media (max-width: 768px) {
             .hero-title {
-                font-size: 2.5rem;
+                font-size: 3rem;
             }
 
             .nav-container {
@@ -366,6 +387,12 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 2.4rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -381,7 +408,7 @@
 
     <div class="container">
         <div class="hero-section">
-            <h1 class="hero-title">CYBER BLOG</h1>
+            <h1 class="hero-title"><span class="highlight">CYBER</span> BLOG</h1>
             <p class="hero-subtitle">
                 Dive deep into the future of AI art, cyberpunk culture, and digital creativity. 
                 Stay ahead of the curve with cutting-edge insights and techniques.
@@ -418,9 +445,9 @@
                 <a href="/generator" class="footer-link">Advanced Generator</a>
             </div>
             <p class="footer-text">
-                © 2024 CyberPrompt Generator. All rights reserved. | 
-                <a href="#" class="footer-link">Privacy Policy</a> | 
-                <a href="#" class="footer-link">Terms of Service</a>
+                © 2024 Prompt Generator created by OddestHistory_ All rights reserved. | 
+                <a href="https://x.com/OddestHistory_" target="_blank" class="footer-link">X</a> | 
+                <a href="terms.html" target="_blank" class="footer-link">Terms of Service</a>
             </p>
         </div>
     </footer>

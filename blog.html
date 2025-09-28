@@ -520,7 +520,11 @@
                         <img src="${post.featured_image_url}" 
                              alt="${post.title}" 
                              style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px;"
-                             onerror="this.parentElement.innerHTML='<div style=\\"background: linear-gradient(135deg, #667eea, #764ba2); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; height: 200px; border-radius: 8px;\\">Image Failed to Load</div>'">
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                             onload="this.style.display='block'; this.nextElementSibling.style.display='none';">
+                        <div style="background: linear-gradient(135deg, #667eea, #764ba2); display: none; align-items: center; justify-content: center; color: white; font-weight: bold; height: 200px; border-radius: 8px;">
+                            Image Failed to Load
+                        </div>
                     </div>` : 
                     `<div class="post-image" style="background: linear-gradient(135deg, #667eea, #764ba2); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
                         ${post.category || 'Blog Post'}
@@ -543,7 +547,7 @@
                             </div>
                             <h3 class="post-title">${post.title}</h3>
                             <p class="post-excerpt">${post.excerpt || 'No excerpt available'}</p>
-                            <button class="read-more" onclick="window.location.href='./${slug}.html'">Read More →</button>
+                            <button class="read-more" onclick="window.location.href='./${slug}.html'">Read More</button>
                         </div>
                     </article>
                 `;

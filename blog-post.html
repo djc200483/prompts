@@ -319,17 +319,34 @@
                 const path = window.location.pathname;
                 const slug = path.split('/').pop().replace('.html', '');
                 
-                console.log('Loading blog post with slug:', slug);
+                console.log('Current URL:', window.location.href);
+                console.log('Current pathname:', window.location.pathname);
+                console.log('Extracted slug:', slug);
                 
-                // Fetch the blog post from the API
-                const response = await fetch(`https://prompts-production-7afc.up.railway.app/api/posts/${slug}`);
+                // Show loading state
+                document.getElementById('loading').style.display = 'block';
+                document.getElementById('error').style.display = 'none';
+                document.getElementById('post-content').style.display = 'none';
+                
+                // Fetch the blog post from the API with cache busting
+                const apiUrl = `https://prompts-production-7afc.up.railway.app/api/posts/${slug}?t=${Date.now()}`;
+                console.log('Fetching from API:', apiUrl);
+                
+                const response = await fetch(apiUrl, {
+                    method: 'GET',
+                    headers: {
+                        'Cache-Control': 'no-cache',
+                        'Pragma': 'no-cache'
+                    }
+                });
                 
                 if (!response.ok) {
-                    throw new Error('Post not found');
+                    console.error('API response not ok:', response.status, response.statusText);
+                    throw new Error(`Post not found: ${response.status} ${response.statusText}`);
                 }
                 
                 const post = await response.json();
-                console.log('Loaded post:', post);
+                console.log('Successfully loaded post:', post);
                 
                 // Hide loading, show content
                 document.getElementById('loading').style.display = 'none';
@@ -371,7 +388,19 @@
         }
         
         // Load the blog post when the page loads
-        loadBlogPost();
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, starting blog post load');
+            loadBlogPost();
+        });
+        
+        // Also load on page show (for back button navigation)
+        window.addEventListener('pageshow', function(event) {
+            console.log('Page show event, reloading blog post');
+            if (event.persisted) {
+                // Page was loaded from cache, reload
+                loadBlogPost();
+            }
+        });
     </script>
 </body>
 </html>

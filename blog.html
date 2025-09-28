@@ -552,11 +552,25 @@
 
         // Initialize blog posts
         async function initializeBlog() {
+            console.log('Initializing blog posts...');
             await loadBlogPosts();
             renderBlogPosts();
         }
         
-        initializeBlog();
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Blog page DOM loaded');
+            initializeBlog();
+        });
+        
+        // Also initialize on page show (for back button navigation)
+        window.addEventListener('pageshow', function(event) {
+            console.log('Blog page show event');
+            if (event.persisted) {
+                // Page was loaded from cache, reload
+                initializeBlog();
+            }
+        });
 
         // Blog post click handlers are handled by inline onclick in the template
     </script>

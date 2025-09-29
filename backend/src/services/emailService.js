@@ -1,6 +1,12 @@
 const { Resend } = require('resend');
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Initialize Resend only if API key is available
+let resend = null;
+if (process.env.RESEND_API_KEY) {
+  resend = new Resend(process.env.RESEND_API_KEY);
+} else {
+  console.warn('⚠️ RESEND_API_KEY not found. Email functionality will be disabled.');
+}
 
 class EmailService {
   constructor() {
@@ -9,6 +15,11 @@ class EmailService {
 
   // Send welcome email to new subscribers
   async sendWelcomeEmail(email) {
+    if (!resend) {
+      console.warn('Resend not initialized. Skipping welcome email.');
+      return { success: false, error: 'Email service not configured' };
+    }
+
     try {
       const { data, error } = await resend.emails.send({
         from: this.fromEmail,
@@ -32,6 +43,11 @@ class EmailService {
 
   // Send blog post notification to all subscribers
   async sendBlogPostNotification(post, subscribers) {
+    if (!resend) {
+      console.warn('Resend not initialized. Skipping blog post notification.');
+      return { success: false, error: 'Email service not configured' };
+    }
+
     try {
       const { data, error } = await resend.emails.send({
         from: this.fromEmail,

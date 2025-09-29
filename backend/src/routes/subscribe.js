@@ -5,6 +5,15 @@ const emailService = require('../services/emailService');
 
 const router = express.Router();
 
+// Test endpoint to check if API is working
+router.get('/test', (req, res) => {
+  res.json({ 
+    message: 'Subscribe API is working',
+    timestamp: new Date().toISOString(),
+    resendConfigured: !!process.env.RESEND_API_KEY
+  });
+});
+
 // Email validation
 const emailValidation = [
   body('email')
@@ -16,12 +25,16 @@ const emailValidation = [
 // POST /api/subscribe - Subscribe to blog updates
 router.post('/', emailValidation, async (req, res) => {
   try {
+    console.log('📧 Subscribe request received:', req.body);
+    
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+      console.log('❌ Validation errors:', errors.array());
       return res.status(400).json({ errors: errors.array() });
     }
     
     const { email } = req.body;
+    console.log('📧 Processing email:', email);
     
     // Check if email already exists
     const existingSubscriber = await query(

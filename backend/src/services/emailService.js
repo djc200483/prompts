@@ -15,10 +15,14 @@ class EmailService {
 
   // Send welcome email to new subscribers
   async sendWelcomeEmail(email) {
+    console.log('📧 Attempting to send welcome email to:', email);
+    
     if (!resend) {
-      console.warn('Resend not initialized. Skipping welcome email.');
+      console.warn('⚠️ Resend not initialized. Skipping welcome email.');
       return { success: false, error: 'Email service not configured' };
     }
+    
+    console.log('✅ Resend initialized, proceeding with email send');
 
     try {
       const { data, error } = await resend.emails.send({

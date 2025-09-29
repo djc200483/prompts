@@ -26,6 +26,10 @@
       "use": "@vercel/static"
     },
     {
+      "src": "resources.html",
+      "use": "@vercel/static"
+    },
+    {
       "src": "*.png",
       "use": "@vercel/static"
     }
@@ -64,7 +68,15 @@
       "destination": "/unsubscribe.html"
     },
     {
-      "source": "/((?!.*\\.png$|^generator$|^blog$|^terms$|^unsubscribe$).*)",
+      "source": "/resources",
+      "destination": "/resources.html"
+    },
+    {
+      "source": "/resources/",
+      "destination": "/resources.html"
+    },
+    {
+      "source": "/((?!.*\\.png$|^generator$|^blog$|^terms$|^unsubscribe$|^resources$).*)",
       "destination": "/index.html"
     }
   ],

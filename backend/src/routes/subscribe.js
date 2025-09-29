@@ -1,6 +1,7 @@
 const express = require('express');
 const { body, validationResult } = require('express-validator');
 const { query } = require('../utils/database');
+const emailService = require('../services/emailService');
 
 const router = express.Router();
 
@@ -43,6 +44,14 @@ router.post('/', emailValidation, async (req, res) => {
           [subscriber.id]
         );
         
+        // Send welcome email for reactivated subscription
+        try {
+          await emailService.sendWelcomeEmail(email);
+        } catch (emailError) {
+          console.error('Failed to send welcome email for reactivated subscription:', emailError);
+          // Don't fail the request if email fails
+        }
+        
         return res.json({
           message: 'Subscription reactivated successfully',
           email: email
@@ -55,6 +64,14 @@ router.post('/', emailValidation, async (req, res) => {
       'INSERT INTO subscribers (email) VALUES ($1) RETURNING id, subscribed_at',
       [email]
     );
+    
+    // Send welcome email
+    try {
+      await emailService.sendWelcomeEmail(email);
+    } catch (emailError) {
+      console.error('Failed to send welcome email:', emailError);
+      // Don't fail the request if email fails
+    }
     
     res.status(201).json({
       message: 'Successfully subscribed to blog updates',
@@ -114,6 +131,61 @@ router.get('/count', async (req, res) => {
   } catch (error) {
     console.error('Error getting subscriber count:', error);
     res.status(500).json({ error: 'Failed to get subscriber count' });
+  }
+});
+
+// POST /api/subscribe/notify - Send blog post notification (requires API key)
+router.post('/notify', async (req, res) => {
+  try {
+    const { postId } = req.body;
+    
+    if (!postId) {
+      return res.status(400).json({ error: 'Post ID is required' });
+    }
+    
+    // Get the blog post
+    const postResult = await query(
+      'SELECT * FROM blog_posts WHERE id = $1 AND published = true',
+      [postId]
+    );
+    
+    if (postResult.rows.length === 0) {
+      return res.status(404).json({ error: 'Published post not found' });
+    }
+    
+    const post = postResult.rows[0];
+    
+    // Get all active subscribers
+    const subscribersResult = await query(
+      'SELECT email FROM subscribers WHERE active = true'
+    );
+    
+    if (subscribersResult.rows.length === 0) {
+      return res.json({ 
+        message: 'No active subscribers to notify',
+        subscriberCount: 0
+      });
+    }
+    
+    // Send notification email
+    const emailResult = await emailService.sendBlogPostNotification(post, subscribersResult.rows);
+    
+    if (emailResult.success) {
+      res.json({
+        message: 'Blog post notification sent successfully',
+        subscriberCount: subscribersResult.rows.length,
+        postTitle: post.title
+      });
+    } else {
+      res.status(500).json({
+        error: 'Failed to send notification email',
+        details: emailResult.error
+      });
+    }
+    
+  } catch (error) {
+    console.error('Error sending blog post notification:', error);
+    res.status(500).json({ error: 'Failed to send notification' });
   }
 });
 

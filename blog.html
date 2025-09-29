@@ -458,29 +458,99 @@
 
     <script>
         // Newsletter subscription handling
-        document.getElementById('newsletter-form').addEventListener('submit', function(e) {
+        document.getElementById('newsletter-form').addEventListener('submit', async function(e) {
+            console.log('📧 Form submit event triggered');
             e.preventDefault();
             
             const email = document.getElementById('email-input').value;
             const button = document.querySelector('.subscribe-btn');
+            const emailInput = document.getElementById('email-input');
             
-            // Simulate subscription process
+            console.log('📧 Email value:', email);
+            
+            // Basic email validation
+            if (!email || !email.includes('@')) {
+                showMessage('Please enter a valid email address', 'error');
+                return;
+            }
+            
+            // Show loading state
             button.textContent = 'Subscribing...';
             button.style.opacity = '0.7';
+            button.disabled = true;
             
-            setTimeout(() => {
-                button.textContent = 'Subscribed!';
-                button.style.background = 'linear-gradient(135deg, #ec4899, #be185d)';
-                document.getElementById('email-input').value = '';
+            try {
+                const response = await fetch('https://prompts-production-7afc.up.railway.app/api/subscribe', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email: email })
+                });
                 
-                // Reset after 3 seconds
-                setTimeout(() => {
-                    button.textContent = 'Subscribe';
-                    button.style.opacity = '1';
-                    button.style.background = 'linear-gradient(135deg, #a855f7, #ec4899)';
-                }, 3000);
-            }, 1500);
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // Success
+                    button.textContent = 'Subscribed!';
+                    button.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+                    emailInput.value = '';
+                    showMessage('Welcome! Check your email for confirmation.', 'success');
+                    
+                    // Reset after 3 seconds
+                    setTimeout(() => {
+                        button.textContent = 'Subscribe';
+                        button.style.opacity = '1';
+                        button.style.background = 'linear-gradient(135deg, #a855f7, #ec4899)';
+                        button.disabled = false;
+                    }, 3000);
+                } else {
+                    // Error
+                    throw new Error(data.message || data.error || 'Subscription failed');
+                }
+                
+            } catch (error) {
+                console.error('Subscription error:', error);
+                button.textContent = 'Subscribe';
+                button.style.opacity = '1';
+                button.disabled = false;
+                showMessage(error.message || 'Failed to subscribe. Please try again.', 'error');
+            }
         });
+        
+        // Show message function
+        function showMessage(message, type) {
+            // Remove existing message
+            const existingMessage = document.querySelector('.newsletter-message');
+            if (existingMessage) {
+                existingMessage.remove();
+            }
+            
+            // Create new message
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `newsletter-message ${type}`;
+            messageDiv.textContent = message;
+            messageDiv.style.cssText = `
+                margin-top: 15px;
+                padding: 10px 15px;
+                border-radius: 6px;
+                font-size: 0.9rem;
+                text-align: center;
+                background: ${type === 'success' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)'};
+                color: ${type === 'success' ? '#10b981' : '#ef4444'};
+                border: 1px solid ${type === 'success' ? 'rgba(16, 185, 129, 0.3)' : 'rgba(239, 68, 68, 0.3)'};
+            `;
+            
+            // Insert after the form
+            document.getElementById('newsletter-form').parentNode.insertBefore(messageDiv, document.getElementById('newsletter-form').nextSibling);
+            
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                if (messageDiv.parentNode) {
+                    messageDiv.remove();
+                }
+            }, 5000);
+        }
 
         // Load blog posts from Railway API
         let blogPosts = [];

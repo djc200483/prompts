@@ -25,6 +25,10 @@ class EmailService {
     console.log('✅ Resend initialized, proceeding with email send');
 
     try {
+      console.log('📧 Sending email with Resend...');
+      console.log('📧 From:', this.fromEmail);
+      console.log('📧 To:', email);
+      
       const { data, error } = await resend.emails.send({
         from: this.fromEmail,
         to: [email],
@@ -33,14 +37,15 @@ class EmailService {
       });
 
       if (error) {
-        console.error('Error sending welcome email:', error);
+        console.error('❌ Resend API error:', error);
         return { success: false, error };
       }
 
-      console.log('Welcome email sent successfully:', data);
+      console.log('✅ Welcome email sent successfully:', data);
       return { success: true, data };
     } catch (error) {
-      console.error('Error in sendWelcomeEmail:', error);
+      console.error('❌ Error in sendWelcomeEmail:', error);
+      console.error('❌ Error details:', error.message, error.stack);
       return { success: false, error: error.message };
     }
   }

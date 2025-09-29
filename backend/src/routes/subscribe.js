@@ -10,8 +10,30 @@ router.get('/test', (req, res) => {
   res.json({ 
     message: 'Subscribe API is working',
     timestamp: new Date().toISOString(),
-    resendConfigured: !!process.env.RESEND_API_KEY
+    resendConfigured: !!process.env.RESEND_API_KEY,
+    fromEmail: process.env.FROM_EMAIL
   });
+});
+
+// Test endpoint to send a test email
+router.post('/test-email', async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email) {
+      return res.status(400).json({ error: 'Email is required' });
+    }
+    
+    console.log('🧪 Test email request for:', email);
+    const result = await emailService.sendWelcomeEmail(email);
+    
+    res.json({
+      message: 'Test email sent',
+      result: result
+    });
+  } catch (error) {
+    console.error('Test email error:', error);
+    res.status(500).json({ error: error.message });
+  }
 });
 
 // Email validation

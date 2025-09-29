@@ -387,15 +387,24 @@
 
         // Confirm unsubscribe
         async function confirmUnsubscribe() {
+            console.log('🚫 Starting unsubscribe process for:', email);
+            
             if (!email) {
                 showMessage('No email address to unsubscribe.', 'error');
                 return;
             }
 
             showMessage('Processing unsubscribe request...', 'loading');
-            document.getElementById('unsubscribe-buttons').style.display = 'none';
+            
+            const unsubscribeButtons = document.getElementById('unsubscribe-buttons');
+            console.log('🚫 Unsubscribe buttons element:', unsubscribeButtons);
+            
+            if (unsubscribeButtons) {
+                unsubscribeButtons.style.display = 'none';
+            }
 
             try {
+                console.log('🚫 Making DELETE request to API...');
                 const response = await fetch('https://prompts-production-7afc.up.railway.app/api/subscribe', {
                     method: 'DELETE',
                     headers: {
@@ -404,21 +413,38 @@
                     body: JSON.stringify({ email: email })
                 });
 
+                console.log('🚫 API response status:', response.status);
                 const data = await response.json();
+                console.log('🚫 API response data:', data);
 
                 if (response.ok) {
                     // Success
-                    document.getElementById('unsubscribe-content').style.display = 'none';
-                    document.getElementById('success-message').style.display = 'block';
+                    console.log('🚫 Unsubscribe successful, updating UI...');
+                    const unsubscribeContent = document.getElementById('unsubscribe-content');
+                    const successMessage = document.getElementById('success-message');
+                    
+                    console.log('🚫 Unsubscribe content element:', unsubscribeContent);
+                    console.log('🚫 Success message element:', successMessage);
+                    
+                    if (unsubscribeContent) {
+                        unsubscribeContent.style.display = 'none';
+                    }
+                    if (successMessage) {
+                        successMessage.style.display = 'block';
+                    }
                 } else {
                     // Error
+                    console.log('🚫 API returned error:', data);
                     throw new Error(data.message || data.error || 'Unsubscribe failed');
                 }
 
             } catch (error) {
-                console.error('Unsubscribe error:', error);
+                console.error('🚫 Unsubscribe error:', error);
                 showMessage(error.message || 'Failed to unsubscribe. Please try again.', 'error');
-                document.getElementById('unsubscribe-buttons').style.display = 'block';
+                
+                if (unsubscribeButtons) {
+                    unsubscribeButtons.style.display = 'block';
+                }
             }
         }
 

@@ -3,6 +3,7 @@ const { body, validationResult } = require('express-validator');
 const { query } = require('../utils/database');
 const { createSlug, ensureUniqueSlug } = require('../utils/slugify');
 const { authenticateApiKey, validateBlogPost } = require('../middleware/auth');
+const emailService = require('../services/emailService');
 
 const router = express.Router();
 
@@ -136,6 +137,41 @@ router.post('/', authenticateApiKey, postValidation, validateBlogPost, async (re
     
     const result = await query(sql, [title, excerpt, content, category, featured_image_url, keywords, slug, published]);
     
+    // Send notification email if post is published
+    if (published) {
+      try {
+        console.log('📧 Sending blog post notification for new post:', result.rows[0].title);
+        
+        // Get all active subscribers
+        const subscribersResult = await query(
+          'SELECT email FROM subscribers WHERE active = true'
+        );
+        
+        if (subscribersResult.rows.length > 0) {
+          const post = {
+            id: result.rows[0].id,
+            title: title,
+            excerpt: excerpt,
+            slug: slug,
+            created_at: result.rows[0].created_at
+          };
+          
+          const emailResult = await emailService.sendBlogPostNotification(post, subscribersResult.rows);
+          
+          if (emailResult.success) {
+            console.log('✅ Blog post notification sent successfully to', subscribersResult.rows.length, 'subscribers');
+          } else {
+            console.error('❌ Failed to send blog post notification:', emailResult.error);
+          }
+        } else {
+          console.log('ℹ️ No active subscribers to notify');
+        }
+      } catch (emailError) {
+        console.error('❌ Error sending blog post notification:', emailError);
+        // Don't fail the post creation if email fails
+      }
+    }
+    
     res.status(201).json({
       message: 'Post created successfully',
       post: result.rows[0]
@@ -190,6 +226,48 @@ router.put('/:id', authenticateApiKey, postValidation, async (req, res) => {
     `;
     
     const result = await query(sql, [id, title, excerpt, content, category, featured_image_url, keywords, slug, published]);
+    
+    // Send notification email if post is being published (and wasn't published before)
+    if (published !== undefined && published) {
+      try {
+        // Check if this post was previously unpublished
+        const wasUnpublished = await query('SELECT published FROM blog_posts WHERE id = $1', [id]);
+        const wasPublishedBefore = wasUnpublished.rows.length > 0 && wasUnpublished.rows[0].published;
+        
+        // Only send notification if this is a new publication (not just an update to an already published post)
+        if (!wasPublishedBefore) {
+          console.log('📧 Sending blog post notification for newly published post:', result.rows[0].title);
+          
+          // Get all active subscribers
+          const subscribersResult = await query(
+            'SELECT email FROM subscribers WHERE active = true'
+          );
+          
+          if (subscribersResult.rows.length > 0) {
+            const post = {
+              id: result.rows[0].id,
+              title: title || result.rows[0].title,
+              excerpt: excerpt,
+              slug: slug,
+              created_at: result.rows[0].updated_at
+            };
+            
+            const emailResult = await emailService.sendBlogPostNotification(post, subscribersResult.rows);
+            
+            if (emailResult.success) {
+              console.log('✅ Blog post notification sent successfully to', subscribersResult.rows.length, 'subscribers');
+            } else {
+              console.error('❌ Failed to send blog post notification:', emailResult.error);
+            }
+          } else {
+            console.log('ℹ️ No active subscribers to notify');
+          }
+        }
+      } catch (emailError) {
+        console.error('❌ Error sending blog post notification:', emailError);
+        // Don't fail the post update if email fails
+      }
+    }
     
     res.json({
       message: 'Post updated successfully',

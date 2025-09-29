@@ -22,6 +22,10 @@
       "use": "@vercel/static"
     },
     {
+      "src": "unsubscribe.html",
+      "use": "@vercel/static"
+    },
+    {
       "src": "*.png",
       "use": "@vercel/static"
     }
@@ -56,7 +60,11 @@
       "destination": "/terms.html"
     },
     {
-      "source": "/((?!.*\\.png$|^generator$|^blog$|^terms$).*)",
+      "source": "/unsubscribe",
+      "destination": "/unsubscribe.html"
+    },
+    {
+      "source": "/((?!.*\\.png$|^generator$|^blog$|^terms$|^unsubscribe$).*)",
       "destination": "/index.html"
     }
   ],

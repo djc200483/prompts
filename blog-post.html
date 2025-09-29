@@ -317,7 +317,13 @@
             try {
                 // Get the slug from the URL
                 const path = window.location.pathname;
-                const slug = path.split('/').pop().replace('.html', '');
+                // Handle both /blog/slug and /slug.html patterns
+                let slug;
+                if (path.startsWith('/blog/')) {
+                    slug = path.split('/blog/')[1];
+                } else {
+                    slug = path.split('/').pop().replace('.html', '');
+                }
                 
                 console.log('Current URL:', window.location.href);
                 console.log('Current pathname:', window.location.pathname);

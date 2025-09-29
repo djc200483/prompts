@@ -56,10 +56,6 @@
       "destination": "/terms.html"
     },
     {
-      "source": "/test-blog-post.html",
-      "destination": "/blog-post.html"
-    },
-    {
       "source": "/((?!.*\\.png$|^generator$|^blog$|^terms$).*)",
       "destination": "/index.html"
     }

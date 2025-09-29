@@ -86,10 +86,11 @@ class EmailService {
       <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
         <title>Welcome to Cyber Blog</title>
         <style>
           body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Bebas Neue', 'Arial', sans-serif;
             line-height: 1.6;
             color: #333;
             max-width: 600px;
@@ -152,19 +153,18 @@ class EmailService {
         <div class="container">
           <div class="header">
             <div class="logo">CYBER BLOG</div>
-            <div class="subtitle">AI Art & Tech Insights</div>
+            <div class="subtitle">AI Art & Prompting Insights</div>
           </div>
           
           <div class="content">
-            <h2>Welcome to the Future! 🚀</h2>
-            <p>Thanks for subscribing to Cyber Blog! You're now part of our community of AI art enthusiasts and tech innovators.</p>
+            <h2>Welcome to the Cyber Blog by OddestHistory 🚀</h2>
+            <p>Thank you for subscribing. You're now part of my community of AI art enthusiasts.</p>
             
-            <p>You'll receive:</p>
+            <p>By signing up to our Blog you'll receive regular notifications when I publish new posts:</p>
             <ul>
-              <li>🎨 Latest AI art trends and techniques</li>
-              <li>🤖 Cutting-edge tech insights</li>
+              <li>🎨 Latest AI art trends and prompting techniques</li>
+              <li>🤖 Regular reviews of new AI art tools and resources</li>
               <li>💡 Exclusive prompt engineering tips</li>
-              <li>📱 Updates on new blog posts</li>
             </ul>
             
             <p>Ready to dive in? Check out our latest content:</p>

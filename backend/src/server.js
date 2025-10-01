@@ -8,6 +8,7 @@ require('dotenv').config();
 const blogRoutes = require('./routes/posts');
 const subscribeRoutes = require('./routes/subscribe');
 const adminRoutes = require('./routes/admin');
+const sitemapRoutes = require('./routes/sitemap');
 const { initializeDatabase } = require('./utils/database');
 
 const app = express();
@@ -66,6 +67,7 @@ const adminAuth = basicAuth({
 app.use('/api/posts', blogRoutes);
 app.use('/api/subscribe', subscribeRoutes);
 app.use('/admin', adminAuth, adminRoutes);
+app.use('/sitemap.xml', sitemapRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {

@@ -4,7 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Loading Blog Post...</title>
+    <meta name="description" content="Loading blog post...">
+    <meta name="keywords" content="AI art, cyberpunk, prompt engineering">
     <link rel="icon" type="image/png" href="favicon.png">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="">
+    <meta property="og:title" content="Loading Blog Post...">
+    <meta property="og:description" content="Loading blog post...">
+    <meta property="og:image" content="https://prompts.oddesthistory.com/3prompt.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="">
+    <meta property="twitter:title" content="Loading Blog Post...">
+    <meta property="twitter:description" content="Loading blog post...">
+    <meta property="twitter:image" content="https://prompts.oddesthistory.com/3prompt.png">
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
     <style>
         * {
@@ -313,6 +329,69 @@
     </div>
 
     <script>
+        // Function to update meta tags for SEO
+        function updateMetaTags(post) {
+            const currentUrl = window.location.href;
+            const postImage = post.featured_image_url || 'https://prompts.oddesthistory.com/3prompt.png';
+            const postDescription = post.excerpt || post.title + ' - Read more on Cyber Blog';
+            const postKeywords = post.keywords || `${post.category || 'AI Art'}, cyberpunk, prompt engineering, AI creativity`;
+            
+            // Update basic meta tags
+            document.querySelector('meta[name="description"]').setAttribute('content', postDescription);
+            document.querySelector('meta[name="keywords"]').setAttribute('content', postKeywords);
+            
+            // Update Open Graph tags
+            document.querySelector('meta[property="og:url"]').setAttribute('content', currentUrl);
+            document.querySelector('meta[property="og:title"]').setAttribute('content', post.title);
+            document.querySelector('meta[property="og:description"]').setAttribute('content', postDescription);
+            document.querySelector('meta[property="og:image"]').setAttribute('content', postImage);
+            
+            // Update Twitter Card tags
+            document.querySelector('meta[property="twitter:url"]').setAttribute('content', currentUrl);
+            document.querySelector('meta[property="twitter:title"]').setAttribute('content', post.title);
+            document.querySelector('meta[property="twitter:description"]').setAttribute('content', postDescription);
+            document.querySelector('meta[property="twitter:image"]').setAttribute('content', postImage);
+            
+            // Add structured data for better SEO
+            const structuredData = {
+                "@context": "https://schema.org",
+                "@type": "BlogPosting",
+                "headline": post.title,
+                "description": postDescription,
+                "image": postImage,
+                "author": {
+                    "@type": "Person",
+                    "name": "OddestHistory_"
+                },
+                "publisher": {
+                    "@type": "Organization",
+                    "name": "Prompt Generator",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://prompts.oddesthistory.com/favicon.png"
+                    }
+                },
+                "datePublished": post.created_at,
+                "dateModified": post.updated_at || post.created_at,
+                "mainEntityOfPage": {
+                    "@type": "WebPage",
+                    "@id": currentUrl
+                }
+            };
+            
+            // Remove existing structured data
+            const existingScript = document.querySelector('script[type="application/ld+json"]');
+            if (existingScript) {
+                existingScript.remove();
+            }
+            
+            // Add new structured data
+            const script = document.createElement('script');
+            script.type = 'application/ld+json';
+            script.textContent = JSON.stringify(structuredData);
+            document.head.appendChild(script);
+        }
+
         async function loadBlogPost() {
             try {
                 // Get the slug from the URL
@@ -354,6 +433,9 @@
                 
                 // Update page title
                 document.title = `${post.title} - Cyber Blog`;
+                
+                // Update meta tags for SEO
+                updateMetaTags(post);
                 
                 // Render the blog post
                 const postContainer = document.getElementById('post-content');

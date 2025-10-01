@@ -80,7 +80,11 @@
       "destination": "/resources.html"
     },
     {
-      "source": "/((?!.*\\.png$|^generator$|^blog$|^terms$|^unsubscribe$|^resources$).*)",
+      "source": "/sitemap.xml",
+      "destination": "https://prompts-production-7afc.up.railway.app/sitemap.xml"
+    },
+    {
+      "source": "/((?!.*\\.png$|^generator$|^blog$|^terms$|^unsubscribe$|^resources$|^sitemap\\.xml$).*)",
       "destination": "/index.html"
     }
   ],

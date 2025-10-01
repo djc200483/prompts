@@ -153,6 +153,8 @@ router.post('/', authenticateApiKey, postValidation, validateBlogPost, async (re
             title: title,
             excerpt: excerpt,
             slug: slug,
+            featured_image_url: featured_image_url,
+            category: category,
             created_at: result.rows[0].created_at
           };
           
@@ -249,6 +251,8 @@ router.put('/:id', authenticateApiKey, postValidation, async (req, res) => {
               title: title || result.rows[0].title,
               excerpt: excerpt,
               slug: slug,
+              featured_image_url: featured_image_url,
+              category: category,
               created_at: result.rows[0].updated_at
             };
             

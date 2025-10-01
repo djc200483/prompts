@@ -3,6 +3,255 @@ const { query } = require('../utils/database');
 
 const router = express.Router();
 
+// GET /admin/edit/:id - Edit post page
+router.get('/edit/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    // Get the post data
+    const postResult = await query(
+      'SELECT * FROM blog_posts WHERE id = $1',
+      [id]
+    );
+    
+    if (postResult.rows.length === 0) {
+      return res.status(404).send('Post not found');
+    }
+    
+    const post = postResult.rows[0];
+    
+    res.send(`
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Edit Post - Cyberpunk Blog Admin</title>
+          <style>
+              * { margin: 0; padding: 0; box-sizing: border-box; }
+              body { 
+                  font-family: 'Courier New', monospace; 
+                  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+                  color: #00ffff; 
+                  min-height: 100vh;
+                  padding: 20px;
+              }
+              .container { 
+                  max-width: 800px; 
+                  margin: 0 auto; 
+                  background: rgba(0, 255, 255, 0.05);
+                  border: 1px solid #00ffff;
+                  border-radius: 10px;
+                  padding: 30px;
+                  box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+              }
+              h1 { 
+                  text-align: center; 
+                  margin-bottom: 30px; 
+                  text-shadow: 0 0 10px #00ffff;
+                  font-size: 2.5em;
+              }
+              .form-group { 
+                  margin-bottom: 20px; 
+              }
+              label { 
+                  display: block; 
+                  margin-bottom: 5px; 
+                  color: #00ffff; 
+                  font-weight: bold;
+              }
+              input, textarea, select { 
+                  width: 100%; 
+                  padding: 10px; 
+                  border: 1px solid #00ffff; 
+                  border-radius: 5px; 
+                  background: rgba(0, 0, 0, 0.5); 
+                  color: #00ffff; 
+                  font-family: 'Courier New', monospace;
+              }
+              textarea { 
+                  min-height: 100px; 
+                  resize: vertical; 
+              }
+              .btn { 
+                  background: linear-gradient(45deg, #00ffff, #0080ff); 
+                  color: #000; 
+                  border: none; 
+                  padding: 12px 24px; 
+                  border-radius: 5px; 
+                  cursor: pointer; 
+                  font-family: 'Courier New', monospace; 
+                  font-weight: bold; 
+                  margin-right: 10px;
+                  transition: all 0.3s ease;
+              }
+              .btn:hover { 
+                  transform: translateY(-2px); 
+                  box-shadow: 0 5px 15px rgba(0, 255, 255, 0.4); 
+              }
+              .btn-danger {
+                  background: linear-gradient(45deg, #ff4444, #cc0000);
+              }
+              .btn-success {
+                  background: linear-gradient(45deg, #00ff88, #00cc66);
+              }
+              .back-link {
+                  color: #00ffff;
+                  text-decoration: none;
+                  margin-bottom: 20px;
+                  display: inline-block;
+              }
+              .back-link:hover {
+                  text-shadow: 0 0 5px #00ffff;
+              }
+          </style>
+      </head>
+      <body>
+          <div class="container">
+              <a href="/admin" class="back-link">← Back to Admin</a>
+              <h1>Edit Post</h1>
+              
+              <form id="edit-form">
+                  <div class="form-group">
+                      <label for="title">Title</label>
+                      <input type="text" id="title" name="title" value="${post.title.replace(/"/g, '&quot;')}" required>
+                  </div>
+                  
+                  <div class="form-group">
+                      <label for="excerpt">Excerpt</label>
+                      <textarea id="excerpt" name="excerpt" placeholder="Brief description of the post...">${(post.excerpt || '').replace(/"/g, '&quot;')}</textarea>
+                  </div>
+                  
+                  <div class="form-group">
+                      <label for="content">Content</label>
+                      <textarea id="content" name="content" required style="min-height: 300px;">${post.content.replace(/"/g, '&quot;')}</textarea>
+                  </div>
+                  
+                  <div class="form-group">
+                      <label for="category">Category</label>
+                      <select id="category" name="category">
+                          <option value="">Select Category</option>
+                          <option value="AI Art" ${post.category === 'AI Art' ? 'selected' : ''}>AI Art</option>
+                          <option value="Cyberpunk" ${post.category === 'Cyberpunk' ? 'selected' : ''}>Cyberpunk</option>
+                          <option value="Technology" ${post.category === 'Technology' ? 'selected' : ''}>Technology</option>
+                          <option value="Tutorials" ${post.category === 'Tutorials' ? 'selected' : ''}>Tutorials</option>
+                          <option value="News" ${post.category === 'News' ? 'selected' : ''}>News</option>
+                      </select>
+                  </div>
+                  
+                  <div class="form-group">
+                      <label for="featured_image_url">Featured Image URL</label>
+                      <input type="url" id="featured_image_url" name="featured_image_url" value="${(post.featured_image_url || '').replace(/"/g, '&quot;')}" placeholder="https://example.com/image.jpg">
+                  </div>
+                  
+                  <div class="form-group">
+                      <label for="keywords">Keywords (comma-separated)</label>
+                      <input type="text" id="keywords" name="keywords" value="${(post.keywords || '').replace(/"/g, '&quot;')}" placeholder="AI art, cyberpunk, technology">
+                  </div>
+                  
+                  <div class="form-group">
+                      <label>
+                          <input type="checkbox" id="published" name="published" ${post.published ? 'checked' : ''}>
+                          Published
+                      </label>
+                  </div>
+                  
+                  <div class="form-group">
+                      <button type="submit" class="btn btn-success">Update Post</button>
+                      <button type="button" class="btn btn-danger" onclick="deletePost()">Delete Post</button>
+                  </div>
+              </form>
+          </div>
+          
+          <script>
+              const postId = ${post.id};
+              
+              document.getElementById('edit-form').addEventListener('submit', async function(e) {
+                  e.preventDefault();
+                  
+                  const formData = new FormData(this);
+                  const data = {
+                      title: formData.get('title'),
+                      excerpt: formData.get('excerpt'),
+                      content: formData.get('content'),
+                      category: formData.get('category'),
+                      featured_image_url: formData.get('featured_image_url'),
+                      keywords: formData.get('keywords'),
+                      published: formData.get('published') === 'on'
+                  };
+                  
+                  try {
+                      const apiKey = prompt('Enter your API Key to update this post:');
+                      if (!apiKey) {
+                          alert('API Key is required to update posts');
+                          return;
+                      }
+                      
+                      const response = await fetch('/api/posts/' + postId, {
+                          method: 'PUT',
+                          headers: {
+                              'Content-Type': 'application/json',
+                              'x-api-key': apiKey
+                          },
+                          body: JSON.stringify(data)
+                      });
+                      
+                      if (!response.ok) {
+                          throw new Error('Failed to update post: ' + response.status);
+                      }
+                      
+                      alert('Post updated successfully!');
+                      window.close();
+                      
+                  } catch (error) {
+                      console.error('Error updating post:', error);
+                      alert('Error updating post: ' + error.message);
+                  }
+              });
+              
+              async function deletePost() {
+                  if (!confirm('Are you sure you want to delete this post? This action cannot be undone.')) {
+                      return;
+                  }
+                  
+                  try {
+                      const apiKey = prompt('Enter your API Key to delete this post:');
+                      if (!apiKey) {
+                          alert('API Key is required to delete posts');
+                          return;
+                      }
+                      
+                      const response = await fetch('/api/posts/' + postId, {
+                          method: 'DELETE',
+                          headers: {
+                              'Content-Type': 'application/json',
+                              'x-api-key': apiKey
+                          }
+                      });
+                      
+                      if (!response.ok) {
+                          throw new Error('Failed to delete post: ' + response.status);
+                      }
+                      
+                      alert('Post deleted successfully!');
+                      window.close();
+                      
+                  } catch (error) {
+                      console.error('Error deleting post:', error);
+                      alert('Error deleting post: ' + error.message);
+                  }
+              }
+          </script>
+      </body>
+      </html>
+    `);
+    
+  } catch (error) {
+    console.error('Error loading edit page:', error);
+    res.status(500).send('Error loading edit page');
+  }
+});
+
 // GET /admin - Admin dashboard
 router.get('/', (req, res) => {
   res.send(`
